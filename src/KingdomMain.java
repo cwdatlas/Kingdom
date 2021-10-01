@@ -1,3 +1,6 @@
+//Programmed by Adrian and Aidan of Carroll college
+
+
 import java.awt.Color;
 import java.util.Timer;
 import java.util.TimerTask;
