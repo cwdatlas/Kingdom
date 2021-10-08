@@ -12,9 +12,13 @@ import javax.swing.border.EmptyBorder;
 public class KingdomMain {
 
 	public static void main(String[] args) {
+		//Initializing variables and objects
+		
+		
 		JFrame kingdom = new JFrame("Kingdom");
 		JPanel world = new JPanel();
 
+		//setting window params
 		try {
 			// setting up parameters for the JFrame
 			kingdom.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -29,7 +33,7 @@ public class KingdomMain {
 //		mListener = new Mouse_Listener(world);
 //		keyListener = new Key_Listener(main, world);
 
-			// adding classes to kingdom
+			// adding panel to kingdom
 			kingdom.add(world);
 
 			Timer myTimer = new Timer();
@@ -37,9 +41,36 @@ public class KingdomMain {
 				public void run() {
 					kingdom.repaint();
 				}
+				//setting 
 			}, 10, 10);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		
+		//Move objects 
+		
+		
+		
+		//Collision detection and action
+		
+		
+		
+		//Painting objects on world panel
+		
+		
+		
+		//checking to see if game is running, if not end game
+		
+		
+		
+		//initialize or remove objects
+		
+		
+		
+		
+		
+		
+		
 	}
 }
