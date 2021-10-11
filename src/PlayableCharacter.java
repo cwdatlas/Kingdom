@@ -20,14 +20,14 @@ public class PlayableCharacter extends ObjectMain implements PlayableCharacter_I
 
 	@Override
 	public boolean moveLeft() {
-		// TODO Auto-generated method stub
-		return false;
+		x= x-1;
+		return true; //should be moving at a rate of 100 pixels per second as it is timed to the frame rate 
 	}
 
 	@Override
 	public boolean moveRight() {
-		// TODO Auto-generated method stub
-		return false;
+		x=x+1;
+		return true;
 	}
 
 	@Override

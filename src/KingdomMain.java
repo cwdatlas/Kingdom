@@ -3,6 +3,13 @@
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -17,7 +24,7 @@ public class KingdomMain {
 
 		JFrame kingdom = new JFrame("Kingdom");
 		JPanel kingdomPanel = new KingdomPanel();
-
+		kingdom.addKeyListener((KeyListener) kingdomPanel);
 		// setting window params
 		try {
 			// setting up parameters for the JFrame
@@ -29,9 +36,6 @@ public class KingdomMain {
 			// setting parameters for the JPanel: world
 			kingdomPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
 			kingdomPanel.setBackground(new Color(200, 200, 200));
-
-//		mListener = new Mouse_Listener(world);
-//		keyListener = new Key_Listener(main, world);
 
 			// adding panel to kingdom
 			kingdom.add(kingdomPanel);
@@ -49,21 +53,35 @@ public class KingdomMain {
 
 	}
 
-	public static class KingdomPanel extends JPanel {
-		ObjectMain player;
+	public static class KingdomPanel extends JPanel implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener{
+		PlayableCharacter player;
+		boolean movingRight;
+		boolean movingLeft;
 
 		public KingdomPanel() {
 			// initialize objects and variables
 			player = new PlayableCharacter(40, 40, 0, "playerImage.png");
+
 		}
 
 		public void paintComponent(Graphics g) {
 			// Move objects
+			
+			//sets which direction the player will be moving
+			if(movingRight) {
+				player.moveRight();
+			}
+			else if(movingLeft) {
+				player.moveLeft();
+			}
+			else {
+				player.stopMoving(); // this could be better if we didnt do this step if player was already still
+			}
 
 			// Collision detection and action
 
 			// Painting objects on world panel
-			boolean didDraw = player.paint(g);
+			player.paint(g);
 			// if (didDraw)
 			// System.out.println("drawing was a success");
 			// else
@@ -72,6 +90,78 @@ public class KingdomMain {
 			// checking to see if game is running, if not end game
 
 			// initialize or remove objects
+		}
+
+		@Override
+		public void keyTyped(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void keyPressed(KeyEvent e) {
+			if(e.getKeyCode()==39)
+				movingRight = true;
+			else if(e.getKeyCode()==37)
+				movingLeft = true;
+			
+		}
+
+		@Override
+		public void keyReleased(KeyEvent e) {
+			if(e.getKeyCode()==39)
+				movingRight = false;
+			else if(e.getKeyCode()==37)
+				movingLeft = false;
+		
+		}
+
+		@Override
+		public void mouseWheelMoved(MouseWheelEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseDragged(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseMoved(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
 		}
 
 	}
