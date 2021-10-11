@@ -10,6 +10,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -53,115 +54,165 @@ public class KingdomMain {
 
 	}
 
-	public static class KingdomPanel extends JPanel implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener{
-		PlayableCharacter player;
-		boolean movingRight;
-		boolean movingLeft;
+	public static class KingdomPanel extends JPanel
+			implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
+		private boolean movingRight;
+		private boolean movingLeft;
+		private int defenders = 0;
+		private int enemies = 0;
+		private int walls = 0;
+		private int players = 1;
+
+		ArrayList<ObjectMain> objectList = new ArrayList();
 
 		public KingdomPanel() {
-			// initialize objects and variables
-			player = new PlayableCharacter(40, 40, 0, "playerImage.png");
+			// initialize objects and variables, could be moved into (initialize and remove)
+			// section
+			// only for 1 main character right now
+			spawnPlayers(players);
+			spawnDefenders(defenders);
+			spawnEnemies(enemies);
+			spawnWalls(walls);
 
 		}
 
 		public void paintComponent(Graphics g) {
 			// Move objects
-			
-			//sets which direction the player will be moving
-			if(movingRight) {
-				player.moveRight();
-			}
-			else if(movingLeft) {
-				player.moveLeft();
-			}
-			else {
-				player.stopMoving(); // this could be better if we didnt do this step if player was already still
+
+			// lets objects move to their set locations
+
+			for (int i = 0; i < objectList.size(); i++) {
+				if (objectList.get(i).getClass() == PlayableCharacter.class)
+																			
+				{
+					if (movingRight) {
+						((PlayableCharacter) objectList.get(i)).moveRight();//telling the playable character each frame to keep moving if true
+					} else if (movingLeft) {
+						((PlayableCharacter) objectList.get(i)).moveLeft();
+					}
+				}
+
+				else if (objectList.get(i).getClass() == Enemy.class || objectList.get(i).getClass() == Defender.class
+						|| objectList.get(i).getClass() == Arrow.class) { // if class needs the move function
+					objectList.get(i).move();
+				}
 			}
 
 			// Collision detection and action
 
+			
+			
 			// Painting objects on world panel
-			player.paint(g);
-			// if (didDraw)
-			// System.out.println("drawing was a success");
-			// else
-			// System.out.println("drawing was a failure");
+			for (int i = 0; i < objectList.size(); i++) {
+				objectList.get(i).paint(g);
+			}
 
+			
 			// checking to see if game is running, if not end game
-
+			
+			//this means we will have to have a key or a panel that comes up to have the ability to save and shut exit, or not save
+			
+			
+			
 			// initialize or remove objects
+
 		}
 
+		//spawning shortcuts
+		
+		private void spawnPlayers(int numberOfPlayers) {
+			for (int d = 0; d < numberOfPlayers; d++)
+				objectList.add(new PlayableCharacter(1200, 500, 0, "playerImage.png"));
+		}
+		private void spawnDefenders(int numberOfDefenders) {
+			for (int d = 0; d < numberOfDefenders; d++) {
+				objectList.add(new Defender(this.getWidth() / 2, 500));
+			}
+		}
+		private void spawnEnemies(int numberOfEnemies) {
+			for (int d = 0; d < numberOfEnemies; d++) {
+				objectList.add(new Enemy(10, 500));
+			}
+		}
+		private void spawnWalls(int numberOfWalls) {
+			for (int d = 0; d < numberOfWalls; d++) {
+				objectList.add(new Wall(this.getWidth() / 3, 500));
+			}
+		}
+
+		
+		//key and mouse listener events
+		
 		@Override
 		public void keyTyped(KeyEvent e) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void keyPressed(KeyEvent e) {
-			if(e.getKeyCode()==39)
+			if (e.getKeyCode() == 39)
 				movingRight = true;
-			else if(e.getKeyCode()==37)
+			else if (e.getKeyCode() == 37)
 				movingLeft = true;
-			
+
 		}
 
 		@Override
 		public void keyReleased(KeyEvent e) {
-			if(e.getKeyCode()==39)
+			if (e.getKeyCode() == 39)
 				movingRight = false;
-			else if(e.getKeyCode()==37)
+			else if (e.getKeyCode() == 37)
 				movingLeft = false;
-		
+
 		}
 
 		@Override
 		public void mouseWheelMoved(MouseWheelEvent e) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void mouseDragged(MouseEvent e) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void mouseMoved(MouseEvent e) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void mousePressed(MouseEvent e) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent e) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void mouseEntered(MouseEvent e) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void mouseExited(MouseEvent e) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 	}
