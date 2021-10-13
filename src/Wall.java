@@ -1,5 +1,5 @@
 //Programmed by Adrian and Aidan of Carroll college
-public class Wall extends ObjectMain{
+public class Wall extends BaseSprite{
 
 	protected Wall(int X, int Y) {
 		super(X, Y);

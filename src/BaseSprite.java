@@ -5,7 +5,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 //Programmed by Adrian and Aidan of Carroll college
-public class ObjectMain implements ObjectMain_Interface {
+public class BaseSprite implements BaseSpriteI {
 	protected BufferedImage img;
 	protected int x;
 	protected int y;
@@ -13,7 +13,7 @@ public class ObjectMain implements ObjectMain_Interface {
 	// dolphin program (with worded lists) whatever that was
 
 	// The constructor
-	protected ObjectMain(int X, int Y) {
+	protected BaseSprite(int X, int Y) {
 		x = X;
 		y = Y;
 

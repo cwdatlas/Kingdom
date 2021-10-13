@@ -63,7 +63,7 @@ public class KingdomMain {
 		private int walls = 0;
 		private int players = 1;
 
-		ArrayList<ObjectMain> objectList = new ArrayList();
+		ArrayList<BaseSprite> objectList = new ArrayList();
 
 		public KingdomPanel() {
 			// initialize objects and variables, could be moved into (initialize and remove)
@@ -82,9 +82,7 @@ public class KingdomMain {
 			// lets objects move to their set locations
 
 			for (int i = 0; i < objectList.size(); i++) {
-				if (objectList.get(i).getClass() == PlayableCharacter.class)
-																			
-				{
+				if(objectList.get(i) instanceof PlayableCharacter){ //more efficient way of doing this class comparison
 					if (movingRight) {
 						((PlayableCharacter) objectList.get(i)).moveRight();//telling the playable character each frame to keep moving if true
 					} else if (movingLeft) {
@@ -114,8 +112,8 @@ public class KingdomMain {
 			
 			
 			
-			// initialize or remove objects
-
+			//TODO initialize or remove objects
+			
 		}
 
 		//spawning shortcuts

@@ -4,7 +4,7 @@ import javax.imageio.ImageIO;
 
 //Programmed by Adrian and Aidan of Carroll college
 
-public class PlayableCharacter extends ObjectMain implements PlayableCharacter_Interface {
+public class PlayableCharacter extends BaseSprite implements PlayableCharacterI {
 	// set your varables here, make sure as many as possible are private
 	private int gold;
 

@@ -1,6 +1,6 @@
 import java.awt.Graphics;
 
-public interface ObjectMain_Interface {
+public interface BaseSpriteI {
 
 	//This is a function that sets the X,Y cords for any object
 	public boolean place (int x, int y);
