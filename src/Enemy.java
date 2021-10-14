@@ -16,16 +16,11 @@ public class Enemy extends BaseSprite implements EnemyI {
 	}
 
 	@Override
-	public boolean setRetreat() {
-		boolean check = false;
-		try {
+	public void setRetreat() {
 			goToCords = spawnPlace;
-			check = true;
-		} finally {
-
-		}
-		goToCords = spawnPlace;
-		return check;
+			
+		
+		
 	}
 
 }
