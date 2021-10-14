@@ -29,9 +29,11 @@ public class Defender extends BaseSprite implements DefenderI{
 			Timer myTimer = new Timer();
 			myTimer.scheduleAtFixedRate(new TimerTask() {
 				public void run() {
+					if(Math.random() < 0.1) {
+						//put a more specific are for them to roam in
 					goToCords[0] = (int)(Math.random() * 100);
 				}
-			}, 4000, 4000);
+				}}, 4000, 4000);
 			
 			check = true;
 			

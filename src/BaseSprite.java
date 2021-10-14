@@ -105,7 +105,6 @@ public class BaseSprite implements BaseSpriteI {
 	
 	@Override
 	public int[] getPosition() {
-		
 		return cords;
 	}
 
