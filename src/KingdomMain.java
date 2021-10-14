@@ -75,7 +75,7 @@ public class KingdomMain {
 			// initialize objects and variables, could be moved into (initialize and remove)
 			// section
 			// only for 1 main character right now
-			panelWidth = 1500;
+			panelWidth = 1200;
 			spawnPlayers(players);
 			spawnDefenders(defenders);
 			spawnEnemies(enemies);
