@@ -17,10 +17,8 @@ public class Enemy extends BaseSprite implements EnemyI {
 
 	@Override
 	public void setRetreat() {
-			goToCords = spawnPlace;
-			
-		
-		
+		goToCords = spawnPlace;
+
 	}
 
 }
