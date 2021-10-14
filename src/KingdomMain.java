@@ -108,7 +108,7 @@ public class KingdomMain {
 					if (timeOfDay==dayLength*.94) {
 						((Enemy) objectList.get(i)).setRetreat();
 					} else if (timeOfDay==dayLength * .6) {
-						((Enemy) objectList.get(i)).setAttack((PlayableCharacter)objectList.get(i));
+						((Enemy) objectList.get(i)).setAttack((PlayableCharacter)objectList.get(0));
 					}
 					objectList.get(i).move();
 				}

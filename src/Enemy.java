@@ -5,6 +5,7 @@ public class Enemy extends BaseSprite implements EnemyI {
 
 	protected Enemy(int X, int Y, String fileName) {
 		super(X, Y, fileName);
+		spawnPlace = new int[2];
 		spawnPlace[0] = X;
 		spawnPlace[1] = Y;
 		// TODO Auto-generated constructor stub
