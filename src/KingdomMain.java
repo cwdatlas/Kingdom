@@ -56,7 +56,7 @@ public class KingdomMain {
 
 	public static class KingdomPanel extends JPanel
 			implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
-		private String enemySprite = "EnemySprite.png";
+		private String enemySprite = "enemySprite.png";
 		private String playerSprite = "playerSprite.png";
 		private String arrowSprite = "arrowSprite.png";
 		private String defenderSprite = "defenderSprite.png";
