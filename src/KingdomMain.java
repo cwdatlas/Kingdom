@@ -56,10 +56,16 @@ public class KingdomMain {
 
 	public static class KingdomPanel extends JPanel
 			implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
+		private String enemySprite = "EnemySprite.png";
+		private String playerSprite = "playerSprite.png";
+		private String arrowSprite = "arrowSprite.png";
+		private String defenderSprite = "defenderSprite.png";
+		private String wallSprite = "wallSprite.png";
+		private int panelWidth;
 		private boolean movingRight;
 		private boolean movingLeft;
 		private int defenders = 0;
-		private int enemies = 0;
+		private int enemies = 10;
 		private int walls = 0;
 		private int players = 1;
 
@@ -69,6 +75,7 @@ public class KingdomMain {
 			// initialize objects and variables, could be moved into (initialize and remove)
 			// section
 			// only for 1 main character right now
+			panelWidth = 1500;
 			spawnPlayers(players);
 			spawnDefenders(defenders);
 			spawnEnemies(enemies);
@@ -90,8 +97,16 @@ public class KingdomMain {
 					}
 				}
 
-				else if (objectList.get(i).getClass() == Enemy.class || objectList.get(i).getClass() == Defender.class
-						|| objectList.get(i).getClass() == Arrow.class) { // if class needs the move function
+				else if (objectList.get(i) instanceof Enemy) {
+					objectList.get(i).moveTo(objectList.get(0).getPosition());
+					
+				}
+						
+				else if(objectList.get(i) instanceof Defender) { //TODO build mode guard and mode wonder in Defender class
+					
+				}
+				else if (objectList.get(i) instanceof Arrow) { // if class needs the move function
+				
 					objectList.get(i).move();
 				}
 			}
@@ -120,21 +135,24 @@ public class KingdomMain {
 		
 		private void spawnPlayers(int numberOfPlayers) {
 			for (int d = 0; d < numberOfPlayers; d++)
-				objectList.add(new PlayableCharacter(1200, 500, 0, "playerImage.png"));
+				objectList.add(new PlayableCharacter((panelWidth/2), 500, 0, playerSprite));
 		}
-		private void spawnDefenders(int numberOfDefenders) {
+		private void spawnDefenders(int numberOfDefenders) { //TODO set spawn parameters (place)
 			for (int d = 0; d < numberOfDefenders; d++) {
-				objectList.add(new Defender(this.getWidth() / 2, 500));
+				objectList.add(new Defender(panelWidth/2, 500, defenderSprite));
 			}
 		}
-		private void spawnEnemies(int numberOfEnemies) {
+		private void spawnEnemies(int numberOfEnemies) {//TODO set spawn parameters (place)
 			for (int d = 0; d < numberOfEnemies; d++) {
-				objectList.add(new Enemy(10, 500));
+				if(Math.random()>=.5)
+					objectList.add(new Enemy((int)(Math.random()*100)-100, 500, enemySprite));
+				else
+					objectList.add(new Enemy((int)(Math.random()*100)+panelWidth, 500, enemySprite));
 			}
 		}
-		private void spawnWalls(int numberOfWalls) {
+		private void spawnWalls(int numberOfWalls) {//TODO set spawn parameters (place)
 			for (int d = 0; d < numberOfWalls; d++) {
-				objectList.add(new Wall(this.getWidth() / 3, 500));
+				objectList.add(new Wall(panelWidth/3, 500, wallSprite));
 			}
 		}
 

@@ -10,23 +10,20 @@ public class PlayableCharacter extends BaseSprite implements PlayableCharacterI 
 
 	// constructor...
 	PlayableCharacter(int X, int Y, int Gold, String fileName) {
-		super(X, Y);
-		x = X;
-		y = Y;
+		super(X, Y, fileName);
 		gold = Gold;
-		this.loadImage(fileName);
 
 	}
 
 	@Override
 	public boolean moveLeft() {
-		x= x-1;
+		cords[0]= cords[0]-2;
 		return true; //should be moving at a rate of 100 pixels per second as it is timed to the frame rate 
 	}
 
 	@Override
 	public boolean moveRight() {
-		x=x+1;
+		cords[0]=cords[0]+2;
 		return true;
 	}
 

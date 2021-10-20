@@ -17,6 +17,7 @@ public interface BaseSpriteI {
 	//paint paints in the object with the graphics object (im not sure of this as of now)
 	public boolean paint(Graphics g);
 	
-	
+	//gets the x position of Playable character
+	int[] getPosition();	
 }
 
