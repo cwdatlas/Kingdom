@@ -64,6 +64,11 @@ public class KingdomMain {
 		private int panelWidth;
 		private boolean movingRight;
 		private boolean movingLeft;
+		private boolean day;
+		private boolean night;
+		private int days = 0;
+		private int timeOfDay;
+		private int dayLength = 10000;
 		private int defenders = 0;
 		private int enemies = 10;
 		private int walls = 0;
@@ -78,7 +83,6 @@ public class KingdomMain {
 			panelWidth = 1500;
 			spawnPlayers(players);
 			spawnDefenders(defenders);
-			spawnEnemies(enemies);
 			spawnWalls(walls);
 
 		}
@@ -98,8 +102,16 @@ public class KingdomMain {
 				}
 
 				else if (objectList.get(i) instanceof Enemy) {
-					objectList.get(i).moveTo(objectList.get(0).getPosition());
-					
+					if(timeOfDay>dayLength*.98) {
+						if(Math.random()>=.5) {
+							objectList.get(i).moveTo((int)(Math.random()*100)-100, 500);
+						}
+						else{
+							objectList.get(i).moveTo((int)(Math.random()*100)+panelWidth, 500);
+						}
+					}else if(timeOfDay>dayLength*.6){
+						objectList.get(i).moveTo(objectList.get(0).getPosition());
+					}
 				}
 						
 				else if(objectList.get(i) instanceof Defender) { //TODO build mode guard and mode wonder in Defender class
@@ -127,7 +139,15 @@ public class KingdomMain {
 			
 			
 			
-			//TODO initialize or remove objects
+			//TODO initialize or remove objects do whatever like the timer deal
+			if(timeOfDay==dayLength*.60)
+				spawnEnemies(4);
+			
+			if(timeOfDay>dayLength) {
+				timeOfDay = 0;
+				days++;
+			}
+			timeOfDay++;
 			
 		}
 
