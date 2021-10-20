@@ -7,4 +7,16 @@ public class Enemy extends BaseSprite implements EnemyI{
 		// TODO Auto-generated constructor stub
 	}
 
+	@Override
+	public boolean setAttack(PlayableCharacter player) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean setRetreat() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

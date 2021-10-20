@@ -43,7 +43,6 @@ public class BaseSprite implements BaseSpriteI {
 		try {
 			goToCords[0]=x;
 			goToCords[1]=y;
-			move();
 			check = true;
 		}finally {
 			// TODO fill this in with the finally catch thing
@@ -57,7 +56,6 @@ public class BaseSprite implements BaseSpriteI {
 		try {
 			goToCords[0]=Cords[0];
 			goToCords[1]=Cords[1];
-			move();
 			check = true;
 		}finally {
 			// TODO fill this in with the finally catch thing
