@@ -11,6 +11,7 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -64,14 +65,17 @@ public class KingdomMain {
 		private int panelWidth;
 		private boolean movingRight;
 		private boolean movingLeft;
+		//time variables
 		private boolean day;
 		private boolean night;
 		private int days = 0;
-		private int timeOfDay = 1100;
-		private int dayLength = 2000;
+		private int timeOfDay = 0;
+		private TimeState timeState;
+		
+		private int dayLength = 30000; //a full day at 5 min day should be around 30,000 frames
 		private int defenders = 0;
-		private int enemies = 10;
-		private int walls = 0;
+		private int enemiesPerDay = 4;
+		private int walls = 2;
 		private int players = 1;
 
 		ArrayList<BaseSprite> objectList = new ArrayList();
@@ -84,10 +88,13 @@ public class KingdomMain {
 			spawnPlayers(players);
 			spawnDefenders(defenders);
 			spawnWalls(walls);
+			timeState = timeState.DAWN;
 
 		}
 
 		public void paintComponent(Graphics g) {
+			boolean retreating = true;
+			boolean defending = false;
 			// Move objects
 
 			// lets objects move to their set locations
@@ -105,21 +112,25 @@ public class KingdomMain {
 
 				else if (objectList.get(i) instanceof Enemy) {
 
-					if (timeOfDay==dayLength*.94) {
+					if (timeState==timeState.DAWN && !retreating) {
 						((Enemy) objectList.get(i)).setRetreat();
-					} else if (timeOfDay==dayLength * .6) {
+						retreating = true;
+					} else if (timeState==timeState.NIGHT && retreating) {
 						((Enemy) objectList.get(i)).setAttack((PlayableCharacter)objectList.get(i));
+						retreating = false;
 					}
 					objectList.get(i).move();
 				}
 
 				else if (objectList.get(i) instanceof Defender) { // TODO build mode guard and mode wonder in Defender
 					
-					if (timeOfDay==dayLength) {
+					if (timeState==timeState.DAY && defending) {
 						((Defender) objectList.get(i)).setRoaming();
-					} else if (timeOfDay==dayLength * .6) {
+						defending = false;
+					} else if (timeState==timeState.DUSK && !defending) {
 						((Defender) objectList.get(i)).setDefending();
-					}											// class
+						defending = true;
+					}											
 					objectList.get(i).move();
 				} else if (objectList.get(i) instanceof Arrow) { // if class needs the move function
 
@@ -127,7 +138,17 @@ public class KingdomMain {
 				}
 			}
 
-			// Collision detection and action
+			// TODO Collision detection and action
+				
+			for(int i = 0; i<objectList.size();i++)
+				for(int a = 0; a<objectList.size() && a!=i;a++) { //TODO all combinations non repeatable
+					if(objectList.get(i).isColliding(objectList.get(a)))
+						if((objectList.get(i) instanceof Enemy && objectList.get(a) instanceof Arrow)||(objectList.get(i) instanceof Arrow && objectList.get(a) instanceof Enemy) ) {
+							
+						}
+					
+				}
+			
 
 			// Painting objects on world panel
 			for (int i = 0; i < objectList.size(); i++) {
@@ -141,11 +162,20 @@ public class KingdomMain {
 
 			// TODO initialize or remove objects do whatever like the timer deal
 			if (timeOfDay == dayLength * .60)
-				spawnEnemies(4);
+				spawnEnemies(enemiesPerDay);
 
 			if (timeOfDay > dayLength) {
 				timeOfDay = 0;
 				days++;
+			}
+			if(timeOfDay==dayLength*.7) {
+				timeState=timeState.NIGHT;
+			}else if(timeOfDay==dayLength*.6) {
+				timeState=timeState.DUSK;
+			}else if(timeOfDay==dayLength*.1) {
+				timeState=timeState.DAY;
+			}else if(timeOfDay==0) {
+				timeState=timeState.DAWN;
 			}
 			timeOfDay++;
 
@@ -176,7 +206,15 @@ public class KingdomMain {
 		private void spawnWalls(int numberOfWalls) {// TODO set spawn parameters (place)
 			for (int d = 0; d < numberOfWalls; d++) {
 				objectList.add(new Wall(panelWidth / 3, 500, wallSprite));
+				objectList.add(new Wall((panelWidth / 3)*2 , 500, wallSprite));
 			}
+		}
+		
+		private enum TimeState{
+			DUSK,
+			DAY,
+			DAWN,
+			NIGHT
 		}
 
 		// key and mouse listener events
