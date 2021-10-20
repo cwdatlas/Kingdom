@@ -23,9 +23,18 @@ public class BaseSprite implements BaseSpriteI {
 	}
 
 	@Override
-	public boolean place(int x, int y) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean placeSprite(int x, int y) {
+		boolean check = false;
+		try {
+			cords[0] = x;
+			cords[1] = y;
+			check = true;
+		}finally {
+			// TODO fill this in with the finally catch thing
+		}
+		
+		
+		return check;
 	}
 
 	@Override
@@ -74,6 +83,9 @@ public class BaseSprite implements BaseSpriteI {
 
 	@Override
 	public boolean remove(boolean visability) {
+		if(visability == true) {
+			visability = false;
+		}
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -92,9 +104,10 @@ public class BaseSprite implements BaseSpriteI {
 			}
 	}
 
+	
 	@Override
 	public int[] getPosition() {
-		// TODO Auto-generated method stub
+		
 		return cords;
 	}
 
