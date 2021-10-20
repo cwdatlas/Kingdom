@@ -1,22 +1,25 @@
 //Programmed by Adrian and Aidan of Carroll college
 
-public class Enemy extends BaseSprite implements EnemyI{
+public class Enemy extends BaseSprite implements EnemyI {
+	int[] spawnPlace;
 
 	protected Enemy(int X, int Y, String fileName) {
 		super(X, Y, fileName);
+		spawnPlace = new int[2];
+		spawnPlace[0] = X;
+		spawnPlace[1] = Y;
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	public boolean setAttack(PlayableCharacter player) {
-		// TODO Auto-generated method stub
-		return false;
+	public void setAttack(PlayableCharacter player) {
+		goToCords = player.getPosition();
 	}
 
 	@Override
-	public boolean setRetreat() {
-		// TODO Auto-generated method stub
-		return false;
+	public void setRetreat() {
+		goToCords = spawnPlace;
+
 	}
 
 }
