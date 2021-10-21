@@ -108,4 +108,10 @@ public class BaseSprite implements BaseSpriteI {
 		return cords;
 	}
 
+	@Override
+	public boolean isColliding(BaseSprite testedSprite) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }
