@@ -180,10 +180,10 @@ public class KingdomMain {
 
 					if (retreating) {
 						((Enemy) objectList.get(i)).setRetreat();
-						retreating=false;
+
 					} else if (attacking) {
 						((Enemy) objectList.get(i)).setAttack((PlayableCharacter)objectList.get(0));
-						attacking = false;
+
 					}
 					objectList.get(i).move();
 				}
@@ -192,11 +192,11 @@ public class KingdomMain {
 					
 					if (roaming) {
 						((Defender) objectList.get(i)).setRoaming();
-						roaming=false;
+
 						
 					} else if (defending) {
 						((Defender) objectList.get(i)).setDefending();
-						defending = false;
+
 					}											
 					objectList.get(i).move();
 				} else if (objectList.get(i) instanceof Arrow) { // if class needs the move function
@@ -204,6 +204,10 @@ public class KingdomMain {
 					objectList.get(i).move();
 				}
 			}
+				attacking = false;
+				defending = false;
+				roaming = false;
+				retreating = false;
 		}
 		
 		private void checkCollisions() { //TODO collisions
