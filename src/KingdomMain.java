@@ -73,8 +73,8 @@ public class KingdomMain {
 		private TimeState timeState;
 		
 		private int dayLength = 5000; //a full day at 5 min day should be around 30,000 frames
-		private int defenders = 0;
-		private int enemiesPerDay = 4;
+		private int defenders = 2;
+		private int enemiesPerDay = 0;
 		private int walls = 2;
 		private int players = 1;
 
@@ -124,12 +124,11 @@ public class KingdomMain {
 
 				else if (objectList.get(i) instanceof Defender) { // TODO build mode guard and mode wonder in Defender
 					
-					if (timeState==timeState.DAY && defending) {
+					if (timeState==timeState.DAY) {
 						((Defender) objectList.get(i)).setRoaming();
-						defending = false;
-					} else if (timeState==timeState.DUSK && !defending) {
+						
+					} else if (timeState==timeState.DUSK) {
 						((Defender) objectList.get(i)).setDefending();
-						defending = true;
 					}											
 					objectList.get(i).move();
 				} else if (objectList.get(i) instanceof Arrow) { // if class needs the move function
