@@ -18,6 +18,8 @@ public class BaseSprite implements BaseSpriteI {
 		cords = new int[2];
 		cords[0] = X;
 		cords[1] = Y;
+		goToCords[0] = X;
+		goToCords[1] = Y;
 		this.loadImage(fileName);
 		
 	}

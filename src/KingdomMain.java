@@ -66,13 +66,12 @@ public class KingdomMain {
 		private boolean movingRight;
 		private boolean movingLeft;
 		//time variables
-		private boolean day;
-		private boolean night;
+
 		private int days = 0;
 		private int timeOfDay = 0;
 		private TimeState timeState;
 		
-		private int dayLength = 30000; //a full day at 5 min day should be around 30,000 frames
+		private int dayLength = 3000; //a full day at 5 min day should be around 30,000 frames
 		private int defenders = 2;
 		private int enemiesPerDay = 4;
 		private int walls = 2;
@@ -93,8 +92,6 @@ public class KingdomMain {
 		}
 
 		public void paintComponent(Graphics g) {
-			boolean retreating = true;
-			boolean defending = false;
 			// Move objects
 
 			// lets objects move to their set locations
@@ -160,12 +157,15 @@ public class KingdomMain {
 			// ability to save and shut exit, or not save
 
 			// TODO initialize or remove objects do whatever like the timer deal
-			if (timeOfDay == dayLength * .60)
+			if (timeOfDay == dayLength*.7) {
 				spawnEnemies(enemiesPerDay);
+
+			}
 
 			if (timeOfDay > dayLength) {
 				timeOfDay = 0;
 				days++;
+
 			}
 			if(timeOfDay==dayLength*.7) {
 				timeState=timeState.NIGHT;
@@ -196,9 +196,9 @@ public class KingdomMain {
 		private void spawnEnemies(int numberOfEnemies) {// TODO set spawn parameters (place)
 			for (int d = 0; d < numberOfEnemies; d++) {
 				if (d%2 == 0)
-					objectList.add(new Enemy((int) (Math.random() * 300) - 800, 500, enemySprite));
+					objectList.add(new Enemy((int) (Math.random() * 700) -700, 500, enemySprite));
 				else
-					objectList.add(new Enemy((int) (Math.random() * 100) + panelWidth, 500, enemySprite));
+					objectList.add(new Enemy((int) (Math.random() * 700) + panelWidth, 500, enemySprite));
 			}
 		}
 
