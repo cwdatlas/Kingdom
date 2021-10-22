@@ -1,3 +1,4 @@
+import java.awt.Point;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -6,21 +7,23 @@ import java.util.TimerTask;
 public class Defender extends BaseSprite implements DefenderI {
 	private final Random random;
 
-	protected Defender(int X, int Y, String fileName) {
-		super(X, Y, fileName);
+	protected Defender(int x, int y, String fileName) {
+		super(x, y, fileName);
 		random = new Random();
 	}
 
 	@Override
 	public void setDefending() {
-		goToCords[0] = random.nextInt(800);
+//		goToCords[0] = random.nextInt(800);
+		target.setLocation(new Point(random.nextInt(800), 500));
+
 	}
 
 	@Override
 	public void setRoaming() {
 		if(Math.random() < .01) {
-//		goToCords[0] = (int) (Math.random() * 1500);
-			moveTo(random.nextInt(1500), goToCords[1] );
+		//pass 1500 as a parameter in the constructor
+			moveTo(random.nextInt(1500), (int) target.getY() );
 		}
 
 

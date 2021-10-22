@@ -1,24 +1,28 @@
 //Programmed by Adrian and Aidan of Carroll college
+import java.awt.Point;
+
+
 
 public class Enemy extends BaseSprite implements EnemyI {
-	int[] spawnPlace;
+	Point spawnPlace;
 
-	protected Enemy(int X, int Y, String fileName) {
-		super(X, Y, fileName);
-		spawnPlace = new int[2];
-		spawnPlace[0] = X;
-		spawnPlace[1] = Y;
+	protected Enemy(int x, int y, String fileName) {
+		super(x, y, fileName);
+		spawnPlace = new Point(x, y);
+//		spawnPlace = new int[2];
+//		spawnPlace[0] = X;
+//		spawnPlace[1] = Y;
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public void setAttack(PlayableCharacter player) {
-		goToCords = player.getPosition();
+		target = player.getPosition();
 	}
 
 	@Override
 	public void setRetreat() {
-		goToCords = spawnPlace;
+		target = spawnPlace;
 
 	}
 

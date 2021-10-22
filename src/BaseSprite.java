@@ -1,4 +1,5 @@
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -7,73 +8,49 @@ import javax.imageio.ImageIO;
 //Programmed by Adrian and Aidan of Carroll college
 public class BaseSprite implements BaseSpriteI {
 	protected BufferedImage img;
-	protected int[] cords;
-	protected int[] goToCords;
+//	protected int[] cords;
+//	protected int[] goToCords;
+	protected Point target;
+	protected Point currentPosition;
 	// build the variables for direction like how Nate built direction in the
 	// dolphin program (with worded lists) whatever that was
 
 	// The constructor
-	protected BaseSprite(int X, int Y, String fileName) {
-		goToCords = new int[2];
-		cords = new int[2];
-		cords[0] = X;
-		cords[1] = Y;
-		goToCords[0] = X;
-		goToCords[1] = Y;
+	protected BaseSprite(int x, int y, String fileName) {
+		target = new Point(x, y);
+		currentPosition = new Point(x, y);
+		//make a point for cords and goToCords
+//		cords = new int[2];
+//		cords[0] = X;
+//		cords[1] = Y;
+//		goToCords[0] = X;
+//		goToCords[1] = Y;
 		this.loadImage(fileName);
 		
 	}
 
 	@Override
-	public boolean placeSprite(int x, int y) {
-		boolean check = false;
-		try {
-			cords[0] = x;
-			cords[1] = y;
-			check = true;
-		}finally {
-			// TODO fill this in with the finally catch thing
-		}
-		
-		
-		return check;
+	public void placeSprite(int x, int y) {
+		currentPosition.setLocation(new Point(x, y));	
 	}
 
 	@Override
-	public boolean moveTo(int x, int y) {
-		boolean check = false;
-		try {
-			goToCords[0]=x;
-			goToCords[1]=y;
-			check = true;
-		}finally {
-			// TODO fill this in with the finally catch thing
-		}
-		return check;
+	public void moveTo(int x, int y) {
+		target.setLocation(new Point(x, y));
 		
 	}
 	
-	public boolean moveTo(int[] Cords) {
-		boolean check = false;
-		try {
-			goToCords[0]=Cords[0];
-			goToCords[1]=Cords[1];
-			check = true;
-		}finally {
-			// TODO fill this in with the finally catch thing
-		}
-		return check;
-	}
 
 	@Override
 	public boolean move() {
 		boolean check = false;
 		try {
-			if(goToCords[0]>cords[0]) {
-				cords[0]=cords[0]+1;
+			if(target.x > currentPosition.x) {
+				currentPosition.setLocation(new Point(currentPosition.x + 1, currentPosition.y));
 			}
-			else if(goToCords[0]<cords[0]) {
-				cords[0]=cords[0]-1;
+			else if(target.x < currentPosition.x) {
+				currentPosition.setLocation(new Point(currentPosition.x - 1, currentPosition.y));
+
 			}
 		}finally{
 			// TODO fill this in with the finally catch thing
@@ -92,7 +69,7 @@ public class BaseSprite implements BaseSpriteI {
 
 	@Override
 	public boolean paint(Graphics g) {
-		return g.drawImage(img, cords[0], cords[1], null);
+		return g.drawImage(img, currentPosition.x, currentPosition.y, null);
 	}
 
 	public void loadImage(String fileName) {
@@ -106,13 +83,12 @@ public class BaseSprite implements BaseSpriteI {
 
 	
 	@Override
-	public int[] getPosition() {
-		return cords;
+	public Point getPosition() {
+		return currentPosition;
 	}
 
 	@Override
 	public boolean isColliding(BaseSprite testedSprite) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
