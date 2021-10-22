@@ -69,12 +69,12 @@ public class KingdomMain {
 		private boolean day;
 		private boolean night;
 		private int days = 0;
-		private int timeOfDay = 2000;
+		private int timeOfDay = 0;
 		private TimeState timeState;
 		
-		private int dayLength = 5000; //a full day at 5 min day should be around 30,000 frames
+		private int dayLength = 30000; //a full day at 5 min day should be around 30,000 frames
 		private int defenders = 2;
-		private int enemiesPerDay = 0;
+		private int enemiesPerDay = 4;
 		private int walls = 2;
 		private int players = 1;
 
