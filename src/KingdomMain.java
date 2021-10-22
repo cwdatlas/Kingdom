@@ -189,7 +189,7 @@ public class KingdomMain {
 
 		private void spawnDefenders(int numberOfDefenders) { // TODO set spawn parameters (place)
 			for (int d = 0; d < numberOfDefenders; d++) {
-				objectList.add(new Defender(panelWidth / 2, 500, defenderSprite));
+				objectList.add(new Defender(800, 500, defenderSprite));
 			}
 		}
 

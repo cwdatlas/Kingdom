@@ -11,7 +11,7 @@ public class Defender extends BaseSprite implements DefenderI {
 
 	@Override
 	public void setDefending() {
-		goToCords[0] = 200;
+		goToCords[0] = 800;
 	}
 
 	@Override
