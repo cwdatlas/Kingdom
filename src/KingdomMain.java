@@ -69,10 +69,10 @@ public class KingdomMain {
 		private boolean day;
 		private boolean night;
 		private int days = 0;
-		private int timeOfDay = 0;
+		private int timeOfDay = 2000;
 		private TimeState timeState;
 		
-		private int dayLength = 30000; //a full day at 5 min day should be around 30,000 frames
+		private int dayLength = 5000; //a full day at 5 min day should be around 30,000 frames
 		private int defenders = 0;
 		private int enemiesPerDay = 4;
 		private int walls = 2;
@@ -110,14 +110,14 @@ public class KingdomMain {
 					}
 				}
 
-				else if (objectList.get(i) instanceof Enemy) {
+				else if (objectList.get(i) instanceof Enemy) { //
 
-					if (timeState==timeState.DAWN && !retreating) {
+					if (timeState==timeState.DAWN) {
 						((Enemy) objectList.get(i)).setRetreat();
-						retreating = true;
-					} else if (timeState==timeState.NIGHT && retreating) {
-						((Enemy) objectList.get(i)).setAttack((PlayableCharacter)objectList.get(i));
-						retreating = false;
+					//	retreating = true;
+					} else if (timeState==timeState.NIGHT) {
+						((Enemy) objectList.get(i)).setAttack((PlayableCharacter)objectList.get(0));
+					//	retreating = false;
 					}
 					objectList.get(i).move();
 				}
