@@ -73,7 +73,7 @@ public class KingdomMain {
 		private TimeState timeState;
 		
 		private int dayLength = 5000; //a full day at 5 min day should be around 30,000 frames
-		private int defenders = 0;
+		private int defenders = 2;
 		private int enemiesPerDay = 4;
 		private int walls = 2;
 		private int players = 1;
