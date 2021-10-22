@@ -1,3 +1,4 @@
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -13,7 +14,7 @@ public class BaseSprite implements BaseSpriteI {
 	// dolphin program (with worded lists) whatever that was
 
 	// The constructor
-	protected BaseSprite(int X, int Y, String fileName) {
+	protected BaseSprite(int X, int Y, String fileName, Dimension panelDementions) {
 		goToCords = new int[2];
 		cords = new int[2];
 		cords[0] = X;

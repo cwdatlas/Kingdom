@@ -1,3 +1,4 @@
+import java.awt.Dimension;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -6,8 +7,8 @@ import java.util.TimerTask;
 public class Defender extends BaseSprite implements DefenderI {
 	private final Random random;
 
-	protected Defender(int X, int Y, String fileName) {
-		super(X, Y, fileName);
+	protected Defender(int X, int Y, String fileName, Dimension panelDementions) {
+		super(X, Y, fileName, panelDementions);
 		random = new Random();
 	}
 

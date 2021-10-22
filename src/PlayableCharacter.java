@@ -1,3 +1,4 @@
+import java.awt.Dimension;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -9,8 +10,8 @@ public class PlayableCharacter extends BaseSprite implements PlayableCharacterI 
 	private int gold;
 
 	// constructor...
-	PlayableCharacter(int X, int Y, int Gold, String fileName) {
-		super(X, Y, fileName);
+	PlayableCharacter(int X, int Y, int Gold, String fileName, Dimension panelDementions) {
+		super(X, Y, fileName, panelDementions);
 		gold = Gold;
 
 	}

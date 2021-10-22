@@ -2,6 +2,7 @@
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -12,6 +13,7 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -55,14 +57,14 @@ public class KingdomMain {
 
 	}
 
-	public static class KingdomPanel extends JPanel
-			implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
+	public static class KingdomPanel extends JPanel implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
+		private boolean gameRunning = false;
 		private String enemySprite = "enemySprite.png";
 		private String playerSprite = "playerSprite.png";
 		private String arrowSprite = "arrowSprite.png";
 		private String defenderSprite = "defenderSprite.png";
 		private String wallSprite = "wallSprite.png";
-		private int panelWidth;
+		private Dimension panelDementions;
 		private boolean movingRight;
 		private boolean movingLeft;
 		//time variables
@@ -70,32 +72,99 @@ public class KingdomMain {
 		private int days = 0;
 		private int timeOfDay = 0;
 		private TimeState timeState;
+		boolean spawning=false;
+		boolean defending=false;
+		boolean roaming=true;
+		boolean attacking=false;
+		boolean retreating = false;
 		
 		private int dayLength = 3000; //a full day at 5 min day should be around 30,000 frames
 		private int defenders = 2;
 		private int enemiesPerDay = 4;
 		private int walls = 2;
 		private int players = 1;
+		
+		private final Random random;
 
 		ArrayList<BaseSprite> objectList = new ArrayList();
 
 		public KingdomPanel() {
+			this.random = new Random();
 			// initialize objects and variables, could be moved into (initialize and remove)
 			// section
 			// only for 1 main character right now
-			panelWidth = 1500;
-			spawnPlayers(players);
-			spawnDefenders(defenders);
-			spawnWalls(walls);
+
 			timeState = timeState.DAWN;
+			panelDementions = new Dimension();
+			
 
 		}
 
 		public void paintComponent(Graphics g) {
-			// Move objects
+			panelDementions = this.getSize();
+			
+			if(!gameRunning) { //spawn things that are dependent on frame width
+				spawnPlayers(players);
+				spawnDefenders(defenders);
+				spawnWalls(walls);
+				gameRunning = true;
+			}
+			
+			if(panelDementions!=null && gameRunning) { //then this runs the game
+			doMoves();
+			
+			checkCollisions(); // TODO Collision detection and action
 
-			// lets objects move to their set locations
+			for (int i = 0; i < objectList.size(); i++) { // Painting objects on world panel
+				objectList.get(i).paint(g);
+			}
 
+			timeCalculations();
+			
+			if (spawning) {   // TODO initialize or remove objects do whatever like the timer deal
+				spawnEnemies(enemiesPerDay);
+				spawning = false;
+			}
+			}
+		}
+
+		// spawning shortcuts
+
+		private void spawnPlayers(int numberOfPlayers) {
+			for (int d = 0; d < numberOfPlayers; d++)
+				objectList.add(new PlayableCharacter(((int)panelDementions.getWidth() / 2), 500, 0, playerSprite, panelDementions));
+		}
+
+		private void spawnDefenders(int numberOfDefenders) { // TODO set spawn parameters (place)
+			for (int d = 0; d < numberOfDefenders; d++) {
+				objectList.add(new Defender(800, 500, defenderSprite, panelDementions));
+			}
+		}
+
+		private void spawnEnemies(int numberOfEnemies) {// TODO set spawn parameters (place)
+			for (int d = 0; d < numberOfEnemies; d++) {
+				if (d%2 == 0)
+					objectList.add(new Enemy(random.nextInt(300) -300, 500, enemySprite, panelDementions));
+				else
+					objectList.add(new Enemy(random.nextInt(300) + (int)panelDementions.getWidth(), 500, enemySprite, panelDementions));
+			}
+		}
+
+		private void spawnWalls(int numberOfWalls) {// TODO set spawn parameters (place)
+			for (int d = 0; d < numberOfWalls; d++) {
+				objectList.add(new Wall((int)panelDementions.getWidth() / 3, 500, wallSprite, panelDementions));
+				objectList.add(new Wall(((int)panelDementions.getWidth() / 3)*2 , 500, wallSprite, panelDementions));
+			}
+		}
+		
+		private enum TimeState{ //TODO this needs to be before JPanel/ before timestate is initialize
+			DUSK,
+			DAY,
+			DAWN,
+			NIGHT
+		}
+		
+		private void doMoves() {
 			for (int i = 0; i < objectList.size(); i++) {
 				if (objectList.get(i) instanceof PlayableCharacter) { // more efficient way of doing this class
 																		// comparison
@@ -107,25 +176,27 @@ public class KingdomMain {
 					}
 				}
 
-				else if (objectList.get(i) instanceof Enemy) { //
+				else if (objectList.get(i) instanceof Enemy) { 
 
-					if (timeState==timeState.DAWN) {
+					if (retreating) {
 						((Enemy) objectList.get(i)).setRetreat();
-					//	retreating = true;
-					} else if (timeState==timeState.NIGHT) {
+						retreating=false;
+					} else if (attacking) {
 						((Enemy) objectList.get(i)).setAttack((PlayableCharacter)objectList.get(0));
-					//	retreating = false;
+						attacking = false;
 					}
 					objectList.get(i).move();
 				}
 
 				else if (objectList.get(i) instanceof Defender) { // TODO build mode guard and mode wonder in Defender
 					
-					if (timeState==timeState.DAY) {
+					if (roaming) {
 						((Defender) objectList.get(i)).setRoaming();
+						roaming=false;
 						
-					} else if (timeState==timeState.DUSK) {
+					} else if (defending) {
 						((Defender) objectList.get(i)).setDefending();
+						defending = false;
 					}											
 					objectList.get(i).move();
 				} else if (objectList.get(i) instanceof Arrow) { // if class needs the move function
@@ -133,9 +204,10 @@ public class KingdomMain {
 					objectList.get(i).move();
 				}
 			}
-
-			// TODO Collision detection and action
-				
+		}
+		
+		private void checkCollisions() { //TODO collisions
+			
 			for(int i = 0; i<objectList.size();i++)
 				for(int a = 0; a<objectList.size() && a!=i;a++) { //TODO all combinations non repeatable
 					if(objectList.get(i).isColliding(objectList.get(a)))
@@ -144,76 +216,29 @@ public class KingdomMain {
 						}
 					
 				}
-			
-
-			// Painting objects on world panel
-			for (int i = 0; i < objectList.size(); i++) {
-				objectList.get(i).paint(g);
-			}
-
-			// checking to see if game is running, if not end game
-
-			// this means we will have to have a key or a panel that comes up to have the
-			// ability to save and shut exit, or not save
-
-			// TODO initialize or remove objects do whatever like the timer deal
-			if (timeOfDay == dayLength*.7) {
-				spawnEnemies(enemiesPerDay);
-
-			}
-
+		}
+		
+		private void timeCalculations() {
 			if (timeOfDay > dayLength) {
 				timeOfDay = 0;
 				days++;
 
 			}
-			if(timeOfDay==dayLength*.7) {
+			if(timeOfDay==dayLength*.7 && timeState==timeState.DUSK) {
 				timeState=timeState.NIGHT;
-			}else if(timeOfDay==dayLength*.6) {
+				spawning = true;
+				attacking = true;
+			}else if(timeOfDay==dayLength*.6 && timeState==timeState.DAY) {
 				timeState=timeState.DUSK;
-			}else if(timeOfDay==dayLength*.1) {
+				retreating = true;
+			}else if(timeOfDay==dayLength*.1 && timeState==timeState.DAWN) {
 				timeState=timeState.DAY;
-			}else if(timeOfDay==0) {
+				roaming = true;
+			}else if(timeOfDay==0 && timeState==timeState.NIGHT) {
 				timeState=timeState.DAWN;
+				defending = true;
 			}
 			timeOfDay++;
-
-		}
-
-		// spawning shortcuts
-
-		private void spawnPlayers(int numberOfPlayers) {
-			for (int d = 0; d < numberOfPlayers; d++)
-				objectList.add(new PlayableCharacter((panelWidth / 2), 500, 0, playerSprite));
-		}
-
-		private void spawnDefenders(int numberOfDefenders) { // TODO set spawn parameters (place)
-			for (int d = 0; d < numberOfDefenders; d++) {
-				objectList.add(new Defender(800, 500, defenderSprite));
-			}
-		}
-
-		private void spawnEnemies(int numberOfEnemies) {// TODO set spawn parameters (place)
-			for (int d = 0; d < numberOfEnemies; d++) {
-				if (d%2 == 0)
-					objectList.add(new Enemy((int) (Math.random() * 700) -700, 500, enemySprite));
-				else
-					objectList.add(new Enemy((int) (Math.random() * 700) + panelWidth, 500, enemySprite));
-			}
-		}
-
-		private void spawnWalls(int numberOfWalls) {// TODO set spawn parameters (place)
-			for (int d = 0; d < numberOfWalls; d++) {
-				objectList.add(new Wall(panelWidth / 3, 500, wallSprite));
-				objectList.add(new Wall((panelWidth / 3)*2 , 500, wallSprite));
-			}
-		}
-		
-		private enum TimeState{
-			DUSK,
-			DAY,
-			DAWN,
-			NIGHT
 		}
 
 		// key and mouse listener events
