@@ -197,7 +197,7 @@ public class KingdomMain {
 		private void spawnEnemies(int numberOfEnemies) {// TODO set spawn parameters (place)
 			for (int d = 0; d < numberOfEnemies; d++) {
 				if (Math.random() >= .5)
-					objectList.add(new Enemy((int) (Math.random() * 100) - 100, 500, enemySprite));
+					objectList.add(new Enemy((int) (Math.random() * 300) - 800, 500, enemySprite));
 				else
 					objectList.add(new Enemy((int) (Math.random() * 100) + panelWidth, 500, enemySprite));
 			}
