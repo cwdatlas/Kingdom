@@ -1,4 +1,6 @@
+
 import java.awt.Dimension;
+import java.awt.Point;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -18,13 +20,15 @@ public class PlayableCharacter extends BaseSprite implements PlayableCharacterI 
 
 	@Override
 	public boolean moveLeft() {
-		cords[0]= cords[0]-2;
+//		currentPosition[0]= currentPosition[0]-2;
+		currentPosition.setLocation(new Point((int)currentPosition.getX() - 2, 500));
 		return true; //should be moving at a rate of 100 pixels per second as it is timed to the frame rate 
 	}
 
 	@Override
 	public boolean moveRight() {
-		cords[0]=cords[0]+2;
+		currentPosition.setLocation(new Point((int)currentPosition.getX() + 2, 500));
+//		currentPosition[0]=currentPosition[0]+2;
 		return true;
 	}
 

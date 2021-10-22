@@ -1,13 +1,14 @@
 import java.awt.Graphics;
+import java.awt.Point;
 
 public interface BaseSpriteI {
 
 	// This is a function that sets the X,Y cords for any object
 
-	public boolean placeSprite(int x, int y);
+	public void placeSprite(int x, int y);
 
 	// moveTo sets a location for an object to walk to at its set speed
-	boolean moveTo(int x, int y);
+	void moveTo(int x, int y);
 
 	// move will allow the object to move to the location it has been set to go to
 	boolean move();
@@ -20,7 +21,7 @@ public interface BaseSpriteI {
 	boolean paint(Graphics g);
 
 	// gets the x position of Playable character
-	int[] getPosition();
+	Point getPosition();
 
 	boolean isColliding(BaseSprite testedSprite); // returns true if objects collide
 }
