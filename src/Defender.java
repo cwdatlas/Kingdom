@@ -11,12 +11,15 @@ public class Defender extends BaseSprite implements DefenderI {
 
 	@Override
 	public void setDefending() {
-		goToCords[0] = 200;
+		goToCords[0] = 800;
 	}
 
 	@Override
 	public void setRoaming() {
-		goToCords[0] = (int) (Math.random() * 100);
+		if(Math.random() < .004) {
+		goToCords[0] = (int) (Math.random() * 1500);
+		}
+
 
 	
 	}
