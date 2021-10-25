@@ -13,12 +13,13 @@ public class BaseSprite implements BaseSpriteI {
 //	protected int[] goToCords;
 	protected Point target;
 	protected Point currentPosition;
+	public Dimension dimensions;
 	// build the variables for direction like how Nate built direction in the
 	// dolphin program (with worded lists) whatever that was
 
 	// The constructor
 
-	protected BaseSprite(int x, int y, String fileName, Dimension panelDementions) {
+	protected BaseSprite(int x, int y, String fileName, Dimension panelDimensions) {
 		target = new Point(x, y);
 		currentPosition = new Point(x, y);
 		this.loadImage(fileName);

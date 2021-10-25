@@ -19,7 +19,7 @@ public class KingdomController extends JPanel implements KeyListener, MouseListe
 		private String arrowSprite = "arrowSprite.png";
 		private String defenderSprite = "defenderSprite.png";
 		private String wallSprite = "wallSprite.png";
-		private Dimension panelDementions;
+		private Dimension panelDimensions;
 		private boolean movingRight;
 		private boolean movingLeft;
 		//time variables
@@ -50,13 +50,13 @@ public class KingdomController extends JPanel implements KeyListener, MouseListe
 			// only for 1 main character right now
 
 			timeState = timeState.DAWN;
-			panelDementions = new Dimension();
+			panelDimensions = new Dimension();
 			
 
 		}
 
 		public void paintComponent(Graphics g) {
-			panelDementions = this.getSize();
+			panelDimensions = this.getSize();
 			
 			if(!gameRunning) { //spawn things that are dependent on frame width
 				spawnPlayers(players);
@@ -65,7 +65,7 @@ public class KingdomController extends JPanel implements KeyListener, MouseListe
 				gameRunning = true;
 			}
 			
-			if(panelDementions!=null && gameRunning) { //then this runs the game
+			if(panelDimensions!=null && gameRunning) { //then this runs the game
 			doMoves();
 			
 			checkCollisions(); // TODO Collision detection and action
@@ -87,28 +87,28 @@ public class KingdomController extends JPanel implements KeyListener, MouseListe
 
 		private void spawnPlayers(int numberOfPlayers) {
 			for (int d = 0; d < numberOfPlayers; d++)
-				objectList.add(new PlayableCharacter(((int)panelDementions.getWidth() / 2), 500, 0, playerSprite, panelDementions));
+				objectList.add(new PlayableCharacter(((int)panelDimensions.getWidth() / 2), 500, 0, playerSprite, panelDimensions));
 		}
 
 		private void spawnDefenders(int numberOfDefenders) { // TODO set spawn parameters (place)
 			for (int d = 0; d < numberOfDefenders; d++) {
-				objectList.add(new Defender(800, 500, defenderSprite, panelDementions));
+				objectList.add(new Defender(800, 500, defenderSprite, panelDimensions));
 			}
 		}
 
 		private void spawnEnemies(int numberOfEnemies) {// TODO set spawn parameters (place)
 			for (int d = 0; d < numberOfEnemies; d++) {
 				if (d%2 == 0)
-					objectList.add(new Enemy(random.nextInt(300) -300, 500, enemySprite, panelDementions));
+					objectList.add(new Enemy(random.nextInt(300) -300, 500, enemySprite, panelDimensions));
 				else
-					objectList.add(new Enemy(random.nextInt(300) + (int)panelDementions.getWidth(), 500, enemySprite, panelDementions));
+					objectList.add(new Enemy(random.nextInt(300) + (int)panelDimensions.getWidth(), 500, enemySprite, panelDimensions));
 			}
 		}
 
 		private void spawnWalls(int numberOfWalls) {// TODO set spawn parameters (place)
 			for (int d = 0; d < numberOfWalls; d++) {
-				objectList.add(new Wall((int)panelDementions.getWidth() / 3, 500, wallSprite, panelDementions));
-				objectList.add(new Wall(((int)panelDementions.getWidth() / 3)*2 , 500, wallSprite, panelDementions));
+				objectList.add(new Wall((int)panelDimensions.getWidth() / 3, 500, wallSprite, panelDimensions));
+				objectList.add(new Wall(((int)panelDimensions.getWidth() / 3)*2 , 500, wallSprite, panelDimensions));
 			}
 		}
 		
