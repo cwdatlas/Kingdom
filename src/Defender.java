@@ -5,15 +5,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 //Programmed by Adrian and Aidan of Carroll college
-public class Defender extends BaseSprite implements DefenderI {
 	
-	double a = (Math.random() * 10);
-	
-	
-
-	
-
-	
+public class Defender extends CollisionSprite implements DefenderI {
 	private final Random random;
 
 	protected Defender(int x, int y, String fileName, Dimension panelDementions) {
@@ -55,6 +48,12 @@ public class Defender extends BaseSprite implements DefenderI {
 			
 			}},10, 500);
 		
+
+	@Override
+	void checkCollision(CollisionController colControl) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 		
 	

@@ -33,11 +33,12 @@ public class KingdomController extends JPanel implements KeyListener, MouseListe
 		boolean attacking=false;
 		boolean retreating = false;
 		
-		private int dayLength = 3000; //a full day at 5 min day should be around 30,000 frames
+		private int dayLength = 2000; //a full day at 5 min day should be around 30,000 frames
 		private int defenders = 2;
 		private int enemiesPerDay = 4;
 		private int walls = 2;
 		private int players = 1;
+		private CollisionController colControl;
 		
 		private final Random random;
 
@@ -50,8 +51,9 @@ public class KingdomController extends JPanel implements KeyListener, MouseListe
 			// only for 1 main character right now
 
 			timeState = timeState.DAWN;
+
 			panelDimensions = new Dimension();
-			
+			colControl = new CollisionController(objectList);
 
 		}
 
@@ -167,14 +169,11 @@ public class KingdomController extends JPanel implements KeyListener, MouseListe
 		
 		private void checkCollisions() { //TODO collisions
 			
-			for(int i = 0; i<objectList.size();i++)
-				for(int a = 0; a<objectList.size() && a!=i;a++) { //TODO all combinations non repeatable
-					if(objectList.get(i).isColliding(objectList.get(a)))
-						if((objectList.get(i) instanceof Enemy && objectList.get(a) instanceof Arrow)||(objectList.get(i) instanceof Arrow && objectList.get(a) instanceof Enemy) ) {
-							
-						}
-					
+			for(int i = 0; i<objectList.size();i++) {
+				if(objectList.get(i) instanceof CollisionSprite) {
+					((CollisionSprite) objectList.get(i)).checkCollision(colControl);
 				}
+			}	
 		}
 		
 		private void timeCalculations() {
@@ -189,13 +188,13 @@ public class KingdomController extends JPanel implements KeyListener, MouseListe
 				attacking = true;
 			}else if(timeOfDay==dayLength*.6 && timeState==timeState.DAY) {
 				timeState=timeState.DUSK;
-				retreating = true;
+				defending = true;
 			}else if(timeOfDay==dayLength*.1 && timeState==timeState.DAWN) {
 				timeState=timeState.DAY;
 				roaming = true;
 			}else if(timeOfDay==0 && timeState==timeState.NIGHT) {
 				timeState=timeState.DAWN;
-				defending = true;
+				retreating = true;
 			}
 			timeOfDay++;
 		}
