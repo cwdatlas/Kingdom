@@ -1,18 +1,19 @@
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
 //Programmed by Adrian and Aidan of Carroll college
-public class BaseSprite implements BaseSpriteI {
+public abstract class BaseSprite implements BaseSpriteI {
 	protected BufferedImage img;
-//	protected int[] cords;
-//	protected int[] goToCords;
 	protected Point target;
 	protected Point currentPosition;
+	protected Rectangle hitbox;
+	protected boolean blocked = false;
 	// build the variables for direction like how Nate built direction in the
 	// dolphin program (with worded lists) whatever that was
 
@@ -23,6 +24,7 @@ public class BaseSprite implements BaseSpriteI {
 		currentPosition = new Point(x, y);
 		this.loadImage(fileName);
 		
+		hitbox = new Rectangle(x, y, img.getWidth(), img.getHeight());
 	}
 
 	@Override
@@ -40,16 +42,20 @@ public class BaseSprite implements BaseSpriteI {
 	@Override
 	public boolean move() {
 		boolean check = false;
+		if(!blocked) {
 		try {
 			if(target.x > currentPosition.x) {
 				currentPosition.setLocation(new Point(currentPosition.x + 1, currentPosition.y));
+				hitbox.x = (int) (hitbox.getX()+1);
 			}
 			else if(target.x < currentPosition.x) {
 				currentPosition.setLocation(new Point(currentPosition.x - 1, currentPosition.y));
+				hitbox.x = (int) (hitbox.getX()-1);
 
 			}
 		}finally{
 			// TODO fill this in with the finally catch thing
+		}
 		}
 		return check;
 	}
@@ -81,6 +87,9 @@ public class BaseSprite implements BaseSpriteI {
 	@Override
 	public Point getPosition() {
 		return currentPosition;
+	}
+	public Rectangle getHitBox() {
+		return hitbox;
 	}
 
 	@Override

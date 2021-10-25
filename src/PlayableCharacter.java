@@ -7,7 +7,7 @@ import javax.imageio.ImageIO;
 
 //Programmed by Adrian and Aidan of Carroll college
 
-public class PlayableCharacter extends BaseSprite implements PlayableCharacterI {
+public class PlayableCharacter extends CollisionSprite implements PlayableCharacterI {
 	// set your varables here, make sure as many as possible are private
 	private int gold;
 
@@ -42,6 +42,16 @@ public class PlayableCharacter extends BaseSprite implements PlayableCharacterI 
 	public boolean useMoney(boolean use) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	
+	public void checkCollition(CollisionController colControl) {
+		
+	}
+
+	@Override
+	void checkCollision(CollisionController colControl) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
