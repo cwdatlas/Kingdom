@@ -6,4 +6,6 @@ public interface DefenderI {
 	void setRoaming(); //sets the defenders actions to be in the roaming status
 	
 	void setMode();
+	
+	void checkCollision(CollisionController colControl);
 }

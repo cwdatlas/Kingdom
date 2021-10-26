@@ -39,7 +39,7 @@ public class Defender extends CollisionSprite implements DefenderI {
 		Timer timer = new Timer();
 		timer.scheduleAtFixedRate(new TimerTask() {
 			public void run() {
-				if(Math.random() < .99) {
+				if(Math.random() < .09) {
 					setDefending();
 				}
 				else {
@@ -49,14 +49,17 @@ public class Defender extends CollisionSprite implements DefenderI {
 			}},10, 500);
 		
 
-	@Override
-	void checkCollision(CollisionController colControl) {
+
+	
+		
+	
+	}
+
+	public void checkCollision(CollisionController colControl) {
 		// TODO Auto-generated method stub
 		
 	}
-	
-		
-	
-	}
+
+
 	}
 
