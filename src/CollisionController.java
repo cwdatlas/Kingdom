@@ -12,7 +12,7 @@ public class CollisionController {
 	
 	public ArrayList<BaseSprite> checkCollition(Rectangle hitBox){
 		for(int i = 0; i<objectList.size();  i++) {
-			if(hitBox.intersects(objectList.get(i).getHitBox()));
+			if(hitBox.intersects(objectList.get(i).getHitBox()))
 			returnableObjects.add(objectList.get(i));
 		}
 //		System.out.println("returing collided objects");
