@@ -15,6 +15,7 @@ public abstract class BaseSprite implements BaseSpriteI {
 	public Dimension dimensions;
 	protected Rectangle hitbox;
 	protected boolean blocked = false;
+	protected boolean visible = true;
 	// build the variables for direction like how Nate built direction in the
 	// dolphin program (with worded lists) whatever that was
 
@@ -61,17 +62,16 @@ public abstract class BaseSprite implements BaseSpriteI {
 	}
 
 	@Override
-	public boolean remove(boolean visability) {
-		if(visability == true) {
-			visability = false;
-		}
-		// TODO Auto-generated method stub
-		return false;
+	public void setvisible(boolean visability) {
+			visible = visability;
 	}
 
 	@Override
 	public boolean paint(Graphics g) {
-		return g.drawImage(img, currentPosition.x, currentPosition.y, null);
+		if(visible) {
+		g.drawImage(img, currentPosition.x, currentPosition.y, null);
+		}
+		return visible;
 	}
 
 	public void loadImage(String fileName) {
@@ -92,9 +92,5 @@ public abstract class BaseSprite implements BaseSpriteI {
 		return hitbox;
 	}
 
-	@Override
-	public boolean isColliding(BaseSprite testedSprite) {
-		return false;
-	}
 
 }

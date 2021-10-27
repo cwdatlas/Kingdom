@@ -109,7 +109,9 @@ public class KingdomController extends JPanel implements KeyListener, MouseListe
 
 		private void spawnWalls(int numberOfWalls) {// TODO set spawn parameters (place)
 			for (int d = 0; d < numberOfWalls; d++) {
+				if (d%2 == 0)
 				objectList.add(new Wall((int)panelDimensions.getWidth() / 3, 500, wallSprite, panelDimensions));
+				else
 				objectList.add(new Wall(((int)panelDimensions.getWidth() / 3)*2 , 500, wallSprite, panelDimensions));
 			}
 		}
