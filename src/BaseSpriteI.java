@@ -14,7 +14,7 @@ public interface BaseSpriteI {
 	boolean move();
 
 	// sets visibility to true or false
-	boolean remove(boolean visability);
+	void setvisible(boolean visability);
 
 	// paint paints in the object with the graphics object (im not sure of this as
 	// of now)
