@@ -8,6 +8,9 @@ import java.util.TimerTask;
 	
 public class Defender extends CollisionSprite implements DefenderI {
 	private final Random random;
+	private boolean roaming;
+	int timerTick = 0;
+
 
 	protected Defender(int x, int y, String fileName, Dimension panelDementions) {
 		super(x, y, fileName, panelDementions);
@@ -16,6 +19,11 @@ public class Defender extends CollisionSprite implements DefenderI {
 
 	@Override
 	public void setDefending() {
+		roaming = false;
+//		goToCords[0] = random.nextInt(800);
+//		target.setLocation(new Point(random.nextInt(800), 500));
+//		target.setLocation(new Point((int)(dimensions.getWidth() / 3 + 50 + random.nextInt(30)), 500));
+
 		target.setLocation(new Point((int)(600 + random.nextInt(200)), 500));
 
 
@@ -24,30 +32,22 @@ public class Defender extends CollisionSprite implements DefenderI {
 	@Override
 	public void setRoaming() {
 
-				if(Math.random() < .01) {
-					
-					
-					//pass 1500 as a parameter in the constructor
-						moveTo(random.nextInt(1500), (int) target.getY() );
-					}				
-	}
-			
-	public void setMode() {
 		Timer timer = new Timer();
 		timer.scheduleAtFixedRate(new TimerTask() {
 			public void run() {
-				if(Math.random() < .09) {
-					setDefending();
-				}
-				else {
-					setRoaming();
+				timerTick++;
+				System.out.println(timerTick);
+				if(roaming) {
+					if(Math.random() < .09) {
+						moveTo(random.nextInt(1500), (int) target.getY() );
+					}
 				}
 			
-			}},10, 500);
-		
-		
-	
+			}},50, 10000 );
 	}
+
+
+					
 
 	public void checkCollision(CollisionController colControl) {
 		// TODO Auto-generated method stub
