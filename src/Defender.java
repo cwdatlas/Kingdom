@@ -31,21 +31,20 @@ public class Defender extends CollisionSprite implements DefenderI {
 
 	@Override
 	public void setRoaming() {
-
+		roaming = true;
 		Timer timer = new Timer();
 		timer.scheduleAtFixedRate(new TimerTask() {
 			public void run() {
-				timerTick++;
-				System.out.println(timerTick);
+//				timerTick++;
+//				System.out.println(timerTick);
 				if(roaming) {
 					if(Math.random() < .09) {
-						moveTo(random.nextInt(1500), (int) target.getY() );
+						moveTo(random.nextInt((1500-0) + 1), (int) target.getY() );
 					}
 				}
 			
-			}},50, 10000 );
+			}},500, 1000 );
 	}
-
 
 					
 
