@@ -101,7 +101,7 @@ public class KingdomController extends JPanel implements KeyListener, MouseListe
 		private void spawnEnemies(int numberOfEnemies) {// TODO set spawn parameters (place)
 			for (int d = 0; d < numberOfEnemies; d++) {
 				if (d%2 == 0)
-					objectList.add(new Enemy(random.nextInt(300) -300, 500, enemySprite, panelDimensions));
+					objectList.add(new Enemy(random.nextInt(300) -500, 500, enemySprite, panelDimensions));
 				else
 					objectList.add(new Enemy(random.nextInt(300) + (int)panelDimensions.getWidth(), 500, enemySprite, panelDimensions));
 			}
