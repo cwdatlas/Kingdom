@@ -91,6 +91,11 @@ public abstract class BaseSprite implements BaseSpriteI {
 	public Rectangle getHitBox() {
 		return hitbox;
 	}
-
+	
+	@Override
+	public boolean isColliding(BaseSprite testedSprite) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
 }
