@@ -23,6 +23,7 @@ public class Defender extends CollisionSprite implements DefenderI {
 //		goToCords[0] = random.nextInt(800);
 //		target.setLocation(new Point(random.nextInt(800), 500));
 //		target.setLocation(new Point((int)(dimensions.getWidth() / 3 + 50 + random.nextInt(30)), 500));
+
 		target.setLocation(new Point((int)(600 + random.nextInt(200)), 500));
 
 
@@ -44,13 +45,14 @@ public class Defender extends CollisionSprite implements DefenderI {
 			
 			}},50, 10000 );
 	}
+
+
 					
 
 	public void checkCollision(CollisionController colControl) {
 		// TODO Auto-generated method stub
 		
 	}
+}
 
-
-	}
 
