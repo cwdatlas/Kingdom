@@ -4,6 +4,7 @@ import java.util.ArrayList;
 //Programmed by Adrian and Aidan of Carroll college
 public class Wall extends CollisionSprite {
 	protected int HP = 50;
+	protected int infinityFrames;
 
 	protected Wall(int X, int Y, String fileName, Dimension panelDementions) {
 		super(X, Y, fileName, panelDementions);
@@ -19,15 +20,17 @@ public class Wall extends CollisionSprite {
 		ArrayList<BaseSprite> collidingSprites = colControl.checkCollition(this.getHitBox());
 		for (int i = 0; i < collidingSprites.size(); i++) {
 			if (collidingSprites.get(i) instanceof Enemy) {
-
-				if (HP > 0) {
+				
+				if (HP > 0  && (infinityFrames>100000)) {
+					
+					infinityFrames = 0;
 					HP--;
 					if (HP == 0) {
 						destroyWall();
 					}
 				}
 				collidingSprites.get(i).blocked = HP > 0;
-
+				infinityFrames++;
 			}
 
 		}
