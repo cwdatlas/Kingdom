@@ -35,8 +35,8 @@ public class Defender extends CollisionSprite implements DefenderI {
 		Timer timer = new Timer();
 		timer.scheduleAtFixedRate(new TimerTask() {
 			public void run() {
-				timerTick++;
-				System.out.println(timerTick);
+//				timerTick++;
+//				System.out.println(timerTick);
 				if(roaming) {
 					if(Math.random() < .09) {
 						moveTo(random.nextInt((1500-0) + 1), (int) target.getY() );
@@ -45,15 +45,6 @@ public class Defender extends CollisionSprite implements DefenderI {
 			
 			}},500, 1000 );
 	}
-
-	
-	
-//	randomGenerator.nextInt((maximum – minimum) + 1) + minimum
-//	In our case,
-//	minimum = 1
-//	maximum = 10so it will be
-//	randomGenerator.nextInt((10 – 1) + 1) + 1
-//	randomGenerator.nextInt(10) + 1
 
 					
 
