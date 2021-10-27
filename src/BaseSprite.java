@@ -55,7 +55,6 @@ public abstract class BaseSprite implements BaseSpriteI {
 
 			}
 		}finally{
-			// TODO fill this in with the finally catch thing
 		}
 		}
 		return check;

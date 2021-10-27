@@ -16,9 +16,6 @@ public class Defender extends CollisionSprite implements DefenderI {
 
 	@Override
 	public void setDefending() {
-//		goToCords[0] = random.nextInt(800);
-//		target.setLocation(new Point(random.nextInt(800), 500));
-//		target.setLocation(new Point((int)(dimensions.getWidth() / 3 + 50 + random.nextInt(30)), 500));
 		target.setLocation(new Point((int)(600 + random.nextInt(200)), 500));
 
 
@@ -48,9 +45,6 @@ public class Defender extends CollisionSprite implements DefenderI {
 			
 			}},10, 500);
 		
-
-
-	
 		
 	
 	}
@@ -59,7 +53,6 @@ public class Defender extends CollisionSprite implements DefenderI {
 		// TODO Auto-generated method stub
 		
 	}
+}
 
-
-	}
 
