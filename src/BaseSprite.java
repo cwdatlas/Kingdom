@@ -27,6 +27,7 @@ public abstract class BaseSprite implements BaseSpriteI {
 		this.loadImage(fileName);
 		
 		hitbox = new Rectangle(x, y, img.getWidth(), img.getHeight());
+
 	}
 
 	@Override
