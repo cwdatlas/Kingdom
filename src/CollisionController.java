@@ -15,6 +15,7 @@ public class CollisionController {
 			if(hitBox.intersects(objectList.get(i).getHitBox()));
 			returnableObjects.add(objectList.get(i));
 		}
+//		System.out.println("returing collided objects");
 		return returnableObjects;
 	}
 	

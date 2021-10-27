@@ -17,7 +17,7 @@ public class Wall extends CollisionSprite{
 			if(collidingSprites.get(i) instanceof Enemy) {
 				if(HP > 0)
 				collidingSprites.get(i).blocked = true;
-				System.out.println("enemy blocked");
+//				System.out.println("enemy blocked");
 				HP--;
 			}
 			else {
