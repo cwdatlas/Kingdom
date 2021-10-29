@@ -1,5 +1,7 @@
 import java.awt.Dimension;
 import java.awt.Point;
+import java.awt.Rectangle;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -9,20 +11,25 @@ import java.util.TimerTask;
 public class Defender extends CollisionSprite implements DefenderI {
 	private final Random random;
 	private boolean roaming;
-	int timerTick = 0;
-
+	private Rectangle rangeHitBox;
+	private double rangeWidthOfPanel = .2;
+	private Dimension dementions;
+	
+	private int cooldownTimer = 0;
 
 	protected Defender(int x, int y, String fileName, Dimension panelDementions) {
 		super(x, y, fileName, panelDementions);
 		random = new Random();
+		dementions = panelDementions;
+		
+		int rangeWidth = (int) (this.img.getWidth() + panelDementions.getWidth()*rangeWidthOfPanel);
+		rangeHitBox = new Rectangle(x - rangeWidth/2, y, this.img.getHeight(),rangeWidth);
+					
 	}
 
 	@Override
 	public void setDefending() {
 		roaming = false;
-//		goToCords[0] = random.nextInt(800);
-//		target.setLocation(new Point(random.nextInt(800), 500));
-//		target.setLocation(new Point((int)(dimensions.getWidth() / 3 + 50 + random.nextInt(30)), 500));
 
 		target.setLocation(new Point((int)(600 + random.nextInt(200)), 500));
 
@@ -49,7 +56,20 @@ public class Defender extends CollisionSprite implements DefenderI {
 					
 
 	public void checkCollision(CollisionController colControl) {
-		// TODO Auto-generated method stub
+		ArrayList<BaseSprite> collidingSprites = colControl.checkCollition(rangeHitBox);
+		for (int i = 0; i < collidingSprites.size(); i++) {
+			if (collidingSprites.get(i) instanceof Enemy) {
+				cooldownTimer++;
+				if(cooldownTimer>100000) {
+					cooldownTimer = 0;
+					Point targetPoint = new Point(collidingSprites.get(i).getPosition());
+					Arrow arrow = new Arrow(this.getPosition().x, this.getPosition().y, "arrowSprite.png", dimensions);
+					arrow.moveTo(targetPoint.x, targetPoint.y);
+					colControl.addObject(arrow);
+				}
+			}
+
+		}
 		
 	}
 }

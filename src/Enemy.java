@@ -6,7 +6,7 @@ import java.awt.Point;
 
 
 public class Enemy extends BaseSprite implements EnemyI {
-	Point spawnPlace;
+	private Point spawnPlace;
 
 	protected Enemy(int x, int y, String fileName, Dimension panelDementions) {
 		super(x, y, fileName, panelDementions);
@@ -23,6 +23,9 @@ public class Enemy extends BaseSprite implements EnemyI {
 	public void setRetreat() {
 		target = spawnPlace;
 
+	}
+	public Point getSpawnPlace() {
+		return spawnPlace;
 	}
 
 }
