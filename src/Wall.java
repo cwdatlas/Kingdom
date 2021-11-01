@@ -2,7 +2,7 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 
 //Programmed by Adrian and Aidan of Carroll college
-public class Wall extends CollisionSprite KingdomMain {
+public class Wall extends CollisionSprite {
 	protected int HP = 50;
 	protected int infinityFrames;
 
@@ -34,9 +34,9 @@ public class Wall extends CollisionSprite KingdomMain {
 			}
 			//if player next to wall put up the gold required for wall
 			//add gold counter top right corner when wall is being built
-			else if(collidingSprites.get(i) instanceof PlayableCharacter) {
-				 coins++;
-			}
+//			else if(collidingSprites.get(i) instanceof PlayableCharacter) {
+//				 
+//			}
  {
 				
 			}
