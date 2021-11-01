@@ -29,6 +29,7 @@ public class KingdomMain {
 		JFrame kingdom = new JFrame("Kingdom");
 		JPanel kingdomPanel = new KingdomController();
 		kingdom.addKeyListener((KeyListener) kingdomPanel);
+		kingdom.addMouseListener((MouseListener) kingdomPanel);
 		// setting window params
 		try {
 			// setting up parameters for the JFrame
@@ -36,11 +37,11 @@ public class KingdomMain {
 			kingdom.setVisible(true);
 			kingdom.setBounds(0, 0, 1920, 1080);
 			kingdom.setVisible(true);
+			kingdom.setBackground(Color.WHITE);
 
 			// setting parameters for the JPanel: world
 			kingdomPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
-			kingdomPanel.setBackground(new Color(200, 200, 200));
-
+	
 			// adding panel to kingdom
 			kingdom.add(kingdomPanel);
 
@@ -50,7 +51,7 @@ public class KingdomMain {
 					kingdom.repaint();
 				}
 				// setting
-			}, 10, 10);
+			}, 10, 100);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

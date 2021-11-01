@@ -1,5 +1,7 @@
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -54,7 +56,8 @@ public class KingdomController extends JPanel implements KeyListener, MouseListe
 
 			panelDimensions = new Dimension();
 			colControl = new CollisionController(objectList);
-
+			this.setBackground(Color.ORANGE);
+			
 		}
 
 		public void paintComponent(Graphics g) {
@@ -70,7 +73,7 @@ public class KingdomController extends JPanel implements KeyListener, MouseListe
 			if(panelDimensions!=null && gameRunning) { //then this runs the game
 			doMoves();
 			
-			checkCollisions(); // TODO Collision detection and action
+			checkCollisions();
 
 			for (int i = 0; i < objectList.size(); i++) { // Painting objects on world panel
 				objectList.get(i).paint(g);
@@ -188,15 +191,19 @@ public class KingdomController extends JPanel implements KeyListener, MouseListe
 				timeState=timeState.NIGHT;
 				spawning = true;
 				attacking = true;
+				this.setBackground(Color.BLUE);
 			}else if(timeOfDay==dayLength*.6 && timeState==timeState.DAY) {
 				timeState=timeState.DUSK;
 				defending = true;
+				this.setBackground(Color.DARK_GRAY);
 			}else if(timeOfDay==dayLength*.1 && timeState==timeState.DAWN) {
 				timeState=timeState.DAY;
 				roaming = true;
+				this.setBackground(Color.CYAN);
 			}else if(timeOfDay==0 && timeState==timeState.NIGHT) {
 				timeState=timeState.DAWN;
 				retreating = true;
+				this.setBackground(Color.ORANGE);
 			}
 			timeOfDay++;
 		}
@@ -247,13 +254,20 @@ public class KingdomController extends JPanel implements KeyListener, MouseListe
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			// TODO Auto-generated method stub
+			Point target = e.getLocationOnScreen();
+			Point spawn = objectList.get(1).getPosition();
+			Arrow arrow = new Arrow(spawn.x,spawn.y,arrowSprite, panelDimensions);
+			arrow.moveTo(target.x, 500);
+			objectList.add(arrow);
+			System.out.println("Arrow Fired");
+			
+			
 
 		}
 
 		@Override
 		public void mousePressed(MouseEvent e) {
-			// TODO Auto-generated method stub
+			System.out.println("mouse pressed");
 
 		}
 
