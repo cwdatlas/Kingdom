@@ -24,7 +24,7 @@ public class Defender extends CollisionSprite implements DefenderI {
 		
 		int rangeWidth = (int) (this.img.getWidth() + panelDementions.getWidth()*rangeWidthOfPanel);
 		rangeHitBox = new Rectangle(x - rangeWidth/2, y, this.img.getHeight(),rangeWidth);
-					
+			
 	}
 
 	@Override
@@ -60,7 +60,7 @@ public class Defender extends CollisionSprite implements DefenderI {
 		for (int i = 0; i < collidingSprites.size(); i++) {
 			if (collidingSprites.get(i) instanceof Enemy) {
 				cooldownTimer++;
-				if(cooldownTimer>100000) {
+				if(cooldownTimer>100) {
 					cooldownTimer = 0;
 					Point targetPoint = new Point(collidingSprites.get(i).getPosition());
 					Arrow arrow = new Arrow(this.getPosition().x, this.getPosition().y, "arrowSprite.png", dimensions);

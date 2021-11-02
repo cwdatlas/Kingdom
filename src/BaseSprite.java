@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
@@ -16,6 +17,7 @@ public abstract class BaseSprite implements BaseSpriteI {
 	protected Rectangle hitbox;
 	protected boolean blocked = false;
 	protected boolean visible = true;
+	ArrayList<T> movingObjects;
 	// build the variables for direction like how Nate built direction in the
 	// dolphin program (with worded lists) whatever that was
 

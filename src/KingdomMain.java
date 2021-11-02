@@ -60,7 +60,7 @@ public class KingdomMain {
 					kingdom.repaint();
 				}
 				// setting
-			}, 10, 100);
+			}, 0, 10);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

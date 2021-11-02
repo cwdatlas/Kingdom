@@ -85,6 +85,7 @@ public class KingdomController extends JPanel implements KeyListener, MouseListe
 				spawnEnemies(enemiesPerDay);
 				spawning = false;
 			}
+			
 			}
 		}
 

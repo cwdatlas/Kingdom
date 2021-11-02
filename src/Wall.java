@@ -20,8 +20,7 @@ public class Wall extends CollisionSprite {
 		ArrayList<BaseSprite> collidingSprites = colControl.checkCollition(this.getHitBox());
 		for (int i = 0; i < collidingSprites.size(); i++) {
 			if (collidingSprites.get(i) instanceof Enemy) {
-				
-				if (HP > 0  && (infinityFrames>100000)) {
+				if (HP > 0  && (infinityFrames>60)) {
 					
 					infinityFrames = 0;
 					HP--;
