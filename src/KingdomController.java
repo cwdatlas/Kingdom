@@ -61,33 +61,14 @@ public class KingdomController extends JPanel implements KeyListener, MouseListe
 			// only for 1 main character right now
 
 			timeState = timeState.DAWN;
-
 			panelDimensions = new Dimension();
 			colControl = new CollisionController(objectList);
-
 			this.add(coinPanel);
-
 			this.add(tod);
-
-			this.setBackground(Color.ORANGE);
-			
 		}
 
 		public void paintComponent(Graphics g) {
 			panelDimensions = this.getSize();
-			
-			if(timeState == TimeState.NIGHT) {
-				g.setColor(java.awt.Color.blue);
-			}
-			else if(timeState == TimeState.DAY) {
-				g.setColor(java.awt.Color.yellow);
-			}
-			else if(timeState == TimeState.DUSK) {
-				g.setColor(java.awt.Color.green);
-			}
-			else if(timeState == TimeState.DAWN) {
-				g.setColor(java.awt.Color.orange);
-			}
 			
 			if(!gameRunning) { //spawn things that are dependent on frame width
 				spawnPlayers(players);
@@ -111,7 +92,6 @@ public class KingdomController extends JPanel implements KeyListener, MouseListe
 				spawnEnemies(enemiesPerDay);
 				spawning = false;
 			}
-			
 			}
 			//JLabels
 			//this sets up the coins or score board
@@ -226,28 +206,22 @@ public class KingdomController extends JPanel implements KeyListener, MouseListe
 				spawning = true;
 				attacking = true;
 
-				this.setBackground(Color.BLUE);
 			}else if(timeOfDay==dayLength*.6 && timeState==timeState.DAY) {
 				timeState=TimeState.DUSK;
 				defending = true;
 
-				this.setBackground(Color.DARK_GRAY);
 			}else if(timeOfDay==dayLength*.1 && timeState==timeState.DAWN) {
 				timeState=TimeState.DAY;
 				roaming = true;
 
-				this.setBackground(Color.CYAN);
 			}else if(timeOfDay==0 && timeState==timeState.NIGHT) {
 				timeState=TimeState.DAWN;
 				retreating = true;
-
-				this.setBackground(Color.ORANGE);
 			}
 			timeOfDay++;
 		}
 
 		// key and mouse listener events
-
 		@Override
 		public void keyTyped(KeyEvent e) {
 			// TODO Auto-generated method stub

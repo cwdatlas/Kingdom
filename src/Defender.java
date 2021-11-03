@@ -15,8 +15,6 @@ public class Defender extends CollisionSprite implements DefenderI {
 	private boolean roaming;
 	private Rectangle rangeHitBox;
 	private double rangeWidthOfPanel = .3;
-
-	
 	private int cooldownTimer = 0;
 
 	protected Defender(int x, int y, String fileName, Dimension panelDementions) {
@@ -31,7 +29,6 @@ public class Defender extends CollisionSprite implements DefenderI {
 	@Override
 	public void setDefending() {
 		roaming = false;
-
 		target.setLocation(new Point((int)(600 + random.nextInt(200)), 500));
 
 
