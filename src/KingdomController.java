@@ -256,11 +256,11 @@ public class KingdomController extends JPanel implements KeyListener, MouseListe
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			Point target = e.getLocationOnScreen();
-			Point spawn = objectList.get(1).getPosition();
-			Arrow arrow = new Arrow(spawn.x,spawn.y,arrowSprite, panelDimensions);
+			Point spawn = objectList.get(0).getPosition();
+			System.out.println(objectList.get(0).currentPosition.x+" "+ target.x);
+			Arrow arrow = new Arrow(spawn.x,spawn.y+(objectList.get(0).getHitBox().height/2),arrowSprite, panelDimensions,(objectList.get(0).currentPosition.x<target.x));
 			arrow.moveTo(target.x, 500);
 			objectList.add(arrow);
-			System.out.println("Arrow Fired");
 			
 			
 
@@ -268,7 +268,6 @@ public class KingdomController extends JPanel implements KeyListener, MouseListe
 
 		@Override
 		public void mousePressed(MouseEvent e) {
-			System.out.println("mouse pressed");
 
 		}
 

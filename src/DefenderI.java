@@ -1,3 +1,4 @@
+import java.awt.Graphics;
 
 public interface DefenderI {
 
@@ -6,4 +7,6 @@ public interface DefenderI {
 	void setRoaming(); //sets the defenders actions to be in the roaming status
 		
 	void checkCollision(CollisionController colControl);
+	
+	boolean paint(Graphics g);
 }
