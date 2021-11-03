@@ -32,6 +32,13 @@ public class KingdomMain {
 		JPanel kingdomPanel = new KingdomController();
 		kingdom.addKeyListener((KeyListener) kingdomPanel);
 
+
+		kingdom.addMouseListener((MouseListener) kingdomPanel);
+
+		//this sets up the coins or score board
+		JLabel coinPanel = new JLabel();
+		coinPanel.setText("Coins: " + coins);
+		kingdomPanel.add(coinPanel);
 		// setting window params
 		try {
 			// setting up parameters for the JFrame
@@ -39,11 +46,11 @@ public class KingdomMain {
 			kingdom.setVisible(true);
 			kingdom.setBounds(0, 0, 1920, 1080);
 			kingdom.setVisible(true);
+			kingdom.setBackground(Color.WHITE);
 
 			// setting parameters for the JPanel: world
 			kingdomPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
-			kingdomPanel.setBackground(new Color(200, 200, 200));
-
+	
 			// adding panel to kingdom
 			kingdom.add(kingdomPanel);
 
@@ -53,7 +60,7 @@ public class KingdomMain {
 					kingdom.repaint();
 				}
 				// setting
-			}, 10, 10);
+			}, 0, 10);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

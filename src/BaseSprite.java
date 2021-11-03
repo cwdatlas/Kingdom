@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
@@ -12,7 +13,7 @@ public abstract class BaseSprite implements BaseSpriteI {
 	protected BufferedImage img;
 	protected Point target;
 	protected Point currentPosition;
-	public Dimension dimensions;
+	protected Dimension dimensions;
 	protected Rectangle hitbox;
 	protected boolean blocked = false;
 	protected boolean visible = true;
@@ -26,6 +27,7 @@ public abstract class BaseSprite implements BaseSpriteI {
 	protected BaseSprite(int x, int y, String fileName, Dimension panelDimensions) {
 		target = new Point(x, y);
 		currentPosition = new Point(x, y);
+		dimensions = panelDimensions;
 		this.loadImage(fileName);
 		
 		hitbox = new Rectangle(x, y, img.getWidth(), img.getHeight());
@@ -51,11 +53,11 @@ public abstract class BaseSprite implements BaseSpriteI {
 		try {
 			if(target.x > currentPosition.x) {
 				currentPosition.setLocation(new Point(currentPosition.x + 1, currentPosition.y));
-				hitbox.x = (int) (hitbox.getX()+1);
+				hitbox.x = currentPosition.x;
 			}
 			else if(target.x < currentPosition.x) {
 				currentPosition.setLocation(new Point(currentPosition.x - 1, currentPosition.y));
-				hitbox.x = (int) (hitbox.getX()-1);
+				hitbox.x = currentPosition.x;
 
 			}
 		}finally{

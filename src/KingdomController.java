@@ -1,6 +1,7 @@
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -68,6 +69,8 @@ public class KingdomController extends JPanel implements KeyListener, MouseListe
 
 			this.add(tod);
 
+			this.setBackground(Color.ORANGE);
+			
 		}
 
 		public void paintComponent(Graphics g) {
@@ -96,7 +99,7 @@ public class KingdomController extends JPanel implements KeyListener, MouseListe
 			if(panelDimensions!=null && gameRunning) { //then this runs the game
 			doMoves();
 			
-			checkCollisions(); // TODO Collision detection and action
+			checkCollisions();
 
 			for (int i = 0; i < objectList.size(); i++) { // Painting objects on world panel
 				objectList.get(i).paint(g);
@@ -108,6 +111,7 @@ public class KingdomController extends JPanel implements KeyListener, MouseListe
 				spawnEnemies(enemiesPerDay);
 				spawning = false;
 			}
+			
 			}
 			//JLabels
 			//this sets up the coins or score board
@@ -222,19 +226,22 @@ public class KingdomController extends JPanel implements KeyListener, MouseListe
 				spawning = true;
 				attacking = true;
 
-				
+				this.setBackground(Color.BLUE);
 			}else if(timeOfDay==dayLength*.6 && timeState==timeState.DAY) {
 				timeState=TimeState.DUSK;
 				defending = true;
 
+				this.setBackground(Color.DARK_GRAY);
 			}else if(timeOfDay==dayLength*.1 && timeState==timeState.DAWN) {
 				timeState=TimeState.DAY;
 				roaming = true;
 
+				this.setBackground(Color.CYAN);
 			}else if(timeOfDay==0 && timeState==timeState.NIGHT) {
 				timeState=TimeState.DAWN;
 				retreating = true;
 
+				this.setBackground(Color.ORANGE);
 			}
 			timeOfDay++;
 		}
@@ -285,13 +292,19 @@ public class KingdomController extends JPanel implements KeyListener, MouseListe
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			// TODO Auto-generated method stub
+			Point target = e.getLocationOnScreen();
+			Point spawn = objectList.get(0).getPosition();
+			System.out.println(objectList.get(0).currentPosition.x+" "+ target.x);
+			Arrow arrow = new Arrow(spawn.x,spawn.y+(objectList.get(0).getHitBox().height/2),arrowSprite, panelDimensions,(objectList.get(0).currentPosition.x<target.x));
+			arrow.moveTo(target.x, 500);
+			objectList.add(arrow);
+			
+			
 
 		}
 
 		@Override
 		public void mousePressed(MouseEvent e) {
-			// TODO Auto-generated method stub
 
 		}
 
