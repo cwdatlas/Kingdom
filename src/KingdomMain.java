@@ -37,6 +37,7 @@ public class KingdomMain {
 
 		//this sets up the coins or score board
 		JLabel coinPanel = new JLabel();
+		int coins = 0;
 		coinPanel.setText("Coins: " + coins);
 		kingdomPanel.add(coinPanel);
 		// setting window params
