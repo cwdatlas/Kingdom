@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
@@ -10,6 +11,8 @@ import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
 import java.util.Random;
 
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class KingdomController extends JPanel implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
@@ -41,7 +44,13 @@ public class KingdomController extends JPanel implements KeyListener, MouseListe
 		private CollisionController colControl;
 		
 		private final Random random;
+		
+		//this shows the time of day as a sting under coinPanel
+		JLabel tod = new JLabel();
 
+		//this sets up the coins or score board
+		JLabel coinPanel = new JLabel();
+		
 		ArrayList<BaseSprite> objectList = new ArrayList();
 
 		public KingdomController() {
@@ -55,10 +64,27 @@ public class KingdomController extends JPanel implements KeyListener, MouseListe
 			panelDimensions = new Dimension();
 			colControl = new CollisionController(objectList);
 
+			this.add(coinPanel);
+
+			this.add(tod);
+
 		}
 
 		public void paintComponent(Graphics g) {
 			panelDimensions = this.getSize();
+			
+			if(timeState == TimeState.NIGHT) {
+				g.setColor(java.awt.Color.blue);
+			}
+			else if(timeState == TimeState.DAY) {
+				g.setColor(java.awt.Color.yellow);
+			}
+			else if(timeState == TimeState.DUSK) {
+				g.setColor(java.awt.Color.green);
+			}
+			else if(timeState == TimeState.DAWN) {
+				g.setColor(java.awt.Color.orange);
+			}
 			
 			if(!gameRunning) { //spawn things that are dependent on frame width
 				spawnPlayers(players);
@@ -83,9 +109,16 @@ public class KingdomController extends JPanel implements KeyListener, MouseListe
 				spawning = false;
 			}
 			}
+			//JLabels
+			//this sets up the coins or score board
+
+			coinPanel.setText("Coins: " + objectList.get(0).getGold());
+			tod.setText("Time of Day: " + timeState );
+			
 		}
 
 		// spawning shortcuts
+		
 
 		private void spawnPlayers(int numberOfPlayers) {
 			for (int d = 0; d < numberOfPlayers; d++)
@@ -185,18 +218,23 @@ public class KingdomController extends JPanel implements KeyListener, MouseListe
 
 			}
 			if(timeOfDay==dayLength*.7 && timeState==timeState.DUSK) {
-				timeState=timeState.NIGHT;
+				timeState=TimeState.NIGHT;
 				spawning = true;
 				attacking = true;
+
+				
 			}else if(timeOfDay==dayLength*.6 && timeState==timeState.DAY) {
-				timeState=timeState.DUSK;
+				timeState=TimeState.DUSK;
 				defending = true;
+
 			}else if(timeOfDay==dayLength*.1 && timeState==timeState.DAWN) {
-				timeState=timeState.DAY;
+				timeState=TimeState.DAY;
 				roaming = true;
+
 			}else if(timeOfDay==0 && timeState==timeState.NIGHT) {
-				timeState=timeState.DAWN;
+				timeState=TimeState.DAWN;
 				retreating = true;
+
 			}
 			timeOfDay++;
 		}

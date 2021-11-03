@@ -9,12 +9,10 @@ import javax.imageio.ImageIO;
 
 public class PlayableCharacter extends CollisionSprite implements PlayableCharacterI {
 	// set your varables here, make sure as many as possible are private
-	private int gold;
 
 	// constructor...
 	PlayableCharacter(int X, int Y, int Gold, String fileName, Dimension panelDementions) {
 		super(X, Y, fileName, panelDementions);
-		gold = Gold;
 
 	}
 
@@ -54,4 +52,6 @@ public class PlayableCharacter extends CollisionSprite implements PlayableCharac
 		
 	}
 
+
+	
 }

@@ -24,4 +24,12 @@ public interface BaseSpriteI {
 	Point getPosition();
 
 	boolean isColliding(BaseSprite testedSprite); // returns true if objects collide
+
+	//makes it so you get the gold from playable character
+	int getGold();
+	
+	//lets us set the gold
+	void setGold(int g);
+	
+	int incrementGold();
 }

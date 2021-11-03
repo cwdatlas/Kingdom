@@ -16,6 +16,8 @@ public abstract class BaseSprite implements BaseSpriteI {
 	protected Rectangle hitbox;
 	protected boolean blocked = false;
 	protected boolean visible = true;
+	private int gold;
+
 	// build the variables for direction like how Nate built direction in the
 	// dolphin program (with worded lists) whatever that was
 
@@ -99,4 +101,19 @@ public abstract class BaseSprite implements BaseSpriteI {
 		return false;
 	}
 
+	
+	@Override
+	public int getGold() {
+		return gold;
+	}
+
+	@Override
+	public void setGold(int g) {
+		gold = g;	
+	}
+
+	@Override
+	public int incrementGold() {
+		return gold++;
+	}
 }
