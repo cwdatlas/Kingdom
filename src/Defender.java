@@ -23,14 +23,12 @@ public class Defender extends CollisionSprite implements DefenderI {
 		int rangeWidth = (int) (this.img.getWidth() + panelDementions.getWidth()*rangeWidthOfPanel);
 		rangeHitBox = new Rectangle(x - rangeWidth/2, y, this.img.getHeight(),rangeWidth);		
 	}
-
 	@Override
 	public void setDefending(int position) {
 		
 		roaming = false;
 		target.setLocation(new Point((int)(600 + random.nextInt(200)), 500));
 	}
-
 	@Override
 	public void setRoaming() {
 		roaming = true;
@@ -75,6 +73,7 @@ public class Defender extends CollisionSprite implements DefenderI {
 
 		return true;
 	}
+
 }
 
 
