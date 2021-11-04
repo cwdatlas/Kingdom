@@ -41,10 +41,11 @@ public class KingdomController extends JPanel
 	private boolean roaming = true;
 	private boolean attacking = false;
 	private boolean retreating = false;
-	private Color dawnColor = new Color(6,6,6,220);
-	private Color dayColor = new Color(6,6,6,220);
-	private Color duskColor = new Color(6,6,6,220);
-	private Color nightColor = new Color(6,6,6,220);
+	private Color dawnColor = new Color(255, 153, 51,30);
+	private Color dayColor = new Color(6,6,6,0);
+	private Color duskColor = new Color(255, 153, 51,30);
+	private Color nightColor = new Color(0, 0, 0,120);
+	private Color backgroundColor = new Color(128, 255, 191,30);
 	private BufferedImage backgroundImage; 
 	
 	private int dayLength = 5000; // a full day at 5 min day should be around 30,000 frames
@@ -56,7 +57,7 @@ public class KingdomController extends JPanel
 
 	private final Random random;
 
-	private Color backgroundColor;
+	
 
 	// this shows the time of day as a sting under coinPanel
 	JLabel tod = new JLabel();
@@ -77,7 +78,7 @@ public class KingdomController extends JPanel
 		this.add(tod);
 		
 		try {
-			backgroundImage = ImageIO.read(new File("file:///C:/Users/aidan/eclipse-workspace_java/Kingdom/src/images/background.png"));
+			backgroundImage = ImageIO.read(this.getClass().getResource("/images/background.png"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -190,7 +191,7 @@ public class KingdomController extends JPanel
 						((Defender) objectList.get(i)).setDefending(50 + panelDimensions.width / 3);
 					else
 						((Defender) objectList.get(i))
-								.setDefending(panelDimensions.width + 50 - panelDimensions.width / 3);
+								.setDefending(panelDimensions.width - 50 - panelDimensions.width / 3);
 
 				}
 				objectList.get(i).move();
