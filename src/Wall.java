@@ -28,7 +28,7 @@ public class Wall extends CollisionSprite {
 						destroyWall();
 					}
 				}
-				collidingSprites.get(i).blocked = HP > 0;
+				collidingSprites.get(i).setBlocked(HP > 0);
 				infinityFrames++;
 			}
 			//if player next to wall put up the gold required for wall

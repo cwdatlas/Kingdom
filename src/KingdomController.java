@@ -63,7 +63,6 @@ public class KingdomController extends JPanel implements KeyListener, MouseListe
 			// only for 1 main character right now
 
 			timeState = timeState.DAWN;
-
 			panelDimensions = new Dimension();
 			colControl = new CollisionController(objectList);
 			this.add(coinPanel);
@@ -99,7 +98,6 @@ public class KingdomController extends JPanel implements KeyListener, MouseListe
 				spawnEnemies(enemiesPerDay);
 				spawning = false;
 			}
-			
 			}
 			//JLabels
 			//this sets up the coins or score board
@@ -207,7 +205,6 @@ public class KingdomController extends JPanel implements KeyListener, MouseListe
 			if (timeOfDay > dayLength) {
 				timeOfDay = 0;
 				days++;
-				
 			}
 			if(timeOfDay==dayLength*.7 && timeState==timeState.DUSK) {
 				timeState=TimeState.NIGHT;
@@ -227,12 +224,11 @@ public class KingdomController extends JPanel implements KeyListener, MouseListe
 				timeState=TimeState.DAWN;
 				retreating = true;
 
-			}
 			timeOfDay++;
+			}
 		}
 
 		// key and mouse listener events
-
 		@Override
 		public void keyTyped(KeyEvent e) {
 			// TODO Auto-generated method stub

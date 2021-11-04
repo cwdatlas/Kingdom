@@ -15,7 +15,8 @@ public abstract class BaseSprite implements BaseSpriteI {
 	protected Point currentPosition;
 	protected Dimension dimensions;
 	protected Rectangle hitbox;
-	protected boolean blocked = false;
+	protected boolean blockedRight = false;
+	protected boolean blockedLeft = false;
 	protected boolean visible = true;
 	private int gold;
 
@@ -49,20 +50,19 @@ public abstract class BaseSprite implements BaseSpriteI {
 	@Override
 	public boolean move() {
 		boolean check = false;
-		if(!blocked) {
 		try {
-			if(target.x > currentPosition.x) {
+			if(target.x > currentPosition.x && !blockedRight ) {
 				currentPosition.setLocation(new Point(currentPosition.x + 1, currentPosition.y));
 				hitbox.x = currentPosition.x;
 			}
-			else if(target.x < currentPosition.x) {
+			else if(target.x < currentPosition.x && !blockedLeft) {
 				currentPosition.setLocation(new Point(currentPosition.x - 1, currentPosition.y));
 				hitbox.x = currentPosition.x;
 
 			}
 		}finally{
 		}
-		}
+		
 		return check;
 	}
 
@@ -101,6 +101,20 @@ public abstract class BaseSprite implements BaseSpriteI {
 	public boolean isColliding(BaseSprite testedSprite) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	
+	//the setter for blocking and the direction that the sprite is blocked in
+	public void setBlocked(boolean blocking) {
+		if(target.x > currentPosition.x && blocking) {
+			blockedRight = true;
+		}
+		else if(blocking) {
+			blockedLeft = true;
+		}
+		else {
+			blockedLeft = false;
+			blockedRight = false;
+		}
 	}
 
 	

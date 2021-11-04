@@ -31,8 +31,6 @@ public class KingdomMain {
 		JFrame kingdom = new JFrame("Kingdom");
 		JPanel kingdomPanel = new KingdomController();
 		kingdom.addKeyListener((KeyListener) kingdomPanel);
-
-
 		kingdom.addMouseListener((MouseListener) kingdomPanel);
 
 		//this sets up the coins or score board
