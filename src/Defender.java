@@ -15,24 +15,21 @@ public class Defender extends CollisionSprite implements DefenderI {
 	private boolean roaming;
 	private Rectangle rangeHitBox;
 	private double rangeWidthOfPanel = .3;
-
-	
 	private int cooldownTimer = 0;
 
 	protected Defender(int x, int y, String fileName, Dimension panelDementions) {
 		super(x, y, fileName, panelDementions);
-		random = new Random();
 		
+		random = new Random();
 		int rangeWidth = (int) (this.img.getWidth() + panelDementions.getWidth()*rangeWidthOfPanel);
 		rangeHitBox = new Rectangle(x - rangeWidth/2, y, this.img.getHeight(),rangeWidth);
-			
 	}
-
+	@Override
 	public void setDefending(int position) {
 		roaming = false;
 		target.setLocation(position, 500);
 	}
-
+	@Override
 	public void setRoaming() {
 		roaming = true;
 		Timer timer = new Timer();
@@ -48,9 +45,6 @@ public class Defender extends CollisionSprite implements DefenderI {
 			
 			}},500, 1000 );
 	}
-
-					
-
 	public void checkCollision(CollisionController colControl) {
 		ArrayList<BaseSprite> collidingSprites = colControl.checkCollition(rangeHitBox);
 		for (int i = 0; i < collidingSprites.size(); i++) {
@@ -63,9 +57,7 @@ public class Defender extends CollisionSprite implements DefenderI {
 					colControl.addObject(arrow);
 				}
 			}
-
 		}
-		
 	}
 	@Override
 	public boolean paint(Graphics g) {
@@ -73,14 +65,8 @@ public class Defender extends CollisionSprite implements DefenderI {
 		g.setColor(Color.GREEN);
 		rangeHitBox.x = (int) (currentPosition.x - dimensions.getWidth()*rangeWidthOfPanel/2);
 		g.drawRect(rangeHitBox.x,rangeHitBox.y ,rangeHitBox.height, rangeHitBox.width);
-
-		
 		return true;
-	
-	
 	}
-
-
 }
 
 
