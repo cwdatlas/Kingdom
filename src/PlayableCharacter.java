@@ -1,5 +1,7 @@
 
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.Point;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,20 +16,23 @@ public class PlayableCharacter extends CollisionSprite implements PlayableCharac
 	boolean delete = false;
 
 	// constructor...
-	PlayableCharacter(int X, int Y, int Gold, String fileName, Dimension panelDementions) {
-		super(X, Y, fileName, panelDementions);
+	PlayableCharacter(int x, int y, int Gold, String fileName, Dimension panelDementions) {
+		super(x, y, fileName, panelDementions);
 	}
 
 	@Override
 	public boolean moveLeft() {
 //		currentPosition[0]= currentPosition[0]-2;
 		currentPosition.setLocation(new Point((int)currentPosition.getX() - 2, 500));
+		hitbox.setLocation(new Point((int)currentPosition.getX() - 2, 500));
+
 		return true; //should be moving at a rate of 100 pixels per second as it is timed to the frame rate 
 	}
 
 	@Override
 	public boolean moveRight() {
 		currentPosition.setLocation(new Point((int)currentPosition.getX() + 2, 500));
+		hitbox.setLocation(new Point((int)currentPosition.getX() + 2, 500));
 //		currentPosition[0]=currentPosition[0]+2;
 		return true;
 	}
@@ -55,4 +60,13 @@ public class PlayableCharacter extends CollisionSprite implements PlayableCharac
 				}
 	}	
 }
+		
+		@Override
+		public boolean paint(Graphics g) {
+			super.paint(g);	
+			g.setColor(Color.RED);
+			g.drawRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+			return true;
+
+		}
 }

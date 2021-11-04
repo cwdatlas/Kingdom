@@ -58,7 +58,6 @@ public abstract class BaseSprite implements BaseSpriteI {
 			else if(target.x < currentPosition.x && !blockedLeft) {
 				currentPosition.setLocation(new Point(currentPosition.x - 1, currentPosition.y));
 				hitbox.x = currentPosition.x;
-
 			}
 		}finally{
 		}

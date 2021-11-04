@@ -11,7 +11,6 @@ public class Enemy extends BaseSprite implements EnemyI {
 	protected Enemy(int x, int y, String fileName, Dimension panelDementions) {
 		super(x, y, fileName, panelDementions);
 		spawnPlace = new Point(x, y);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
