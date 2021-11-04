@@ -7,11 +7,11 @@ public class Arrow extends CollisionSprite {
 	boolean right;
 	boolean delete = false;
 
-	protected Arrow(int x, int y, String fileName, Dimension panelDementions, boolean right) {
+	protected Arrow(int x, int y, String fileName, Dimension panelDementions, boolean goingRight) {
 		super(x, y, fileName, panelDementions);
 		dimensions = panelDementions;
 		hitbox = new Rectangle(x, y, img.getWidth(), img.getHeight());
-		System.out.println("arrow Created");
+		right = goingRight;
 	}
 
 	@Override
@@ -44,8 +44,8 @@ public class Arrow extends CollisionSprite {
 			if (collidingSprites.get(i) instanceof Enemy) {
 				Enemy effected = (Enemy) collidingSprites.get(i);
 				effected.setRetreat();
-				effected.setvisible(false);
 				effected.placeSprite(effected.getSpawnPlace().x, effected.getSpawnPlace().y);
+				colControl.deleteObject(effected);
 				delete = true;
 			}
 
