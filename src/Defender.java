@@ -29,12 +29,10 @@ public class Defender extends CollisionSprite implements DefenderI {
 	}
 
 	@Override
-	public void setDefending() {
+	public void setDefending(int position) {
+		
 		roaming = false;
-
 		target.setLocation(new Point((int)(600 + random.nextInt(200)), 500));
-
-
 	}
 
 	@Override

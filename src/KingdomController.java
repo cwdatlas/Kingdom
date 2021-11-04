@@ -46,6 +46,8 @@ public class KingdomController extends JPanel implements KeyListener, MouseListe
 		
 		private final Random random;
 		
+		private Color backgroundColor = Color.BLUE;
+		
 		//this shows the time of day as a sting under coinPanel
 		JLabel tod = new JLabel();
 
@@ -64,30 +66,12 @@ public class KingdomController extends JPanel implements KeyListener, MouseListe
 
 			panelDimensions = new Dimension();
 			colControl = new CollisionController(objectList);
-
 			this.add(coinPanel);
-
 			this.add(tod);
-
-			this.setBackground(Color.ORANGE);
-			
 		}
-
+		
 		public void paintComponent(Graphics g) {
 			panelDimensions = this.getSize();
-			
-			if(timeState == TimeState.NIGHT) {
-				g.setColor(java.awt.Color.blue);
-			}
-			else if(timeState == TimeState.DAY) {
-				g.setColor(java.awt.Color.yellow);
-			}
-			else if(timeState == TimeState.DUSK) {
-				g.setColor(java.awt.Color.green);
-			}
-			else if(timeState == TimeState.DAWN) {
-				g.setColor(java.awt.Color.orange);
-			}
 			
 			if(!gameRunning) { //spawn things that are dependent on frame width
 				spawnPlayers(players);
@@ -100,11 +84,15 @@ public class KingdomController extends JPanel implements KeyListener, MouseListe
 			doMoves();
 			
 			checkCollisions();
-
+			
+			g.setColor(backgroundColor);
+			g.fillRect(0, 0, panelDimensions.width, panelDimensions.height);
 			for (int i = 0; i < objectList.size(); i++) { // Painting objects on world panel
 				objectList.get(i).paint(g);
 			}
-
+			
+			
+			
 			timeCalculations();
 			
 			if (spawning) {   // TODO initialize or remove objects do whatever like the timer deal
@@ -219,29 +207,26 @@ public class KingdomController extends JPanel implements KeyListener, MouseListe
 			if (timeOfDay > dayLength) {
 				timeOfDay = 0;
 				days++;
-
+				
 			}
 			if(timeOfDay==dayLength*.7 && timeState==timeState.DUSK) {
 				timeState=TimeState.NIGHT;
 				spawning = true;
 				attacking = true;
-
-				this.setBackground(Color.BLUE);
+				backgroundColor = Color.BLUE;
+				
 			}else if(timeOfDay==dayLength*.6 && timeState==timeState.DAY) {
 				timeState=TimeState.DUSK;
 				defending = true;
 
-				this.setBackground(Color.DARK_GRAY);
 			}else if(timeOfDay==dayLength*.1 && timeState==timeState.DAWN) {
 				timeState=TimeState.DAY;
 				roaming = true;
 
-				this.setBackground(Color.CYAN);
 			}else if(timeOfDay==0 && timeState==timeState.NIGHT) {
 				timeState=TimeState.DAWN;
 				retreating = true;
 
-				this.setBackground(Color.ORANGE);
 			}
 			timeOfDay++;
 		}

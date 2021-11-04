@@ -2,11 +2,13 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Arrow extends CollisionSprite {
 	boolean right;
 	boolean delete = false;
-
+	Random random = new Random();
+	
 	protected Arrow(int x, int y, String fileName, Dimension panelDementions, boolean right) {
 		super(x, y, fileName, panelDementions);
 		dimensions = panelDementions;
@@ -46,6 +48,7 @@ public class Arrow extends CollisionSprite {
 				effected.setRetreat();
 				effected.setvisible(false);
 				effected.placeSprite(effected.getSpawnPlace().x, effected.getSpawnPlace().y);
+				colControl.addObject(new DroppedCoin(random.nextInt(20)+currentPosition.x, 500, "coin.png", dimensions));
 				delete = true;
 			}
 

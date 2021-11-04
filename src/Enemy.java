@@ -2,6 +2,7 @@ import java.awt.Dimension;
 
 //Programmed by Adrian and Aidan of Carroll college
 import java.awt.Point;
+import java.util.Random;
 
 
 
@@ -27,5 +28,4 @@ public class Enemy extends BaseSprite implements EnemyI {
 	public Point getSpawnPlace() {
 		return spawnPlace;
 	}
-
 }
