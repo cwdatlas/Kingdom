@@ -2,7 +2,6 @@ import java.awt.Dimension;
 
 //Programmed by Adrian and Aidan of Carroll college
 import java.awt.Point;
-import java.util.Random;
 
 
 

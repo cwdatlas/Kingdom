@@ -13,5 +13,4 @@ public interface PlayableCharacterI {
 	//useMoney sets use of money to true or false, which then has the character use money when in rage of an
 	//object that allows money to be given
 	boolean useMoney(boolean use);
-	
 }

@@ -41,40 +41,33 @@ public class Wall extends CollisionSprite {
 //			else if(collidingSprites.get(i) instanceof PlayableCharacter) {
 //				 
 //			}
- {
-				
-			}
-
 		}
 	}
 	
 	@Override
 	public boolean paint(Graphics g) {
-		super.paint(g);
-		if(HP == 50) {
-			g.setColor(Color.BLUE);
-			g.drawRect(hitbox.x, hitbox.y, hitbox.height, hitbox.width);
+		super.paint(g);	
+		if(HP <= 0) {
+//			g.setColor(new Color(1,1,1,250));
+			g.setColor(Color.RED);
+			g.drawRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
 		}
-		
-		else if(HP <= 50) {
-			g.setColor(Color.YELLOW);
-			g.drawRect(hitbox.x, hitbox.y, hitbox.height, hitbox.width);
-		}
-		
-		else if (HP <= 30) {
-			g.setColor(Color.ORANGE);
-			g.drawRect(hitbox.x, hitbox.y, hitbox.height, hitbox.width);
-		}
-		
 		else if (HP <= 15) {
 			g.setColor(Color.RED);
-			g.drawRect(hitbox.x, hitbox.y, hitbox.height, hitbox.width);
+			g.fillRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
 		}
-
-		
+				else if (HP <= 30) {
+			g.setColor(Color.ORANGE);
+			g.fillRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+		}		
+				else if(HP < 50) {
+			g.setColor(Color.YELLOW);
+			g.fillRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+		}
+				else if(HP == 50) {
+			g.setColor(Color.MAGENTA);
+			g.fillRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+		}
 		return true;
-	
-	
 	}
-
 }

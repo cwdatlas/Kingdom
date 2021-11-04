@@ -48,7 +48,6 @@ public class Arrow extends CollisionSprite {
 			if (collidingSprites.get(i) instanceof Enemy) {
 				Enemy effected = (Enemy) collidingSprites.get(i);
 				effected.setRetreat();
-				effected.placeSprite(effected.getSpawnPlace().x, effected.getSpawnPlace().y);
 				colControl.addObject(new DroppedCoin(random.nextInt(20)+currentPosition.x, 500, "coin.png", dimensions));
 				colControl.deleteObject(effected);
 				delete = true;
