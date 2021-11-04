@@ -9,9 +9,13 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -32,12 +36,17 @@ public class KingdomController extends JPanel
 	private int days = 0;
 	private int timeOfDay = 0;
 	private TimeState timeState;
-	boolean spawning = false;
-	boolean defending = false;
-	boolean roaming = true;
-	boolean attacking = false;
-	boolean retreating = false;
-
+	private boolean spawning = false;
+	private boolean defending = false;
+	private boolean roaming = true;
+	private boolean attacking = false;
+	private boolean retreating = false;
+	private Color dawnColor = new Color(6,6,6,220);
+	private Color dayColor = new Color(6,6,6,220);
+	private Color duskColor = new Color(6,6,6,220);
+	private Color nightColor = new Color(6,6,6,220);
+	private BufferedImage backgroundImage; 
+	
 	private int dayLength = 5000; // a full day at 5 min day should be around 30,000 frames
 	private int defenders = 2;
 	private int enemiesPerDay = 4;
@@ -47,7 +56,7 @@ public class KingdomController extends JPanel
 
 	private final Random random;
 
-	private Color backgroundColor = Color.BLUE;
+	private Color backgroundColor;
 
 	// this shows the time of day as a sting under coinPanel
 	JLabel tod = new JLabel();
@@ -66,6 +75,13 @@ public class KingdomController extends JPanel
 		colControl = new CollisionController(objectList);
 		this.add(coinPanel);
 		this.add(tod);
+		
+		try {
+			backgroundImage = ImageIO.read(new File("file:///C:/Users/aidan/eclipse-workspace_java/Kingdom/src/images/background.png"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void paintComponent(Graphics g) {
@@ -81,6 +97,8 @@ public class KingdomController extends JPanel
 		if (panelDimensions != null && gameRunning) { // then this runs the game
 			doMoves();
 			checkCollisions();
+			
+			g.drawImage(backgroundImage, 0, 0, panelDimensions.width, panelDimensions.height, null);
 			g.setColor(backgroundColor);
 			g.fillRect(0, 0, panelDimensions.width, panelDimensions.height);
 			for (int i = 0; i < objectList.size(); i++) { // Painting objects on world panel
@@ -96,7 +114,6 @@ public class KingdomController extends JPanel
 		}
 		// JLabels
 		// this sets up the coins or score board
-
 		coinPanel.setText("Coins: " + objectList.get(0).getGold());
 		tod.setText("Time of Day: " + timeState);
 
@@ -210,19 +227,22 @@ public class KingdomController extends JPanel
 			timeState = TimeState.NIGHT;
 			spawning = true;
 			attacking = true;
-			backgroundColor = Color.BLUE;
+			backgroundColor = nightColor;
 
 		} else if (timeOfDay == dayLength * .6 && timeState == timeState.DAY) {
 			timeState = TimeState.DUSK;
 			defending = true;
+			backgroundColor = duskColor;
 
 		} else if (timeOfDay == dayLength * .1 && timeState == timeState.DAWN) {
 			timeState = TimeState.DAY;
 			roaming = true;
+			backgroundColor = dayColor;
 
 		} else if (timeOfDay == 0 && timeState == timeState.NIGHT) {
 			timeState = TimeState.DAWN;
 			retreating = true;
+			backgroundColor = dawnColor;
 		}
 		timeOfDay++;
 	}
