@@ -30,7 +30,7 @@ public class Defender extends CollisionSprite implements DefenderI {
 
 	public void setDefending(int position) {
 		roaming = false;
-		target.setLocation(new Point((int)(600 + random.nextInt(200)), 500));
+		target.setLocation(position, 500);
 	}
 
 	public void setRoaming() {
