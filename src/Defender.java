@@ -22,7 +22,7 @@ public class Defender extends CollisionSprite implements DefenderI {
 		
 		random = new Random();
 		int rangeWidth = (int) (this.img.getWidth() + panelDementions.getWidth()*rangeWidthOfPanel);
-		rangeHitBox = new Rectangle(x - rangeWidth/2, y, this.img.getHeight(),rangeWidth);
+		rangeHitBox = new Rectangle(currentPosition.x, currentPosition.y, rangeWidth, this.img.getHeight());
 	}
 	@Override
 	public void setDefending(int position) {
@@ -35,17 +35,15 @@ public class Defender extends CollisionSprite implements DefenderI {
 		Timer timer = new Timer();
 		timer.scheduleAtFixedRate(new TimerTask() {
 			public void run() {
-//				timerTick++;
-//				System.out.println(timerTick);
 				if(roaming) {
 					if(Math.random() < .09) {
 						moveTo(random.nextInt((1500-0) + 1), (int) target.getY() );
 					}
 				}
-			
 			}},500, 1000 );
 	}
 	public void checkCollision(CollisionController colControl) {
+//		System.out.println("Location of Hit box " + rangeHitBox.x + rangeHitBox.width + " Sprite location: " + currentPosition.x);
 		ArrayList<BaseSprite> collidingSprites = colControl.checkCollition(rangeHitBox);
 		for (int i = 0; i < collidingSprites.size(); i++) {
 			if (collidingSprites.get(i) instanceof Enemy) {
@@ -63,8 +61,8 @@ public class Defender extends CollisionSprite implements DefenderI {
 	public boolean paint(Graphics g) {
 		super.paint(g);
 		g.setColor(Color.GREEN);
-		rangeHitBox.x = (int) (currentPosition.x - dimensions.getWidth()*rangeWidthOfPanel/2);
-		g.drawRect(rangeHitBox.x,rangeHitBox.y ,rangeHitBox.height, rangeHitBox.width);
+		rangeHitBox.x = (int) (currentPosition.x - (rangeHitBox.width/2) + (img.getWidth()/2));
+		g.drawRect(rangeHitBox.x, rangeHitBox.y, rangeHitBox.width, rangeHitBox.height);
 		return true;
 	}
 }

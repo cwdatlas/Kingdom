@@ -29,7 +29,7 @@ public class KingdomMain {
 	
 
 		JFrame kingdom = new JFrame("Kingdom");
-		JPanel kingdomPanel = new KingdomController();
+		JPanel kingdomPanel = new KingdomController(kingdom);
 		kingdom.addKeyListener((KeyListener) kingdomPanel);
 		kingdom.addMouseListener((MouseListener) kingdomPanel);
 

@@ -36,11 +36,6 @@ public class Wall extends CollisionSprite {
 				collidingSprites.get(i).setBlocked(HP > 0);
 				infinityFrames++;
 			}
-			//if player next to wall put up the gold required for wall
-			//add gold counter top right corner when wall is being built
-//			else if(collidingSprites.get(i) instanceof PlayableCharacter) {
-//				 
-//			}
 		}
 	}
 	
@@ -48,7 +43,7 @@ public class Wall extends CollisionSprite {
 	public boolean paint(Graphics g) {
 		super.paint(g);	
 		if(HP <= 0) {
-//			g.setColor(new Color(1,1,1,250));
+			g.setColor(new Color(1,1,1,250));
 			g.setColor(Color.RED);
 			g.drawRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
 		}

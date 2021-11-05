@@ -23,16 +23,17 @@ public class PlayableCharacter extends CollisionSprite implements PlayableCharac
 	@Override
 	public boolean moveLeft() {
 //		currentPosition[0]= currentPosition[0]-2;
-		currentPosition.setLocation(new Point((int)currentPosition.getX() - 2, 500));
-		hitbox.setLocation(new Point((int)currentPosition.getX() - 2, 500));
+		currentPosition.setLocation(new Point((int) currentPosition.getX() - 2, 500));
+		hitbox.setLocation(new Point((int) currentPosition.getX() - 2, 500));
 
-		return true; //should be moving at a rate of 100 pixels per second as it is timed to the frame rate 
+		return true; // should be moving at a rate of 100 pixels per second as it is timed to the
+						// frame rate
 	}
 
 	@Override
 	public boolean moveRight() {
-		currentPosition.setLocation(new Point((int)currentPosition.getX() + 2, 500));
-		hitbox.setLocation(new Point((int)currentPosition.getX() + 2, 500));
+		currentPosition.setLocation(new Point((int) currentPosition.getX() + 2, 500));
+		hitbox.setLocation(new Point((int) currentPosition.getX() + 2, 500));
 //		currentPosition[0]=currentPosition[0]+2;
 		return true;
 	}
@@ -48,25 +49,24 @@ public class PlayableCharacter extends CollisionSprite implements PlayableCharac
 		// TODO Auto-generated method stub
 		return false;
 	}
-	
-		//picking up coins
-		public void checkCollision(CollisionController colControl) {
-			ArrayList<BaseSprite> collidingSprites = colControl.checkCollition(this.getHitBox());
-			for (int i = 0; i < collidingSprites.size(); i++) {
-				if (collidingSprites.get(i) instanceof DroppedCoin) {
-					DroppedCoin coin = (DroppedCoin) collidingSprites.get(i);
-					colControl.deleteObject(coin);
-					this.incrementGold();
-				}
-	}	
-}
-		
-		@Override
-		public boolean paint(Graphics g) {
-			super.paint(g);	
-			g.setColor(Color.RED);
-			g.drawRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
-			return true;
 
+	// picking up coins
+	public void checkCollision(CollisionController colControl) {
+		ArrayList<BaseSprite> collidingSprites = colControl.checkCollition(this.getHitBox());
+		for (int i = 0; i < collidingSprites.size(); i++) {
+			if (collidingSprites.get(i) instanceof DroppedCoin) {
+				DroppedCoin coin = (DroppedCoin) collidingSprites.get(i);
+				colControl.deleteObject(coin);
+				this.incrementGold();
+			}
 		}
+	}
+	@Override
+	public boolean paint(Graphics g) {
+		super.paint(g);
+		g.setColor(Color.RED);
+		g.drawRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+		return true;
+
+	}
 }

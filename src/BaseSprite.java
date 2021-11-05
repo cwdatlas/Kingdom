@@ -86,8 +86,6 @@ public abstract class BaseSprite implements BaseSpriteI {
 				System.out.println("Image not found.");
 			}
 	}
-
-	
 	@Override
 	public Point getPosition() {
 		return currentPosition;
@@ -95,13 +93,11 @@ public abstract class BaseSprite implements BaseSpriteI {
 	public Rectangle getHitBox() {
 		return hitbox;
 	}
-	
 	@Override
 	public boolean isColliding(BaseSprite testedSprite) {
 		// TODO Auto-generated method stub
 		return false;
 	}
-	
 	//the setter for blocking and the direction that the sprite is blocked in
 	public void setBlocked(boolean blocking) {
 		if(target.x > currentPosition.x && blocking) {

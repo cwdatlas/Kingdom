@@ -1,7 +1,10 @@
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -16,13 +19,17 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.TitledBorder;
 
 public class KingdomController extends JPanel
-		implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
+		implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener, ActionListener{
 	private boolean gameRunning = false;
+	private boolean spawnedSprites = false;
 	private String enemySprite = "enemySprite.png";
 	private String playerSprite = "playerSprite.png";
 	private String arrowSprite = "arrowSprite.png";
@@ -32,7 +39,6 @@ public class KingdomController extends JPanel
 	private boolean movingRight;
 	private boolean movingLeft;
 	// time variables
-
 	private int days = 0;
 	private int timeOfDay = 0;
 	private TimeState timeState;
@@ -56,20 +62,23 @@ public class KingdomController extends JPanel
 	private CollisionController colControl;
 
 	private final Random random;
-
 	
+	JFrame parent;
+	
+	private JPanel startWindow = new JPanel();
+	private boolean startWindowVisible = true;
+	private JButton startGame = new JButton();
+	private JPanel youDiedWindow = new JPanel();
+	private boolean youDiedVisible = false;
+	private JButton playAgain = new JButton();
 
-	// this shows the time of day as a sting under coinPanel
-	JLabel tod = new JLabel();
-
-	// this sets up the coins or score board
-	JLabel coinPanel = new JLabel();
-
+	JLabel tod = new JLabel(); // this shows the time of day as a sting under coinPanel
+	JLabel coinPanel = new JLabel(); // this sets up the coins or score board
 	ArrayList<BaseSprite> objectList = new ArrayList();
 
-	public KingdomController() {
+	public KingdomController(JFrame parentPanel) {
+		parent = parentPanel;
 		this.random = new Random();
-		// only for 1 main character right now
 
 		timeState = timeState.DAWN;
 		panelDimensions = new Dimension();
@@ -83,19 +92,54 @@ public class KingdomController extends JPanel
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		//Panel parameters
+		//startWindow params
+		startWindow.setBackground(Color.BLACK);
+		TitledBorder log2;
+		log2 = BorderFactory.createTitledBorder("Start Game");
+		log2.setTitleColor(Color.WHITE);
+		log2.setBorder(BorderFactory.createLineBorder(Color.WHITE));
+		startWindow.setBorder(log2);
+		startWindow.setLayout(null);
+		this.add(startWindow);
+		
+		//youDiedWindow
+		youDiedWindow.setBackground(Color.BLACK);
+		TitledBorder log3;
+		log3 = BorderFactory.createTitledBorder("You Died");
+		log3.setTitleColor(Color.WHITE);
+		log3.setBorder(BorderFactory.createLineBorder(Color.WHITE));
+		youDiedWindow.setBorder(log3);
+		youDiedWindow.setLayout(null);
+		this.add(youDiedWindow);
+		
+		//buttons
+		startGame.setText("START");
+		startGame.setBackground(Color.WHITE);
+		startGame.setVisible(true);
+		startGame.addActionListener(this);
+		startWindow.add(startGame);
 	}
-
 	public void paintComponent(Graphics g) {
 		panelDimensions = this.getSize();
-
-		if (!gameRunning) { // spawn things that are dependent on frame width
+		
+		startWindow.setBounds(panelDimensions.width/3, (int)(panelDimensions.height*.1), panelDimensions.width/3, (int)(panelDimensions.height*.7));
+		startWindow.setVisible(startWindowVisible);
+		startGame.setBounds((int)(startWindow.getWidth()*.3), (int)(startWindow.getHeight()*.8), (int)(startWindow.getWidth()*.4), (int)(startWindow.getHeight()*.1));
+		
+		youDiedWindow.setBounds(panelDimensions.width/3, (int)(panelDimensions.height*.1), panelDimensions.width/3, (int)(panelDimensions.height*.7));
+		youDiedWindow.setVisible(youDiedVisible);
+		
+		if (!gameRunning
+			&& !spawnedSprites) { // spawn things that are dependent on frame width
 			spawnPlayers(players);
 			spawnDefenders(defenders);
 			spawnWalls(walls);
-			gameRunning = true;
+			spawnedSprites = true;
 		}
 
-		if (panelDimensions != null && gameRunning) { // then this runs the game
+		if (panelDimensions != null 
+			&& gameRunning) { // then this runs the game
 			doMoves();
 			checkCollisions();
 			
@@ -117,7 +161,8 @@ public class KingdomController extends JPanel
 		// this sets up the coins or score board
 		coinPanel.setText("Coins: " + objectList.get(0).getGold());
 		tod.setText("Time of Day: " + timeState);
-
+		coinPanel.setForeground(Color.WHITE);
+		tod.setForeground(Color.WHITE);
 	}
 
 	// spawning shortcuts
@@ -324,6 +369,12 @@ public class KingdomController extends JPanel
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
 
+	}
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		gameRunning = true;
+		startWindowVisible = false;
+		parent.requestFocus();
 	}
 
 }
