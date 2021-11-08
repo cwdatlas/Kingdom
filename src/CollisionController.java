@@ -3,7 +3,9 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 
 public class CollisionController {
-	List<BaseSprite> objectList;
+	private List<BaseSprite> objectList;
+	public int enemiesKilled = 0;
+	public int defendersKilled = 0;
 	
 	public CollisionController(List<BaseSprite> list) {
 		objectList = list;
@@ -22,7 +24,10 @@ public class CollisionController {
 	}
 	
 	public boolean deleteObject(BaseSprite delObject) {
-		
+		if(delObject instanceof Enemy)
+			enemiesKilled++;
+		else if(delObject instanceof Enemy)
+			defendersKilled++;
 		return objectList.remove(delObject);
 	}
 	public boolean addObject(BaseSprite addObject) {

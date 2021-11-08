@@ -49,6 +49,9 @@ public class PlayableCharacter extends CollisionSprite implements PlayableCharac
 				colControl.deleteObject(coin);
 				this.incrementGold();
 			}
+			if (collidingSprites.get(i) instanceof Enemy) {
+			colControl.deleteObject(this);
+			}
 		}
 		//place to use colControl
 		if(downPress
