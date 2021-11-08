@@ -12,13 +12,17 @@ public class Wall extends CollisionSprite {
 	protected int HP = 50;
 	protected int infinityFrames;
 
-	protected Wall(int X, int Y, String fileName, Dimension panelDementions) {
-		super(X, Y, fileName, panelDementions);
+	protected Wall(int x, String fileName, Dimension panelDementions) {
+		super(x, fileName, panelDementions);
 		// TODO Auto-generated constructor stub
 	}
 
-	private void destroyWall() {
+	public void destroyWall() {
 		this.setvisible(false);
+	}
+	
+	public void rebuildWall() {
+		HP = 50;
 	}
 
 	@Override

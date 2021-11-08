@@ -16,59 +16,68 @@ public class PlayableCharacter extends CollisionSprite implements PlayableCharac
 	private Random random = new Random();
 	private boolean delete = false;
 	private boolean downPress = false;
-	private int goldUseTimer= 0;
+	private int goldUseTimer = 0;
 	private int droppedGoldTimer = 0;
 
 	// constructor...
-	PlayableCharacter(int x, int y, int Gold, String fileName, Dimension panelDementions) {
-		super(x, y, fileName, panelDementions);
+	PlayableCharacter(int x, int Gold, String fileName, Dimension panelDementions) {
+		super(x, fileName, panelDementions);
 	}
+
 	@Override
 	public boolean moveLeft() {
-		currentPosition.setLocation(new Point((int) currentPosition.getX() - 2, 500));
-		hitbox.setLocation(new Point((int) currentPosition.getX() - 2, 500));
-		return true; 
-	}
-	@Override
-	public boolean moveRight() {
-		currentPosition.setLocation(new Point((int) currentPosition.getX() + 2, 500));
-		hitbox.setLocation(new Point((int) currentPosition.getX() + 2, 500));
+		currentPosition.setLocation(new Point((int) currentPosition.getX() - 2, currentPosition.y));
+		hitbox.setLocation(new Point((int) currentPosition.getX() - 2, currentPosition.y));
 		return true;
 	}
+
+	@Override
+	public boolean moveRight() {
+		currentPosition.setLocation(new Point((int) currentPosition.getX() + 2, currentPosition.y));
+		hitbox.setLocation(new Point((int) currentPosition.getX() + 2, currentPosition.y));
+		return true;
+	}
+
 	@Override
 	public void downPress(boolean press) {
 		downPress = press;
 	}
+
 	// picking up coins
 	public void checkCollision(CollisionController colControl) {
 		List<BaseSprite> collidingSprites = colControl.checkCollition(this.getHitBox());
 		for (int i = 0; i < collidingSprites.size(); i++) {
-			if (collidingSprites.get(i) instanceof DroppedCoin 
-				&& droppedGoldTimer == 0) {
+			if (collidingSprites.get(i) instanceof DroppedCoin && droppedGoldTimer == 0) {
 				DroppedCoin coin = (DroppedCoin) collidingSprites.get(i);
 				colControl.deleteObject(coin);
 				this.incrementGold();
-			}
-			if (collidingSprites.get(i) instanceof Enemy) {
-			colControl.deleteObject(this);
+			} else if (collidingSprites.get(i) instanceof Enemy) {
+				colControl.deleteObject(this);
+			} else if (collidingSprites.get(i) instanceof Wall) {
+				if (downPress && this.getGold() >= 3) {
+					Wall wall = (Wall) collidingSprites.get(i);
+					if (wall.HP < 50) {
+						wall.rebuildWall();
+						this.setGold(this.getGold() - 3);
+						goldUseTimer = 0;
+					}
+				}
 			}
 		}
-		//place to use colControl
-		if(downPress
-			&& gold > 0
-			&& goldUseTimer == 0){
+		// place to use colControl
+		if (downPress && gold > 0 && goldUseTimer == 0) {
 			this.gold--;
-			colControl.addObject(new DroppedCoin(currentPosition.x, 500, "coin.png", dimensions));
-			goldUseTimer = 500;
-			droppedGoldTimer = 2000;
+			colControl.addObject(new DroppedCoin(currentPosition.x, "coin.png", dimensions));
+			goldUseTimer = 200;
+			droppedGoldTimer = 200;
 		}
-		//incrementing timers down
-		if(goldUseTimer > 0)
+		// incrementing timers down
+		if (goldUseTimer > 0)
 			goldUseTimer--;
-		if(droppedGoldTimer > 0)
+		if (droppedGoldTimer > 0)
 			droppedGoldTimer--;
-		System.out.println(droppedGoldTimer);
 	}
+
 	@Override
 	public boolean paint(Graphics g) {
 		super.paint(g);

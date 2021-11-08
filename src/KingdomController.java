@@ -29,13 +29,14 @@ import javax.swing.border.TitledBorder;
 
 public class KingdomController extends JPanel
 		implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener, ActionListener{
-	private boolean gameRunning = false;
+	private boolean gameRunning;
 	private boolean spawnedSprites;
 	private String enemySprite = "enemySprite.png";
 	private String playerSprite = "playerSprite.png";
 	private String arrowSprite = "arrowSprite.png";
 	private String defenderSprite = "defenderSprite.png";
 	private String wallSprite = "wallSprite.png";
+	private String shopSprite = "defenderShopSprite.png";
 	private Dimension panelDimensions;
 	private boolean movingRight;
 	private boolean movingLeft;
@@ -168,6 +169,7 @@ public class KingdomController extends JPanel
 			spawnPlayers(players);
 			spawnDefenders(defenders);
 			spawnWalls(walls);
+			spawnDefenderShop(1);
 			spawnedSprites = true;
 		}
 		if(!(objectList.get(0) instanceof PlayableCharacter)) { //this is a sign that the player died
@@ -180,6 +182,7 @@ public class KingdomController extends JPanel
 			totalScore.setText("Score: " + score);
 			youDiedVisible = true;
 			gameRunning = false;
+			setVariables();
 		}
 		if (panelDimensions != null 
 			&& gameRunning) { // then this runs the game
@@ -207,13 +210,13 @@ public class KingdomController extends JPanel
 	//spawning players
 	private void spawnPlayers(int numberOfPlayers) {
 		for (int d = 0; d < numberOfPlayers; d++)
-			objectList.add(0, new PlayableCharacter(((int) panelDimensions.getWidth() / 2), 500, 0, playerSprite,
+			objectList.add(0, new PlayableCharacter(((int) panelDimensions.getWidth() / 2), 0, playerSprite,
 					panelDimensions));
 	}
 	//spawning defenders
 	private void spawnDefenders(int numberOfDefenders) { // TODO set spawn parameters (place)
 		for (int d = 0; d < numberOfDefenders; d++) {
-			objectList.add(new Defender(800, 500, defenderSprite, panelDimensions));
+			objectList.add(new Defender(800, defenderSprite, panelDimensions));
 			defendersSpawned++;
 		}
 	}
@@ -221,9 +224,9 @@ public class KingdomController extends JPanel
 	private void spawnEnemies(int numberOfEnemies) {// TODO set spawn parameters (place)
 		for (int d = 0; d < numberOfEnemies; d++) {
 			if (d % 2 == 0)
-				objectList.add(new Enemy(random.nextInt(300) - 500, 500, enemySprite, panelDimensions));
+				objectList.add(new Enemy(random.nextInt(300) - 500, enemySprite, panelDimensions));
 			else
-				objectList.add(new Enemy(random.nextInt(300) + (int) panelDimensions.getWidth(), 500, enemySprite,
+				objectList.add(new Enemy(random.nextInt(300) + (int) panelDimensions.getWidth(), enemySprite,
 						panelDimensions));
 		}
 	}
@@ -231,17 +234,21 @@ public class KingdomController extends JPanel
 	private void spawnWalls(int numberOfWalls) {// TODO set spawn parameters (place)
 		for (int d = 0; d < numberOfWalls; d++) {
 			if (d % 2 == 0)
-				objectList.add(new Wall((int) panelDimensions.getWidth() / 3, 500, wallSprite, panelDimensions));
+				objectList.add(new Wall(((int) panelDimensions.getWidth() / 3), wallSprite, panelDimensions));
 			else
-				objectList.add(new Wall(((int) panelDimensions.getWidth() / 3) * 2, 500, wallSprite, panelDimensions));
+				objectList.add(new Wall(((int) panelDimensions.getWidth() / 3)*2, wallSprite, panelDimensions));
+		}
+	}
+	private void spawnDefenderShop(int numberOfShops) {
+		for (int d = 0; d < numberOfShops; d++) {
+			objectList.add(new DefenderShop(((int) panelDimensions.getWidth() / 2), shopSprite, panelDimensions));
 		}
 	}
 	//set positions to move and allow the sprites to move themselves to thier target positions
 	private void doMoves() {
 		int defender = 0;
 		for (int i = 0; i < objectList.size(); i++) {
-			if (objectList.get(i) instanceof PlayableCharacter) { // more efficient way of doing this class
-																	// comparison
+			if (objectList.get(i) instanceof PlayableCharacter) { // more efficient way of doing this class													// comparison
 				if (movingRight) {
 					((PlayableCharacter) objectList.get(i)).moveRight();// telling the playable character each frame
 																		// to keep moving if true
@@ -339,7 +346,8 @@ public class KingdomController extends JPanel
 		days = 0;
 		timeOfDay = 0;
 		timeState = timeState.DAWN;
-		spawnedSprites = true;
+		spawnedSprites = false;
+		gameRunning = false;
 		objectList = new ArrayList();
 	}
 
@@ -356,7 +364,7 @@ public class KingdomController extends JPanel
 			movingRight = true;
 		else if (e.getKeyCode() == 37)
 			movingLeft = true;
-		if(e.getKeyCode() == 34)
+		if(e.getKeyCode() == 40) 
 			playerUseMoney = true;
 	}
 
@@ -367,7 +375,7 @@ public class KingdomController extends JPanel
 		else if (e.getKeyCode() == 37)
 			movingLeft = false;
 		if(e.getKeyCode() == 40)
-			playerUseMoney = true;
+			playerUseMoney = false;
 	}
 
 	@Override
@@ -393,8 +401,7 @@ public class KingdomController extends JPanel
 		Point target = e.getLocationOnScreen();
 		Point spawn = objectList.get(0).getPosition();
 		System.out.println(objectList.get(0).currentPosition.x + " " + target.x);
-		Arrow arrow = new Arrow(spawn.x, spawn.y + (objectList.get(0).getHitBox().height / 2), arrowSprite,
-				panelDimensions, (objectList.get(0).currentPosition.x < target.x));
+		Arrow arrow = new Arrow(spawn.x, arrowSprite, panelDimensions, (objectList.get(0).currentPosition.x < target.x));
 		arrow.moveTo(target.x, 500);
 		objectList.add(arrow);
 
@@ -430,11 +437,9 @@ public class KingdomController extends JPanel
 			parent.requestFocus();
 		}
 		else if(e.getSource() == playAgain) {
-			gameRunning = true;
 			youDiedVisible = false;
-			parent.requestFocus();
-			spawnPlayers(players);
-			setVariables();
+			parent.requestFocus();			
+			gameRunning = true;
 		}
 	}
 

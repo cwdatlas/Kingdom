@@ -12,10 +12,12 @@ public class Arrow extends CollisionSprite {
 	Random random = new Random();
 	
 
-	protected Arrow(int x, int y, String fileName, Dimension panelDementions, boolean goingRight) {
-		super(x, y, fileName, panelDementions);
+	protected Arrow(int x, String fileName, Dimension panelDementions, boolean goingRight) {
+		super(x, fileName, panelDementions);
 		dimensions = panelDementions;
-		hitbox = new Rectangle(x, y, img.getWidth(), img.getHeight());
+		int y = currentPosition.y + 30;
+		currentPosition.y = y;
+		hitbox = new Rectangle(x, currentPosition.y, img.getWidth(), img.getHeight());
 		right = goingRight;
 	}
 
@@ -49,7 +51,7 @@ public class Arrow extends CollisionSprite {
 			if (collidingSprites.get(i) instanceof Enemy) {
 				Enemy effected = (Enemy) collidingSprites.get(i);
 				effected.setRetreat();
-				colControl.addObject(new DroppedCoin(random.nextInt(20)+currentPosition.x, 500, "coin.png", dimensions));
+				colControl.addObject(new DroppedCoin(random.nextInt(20)+currentPosition.x, "coin.png", dimensions));
 				colControl.deleteObject(effected);
 				delete = true;
 			}
