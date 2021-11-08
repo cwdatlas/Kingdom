@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import javax.imageio.ImageIO;
 
@@ -12,54 +13,58 @@ import javax.imageio.ImageIO;
 
 public class PlayableCharacter extends CollisionSprite implements PlayableCharacterI {
 	// set your varables here, make sure as many as possible are private
-	Random random = new Random();
-	boolean delete = false;
+	private Random random = new Random();
+	private boolean delete = false;
+	private boolean downPress = false;
+	private int goldUseTimer= 0;
+	private int droppedGoldTimer = 0;
 
 	// constructor...
 	PlayableCharacter(int x, int y, int Gold, String fileName, Dimension panelDementions) {
 		super(x, y, fileName, panelDementions);
 	}
-
 	@Override
 	public boolean moveLeft() {
-//		currentPosition[0]= currentPosition[0]-2;
 		currentPosition.setLocation(new Point((int) currentPosition.getX() - 2, 500));
 		hitbox.setLocation(new Point((int) currentPosition.getX() - 2, 500));
-
-		return true; // should be moving at a rate of 100 pixels per second as it is timed to the
-						// frame rate
+		return true; 
 	}
-
 	@Override
 	public boolean moveRight() {
 		currentPosition.setLocation(new Point((int) currentPosition.getX() + 2, 500));
 		hitbox.setLocation(new Point((int) currentPosition.getX() + 2, 500));
-//		currentPosition[0]=currentPosition[0]+2;
 		return true;
 	}
-
 	@Override
-	public boolean stopMoving() {
-		// TODO Auto-generated method stub
-		return false;
+	public void downPress(boolean press) {
+		downPress = press;
 	}
-
-	@Override
-	public boolean useMoney(boolean use) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 	// picking up coins
 	public void checkCollision(CollisionController colControl) {
-		ArrayList<BaseSprite> collidingSprites = colControl.checkCollition(this.getHitBox());
+		List<BaseSprite> collidingSprites = colControl.checkCollition(this.getHitBox());
 		for (int i = 0; i < collidingSprites.size(); i++) {
-			if (collidingSprites.get(i) instanceof DroppedCoin) {
+			if (collidingSprites.get(i) instanceof DroppedCoin 
+				&& droppedGoldTimer == 0) {
 				DroppedCoin coin = (DroppedCoin) collidingSprites.get(i);
 				colControl.deleteObject(coin);
 				this.incrementGold();
 			}
 		}
+		//place to use colControl
+		if(downPress
+			&& gold > 0
+			&& goldUseTimer == 0){
+			this.gold--;
+			colControl.addObject(new DroppedCoin(currentPosition.x, 500, "coin.png", dimensions));
+			goldUseTimer = 500;
+			droppedGoldTimer = 2000;
+		}
+		//incrementing timers down
+		if(goldUseTimer > 0)
+			goldUseTimer--;
+		if(droppedGoldTimer > 0)
+			droppedGoldTimer--;
+		System.out.println(droppedGoldTimer);
 	}
 	@Override
 	public boolean paint(Graphics g) {

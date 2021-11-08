@@ -1,17 +1,16 @@
+import java.util.List;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
 public class CollisionController {
-	ArrayList<BaseSprite> objectList;
-	ArrayList<BaseSprite> returnableObjects;
+	List<BaseSprite> objectList;
 	
-	public CollisionController(ArrayList<BaseSprite> list) {
+	public CollisionController(List<BaseSprite> list) {
 		objectList = list;
-		returnableObjects = new ArrayList<BaseSprite>();
 	}
 	
-	public ArrayList<BaseSprite> checkCollition(Rectangle hitBox){
-		returnableObjects.removeAll(returnableObjects);
+	public List<BaseSprite> checkCollition(Rectangle hitBox){
+		List<BaseSprite> returnableObjects = new ArrayList<>();
 		
 		for(int i = 0; i<objectList.size();  i++) {
 			if(hitBox.intersects(objectList.get(i).getHitBox()) && hitBox != objectList.get(i).getHitBox() && objectList.get(i).visible) {

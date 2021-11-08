@@ -18,7 +18,7 @@ public abstract class BaseSprite implements BaseSpriteI {
 	protected boolean blockedRight = false;
 	protected boolean blockedLeft = false;
 	protected boolean visible = true;
-	private int gold;
+	protected int gold;
 
 	// build the variables for direction like how Nate built direction in the
 	// dolphin program (with worded lists) whatever that was

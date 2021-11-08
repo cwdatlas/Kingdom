@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -44,7 +45,7 @@ public class Defender extends CollisionSprite implements DefenderI {
 	}
 	public void checkCollision(CollisionController colControl) {
 //		System.out.println("Location of Hit box " + rangeHitBox.x + rangeHitBox.width + " Sprite location: " + currentPosition.x);
-		ArrayList<BaseSprite> collidingSprites = colControl.checkCollition(rangeHitBox);
+		List<BaseSprite> collidingSprites = colControl.checkCollition(rangeHitBox);
 		for (int i = 0; i < collidingSprites.size(); i++) {
 			if (collidingSprites.get(i) instanceof Enemy) {
 				cooldownTimer++;

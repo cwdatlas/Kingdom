@@ -16,6 +16,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
@@ -38,6 +39,7 @@ public class KingdomController extends JPanel
 	private Dimension panelDimensions;
 	private boolean movingRight;
 	private boolean movingLeft;
+	private boolean playerUseMoney;
 	// time variables
 	private int days = 0;
 	private int timeOfDay = 0;
@@ -74,7 +76,7 @@ public class KingdomController extends JPanel
 
 	JLabel tod = new JLabel(); // this shows the time of day as a sting under coinPanel
 	JLabel coinPanel = new JLabel(); // this sets up the coins or score board
-	ArrayList<BaseSprite> objectList = new ArrayList();
+	List<BaseSprite> objectList = new ArrayList();
 
 	public KingdomController(JFrame parentPanel) {
 		parent = parentPanel;
@@ -211,6 +213,7 @@ public class KingdomController extends JPanel
 				} else if (movingLeft) {
 					((PlayableCharacter) objectList.get(i)).moveLeft();
 				}
+				((PlayableCharacter) objectList.get(i)).downPress(playerUseMoney);
 			}
 
 			else if (objectList.get(i) instanceof Enemy) {
@@ -306,7 +309,8 @@ public class KingdomController extends JPanel
 			movingRight = true;
 		else if (e.getKeyCode() == 37)
 			movingLeft = true;
-
+		if(e.getKeyCode() == 34)
+			playerUseMoney = true;
 	}
 
 	@Override
@@ -315,7 +319,8 @@ public class KingdomController extends JPanel
 			movingRight = false;
 		else if (e.getKeyCode() == 37)
 			movingLeft = false;
-
+		if(e.getKeyCode() == 40)
+			playerUseMoney = true;
 	}
 
 	@Override
@@ -337,7 +342,7 @@ public class KingdomController extends JPanel
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent e) {
+	public void mouseClicked(MouseEvent e) { //TODO move to lower level processing (Player)
 		Point target = e.getLocationOnScreen();
 		Point spawn = objectList.get(0).getPosition();
 		System.out.println(objectList.get(0).currentPosition.x + " " + target.x);

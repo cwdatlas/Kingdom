@@ -3,6 +3,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.List;
 
 //Programmed by Adrian and Aidan of Carroll college
 public class Wall extends CollisionSprite {
@@ -22,7 +23,7 @@ public class Wall extends CollisionSprite {
 
 	@Override
 	public void checkCollision(CollisionController colControl) {
-		ArrayList<BaseSprite> collidingSprites = colControl.checkCollition(this.getHitBox());
+		List<BaseSprite> collidingSprites = colControl.checkCollition(this.getHitBox());
 		for (int i = 0; i < collidingSprites.size(); i++) {
 			if (collidingSprites.get(i) instanceof Enemy) {
 				if (HP > 0  && (infinityFrames>60)) {

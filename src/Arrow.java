@@ -2,6 +2,7 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class Arrow extends CollisionSprite {
@@ -43,7 +44,7 @@ public class Arrow extends CollisionSprite {
 
 	@Override
 	public void checkCollision(CollisionController colControl) {
-		ArrayList<BaseSprite> collidingSprites = colControl.checkCollition(this.getHitBox());
+		List<BaseSprite> collidingSprites = colControl.checkCollition(this.getHitBox());
 		for (int i = 0; i < collidingSprites.size(); i++) {
 			if (collidingSprites.get(i) instanceof Enemy) {
 				Enemy effected = (Enemy) collidingSprites.get(i);
