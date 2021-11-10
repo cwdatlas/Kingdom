@@ -18,21 +18,20 @@ public abstract class BaseSprite implements BaseSpriteI {
 	protected boolean blockedRight = false;
 	protected boolean blockedLeft = false;
 	protected boolean visible = true;
-	private int gold;
+	protected int gold;
 
 	// build the variables for direction like how Nate built direction in the
 	// dolphin program (with worded lists) whatever that was
 
 	// The constructor
 
-	protected BaseSprite(int x, int y, String fileName, Dimension panelDimensions) {
+	protected BaseSprite(int x, String fileName, Dimension panelDimensions) {
+		int y = (int)(panelDimensions.height*.74);
 		target = new Point(x, y);
 		currentPosition = new Point(x, y);
 		dimensions = panelDimensions;
 		this.loadImage(fileName);
-		
 		hitbox = new Rectangle(x, y, img.getWidth(), img.getHeight());
-
 	}
 
 	@Override
@@ -79,12 +78,13 @@ public abstract class BaseSprite implements BaseSpriteI {
 	}
 
 	public void loadImage(String fileName) {
-		if (fileName != null)
+		if (fileName != null) {
 			try {
 				img = ImageIO.read(this.getClass().getResource("/images/" + fileName));
 			} catch (IOException e) {
 				System.out.println("Image not found.");
 			}
+		}
 	}
 	@Override
 	public Point getPosition() {

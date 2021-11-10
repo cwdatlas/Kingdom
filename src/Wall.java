@@ -3,26 +3,31 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.List;
 
 //Programmed by Adrian and Aidan of Carroll college
 public class Wall extends CollisionSprite {
 	private Rectangle rangeHitBox;
 	private double rangeWidthOfPanel = .3;
-	protected int HP = 50;
+	protected int HP = 0;
 	protected int infinityFrames;
 
-	protected Wall(int X, int Y, String fileName, Dimension panelDementions) {
-		super(X, Y, fileName, panelDementions);
+	protected Wall(int x, String fileName, Dimension panelDementions) {
+		super(x, fileName, panelDementions);
 		// TODO Auto-generated constructor stub
 	}
 
-	private void destroyWall() {
+	public void destroyWall() {
 		this.setvisible(false);
+	}
+	
+	public void rebuildWall() {
+		HP = 50;
 	}
 
 	@Override
 	public void checkCollision(CollisionController colControl) {
-		ArrayList<BaseSprite> collidingSprites = colControl.checkCollition(this.getHitBox());
+		List<BaseSprite> collidingSprites = colControl.checkCollition(this.getHitBox());
 		for (int i = 0; i < collidingSprites.size(); i++) {
 			if (collidingSprites.get(i) instanceof Enemy) {
 				if (HP > 0  && (infinityFrames>60)) {
