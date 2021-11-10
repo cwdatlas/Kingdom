@@ -9,7 +9,7 @@ import java.util.List;
 public class Wall extends CollisionSprite {
 	private Rectangle rangeHitBox;
 	private double rangeWidthOfPanel = .3;
-	protected int HP = 50;
+	protected int HP = 0;
 	protected int infinityFrames;
 
 	protected Wall(int x, String fileName, Dimension panelDementions) {

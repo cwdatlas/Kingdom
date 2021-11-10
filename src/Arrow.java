@@ -26,10 +26,10 @@ public class Arrow extends CollisionSprite {
 		boolean check = false;
 		try {
 			if (right) {
-				currentPosition.setLocation(new Point(currentPosition.x + 1, currentPosition.y));
+				currentPosition.setLocation(new Point(currentPosition.x + 3, currentPosition.y));
 				hitbox.x = currentPosition.x;
 			} else {
-				currentPosition.setLocation(new Point(currentPosition.x - 1, currentPosition.y));
+				currentPosition.setLocation(new Point(currentPosition.x - 3, currentPosition.y));
 				hitbox.x = currentPosition.x;
 
 			}
