@@ -125,6 +125,13 @@ public abstract class BaseSprite implements BaseSpriteI {
 
 	@Override
 	public int incrementGold() {
-		return gold++;
+		gold++;
+		return gold;
+	}
+	
+	public int minusGold() {
+		gold--;
+		return gold;
+		
 	}
 }
