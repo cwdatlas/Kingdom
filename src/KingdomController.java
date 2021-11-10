@@ -95,7 +95,6 @@ public class KingdomController extends JPanel
 		parent = parentPanel;
 		this.random = new Random();
 		panelDimensions = new Dimension();
-		colControl = new CollisionController(objectList);
 		this.add(coinPanel);
 		this.add(tod);
 		this.add(playerArrows);
@@ -392,6 +391,7 @@ public class KingdomController extends JPanel
 		spawnedSprites = false;
 		gameRunning = false;
 		objectList = new ArrayList();
+		colControl = new CollisionController(objectList);
 	}
 
 	// key and mouse listener events
