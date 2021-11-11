@@ -55,15 +55,6 @@ public class Defender extends CollisionSprite implements DefenderI {
 					colControl.addObject(arrow);
 				}
 			}
-			if (collidingSprites.get(i) instanceof DroppedCoin) {
-				colControl.deleteObject(collidingSprites.get(i));
-				this.incrementGold();
-			}
-			if (collidingSprites.get(i) instanceof PlayableCharacter) {
-				if(this.minusGold()>0)
-					colControl.addObject(new DroppedCoin(currentPosition.x, currentPosition.y, "coin.png", dimensions));
-				;
-			}
 		}
 	}
 	@Override
