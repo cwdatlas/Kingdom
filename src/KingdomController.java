@@ -224,8 +224,14 @@ public class KingdomController extends JPanel
 		difficultyWindow.setBounds(panelDimensions.width / 3, (int) (panelDimensions.height * .1), panelDimensions.width / 3,
 				(int) (panelDimensions.height * .7));
 		difficultyWindow.setVisible(difficultyWindowVisible);
-		easyBtn.setBounds((int) (difficultyWindow.getWidth() * .3), (int) (difficultyWindow.getHeight() * .8),
-				(int) (difficultyWindow.getWidth() * .4), (int) (difficultyWindow.getHeight() * .1));
+		easyBtn.setBounds((int) (difficultyWindow.getWidth() * .1), (int) (difficultyWindow.getHeight() * .2),
+				(int) (difficultyWindow.getWidth() * .2), (int) (difficultyWindow.getHeight() * .1));
+		mediumBtn.setBounds((int) (difficultyWindow.getWidth() * .7), (int) (difficultyWindow.getHeight() * .2),
+				(int) (difficultyWindow.getWidth() * .2), (int) (difficultyWindow.getHeight() * .1));
+		hardBtn.setBounds((int) (difficultyWindow.getWidth() * .1), (int) (difficultyWindow.getHeight() * .8),
+				(int) (difficultyWindow.getWidth() * .2), (int) (difficultyWindow.getHeight() * .1));
+		crazyBtn.setBounds((int) (difficultyWindow.getWidth() * .7), (int) (difficultyWindow.getHeight() * .8),
+				(int) (difficultyWindow.getWidth() * .2), (int) (difficultyWindow.getHeight() * .1));
 		youDiedWindow.setBounds(panelDimensions.width / 3, (int) (panelDimensions.height * .1),
 				panelDimensions.width / 3, (int) (panelDimensions.height * .7));
 		
