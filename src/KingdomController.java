@@ -509,8 +509,9 @@ public class KingdomController extends JPanel
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if (e.getKeyCode() == 39)
+		if (e.getKeyCode() == 39) {
 			movingRight = true;
+		}
 		else if (e.getKeyCode() == 37)
 			movingLeft = true;
 		if (e.getKeyCode() == 40)
@@ -579,7 +580,6 @@ public class KingdomController extends JPanel
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == startGame) {
 			startWindowVisible = false;
-			parent.requestFocus();
 		} else if (e.getSource() == playAgain) {
 			youDiedVisible = false;
 			parent.requestFocus();
@@ -589,21 +589,25 @@ public class KingdomController extends JPanel
 			gameRunning = true;
 			difficulty = Difficulty.EASY;
 			difficultyWindowVisible = false;
+			parent.requestFocus();
 		}
 		else if (e.getSource() == mediumBtn) {
 			gameRunning = true;
 			difficulty = Difficulty.MEDIUM;
 			difficultyWindowVisible = false;
+			parent.requestFocus();
 		}
 		else if (e.getSource() == hardBtn) {
 			gameRunning = true;
 			difficulty = Difficulty.HARD;
 			difficultyWindowVisible = false;
+			parent.requestFocus();
 		}
 		else if (e.getSource() == crazyBtn) {
 			gameRunning = true;
 			difficulty = Difficulty.CRAZY;
 			difficultyWindowVisible = false;
+			parent.requestFocus();
 		}
 	}
 }
