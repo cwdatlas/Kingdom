@@ -14,6 +14,7 @@ import java.util.TimerTask;
 public class Defender extends CollisionSprite implements DefenderI {
 	private final Random random;
 	private boolean roaming;
+	private Rectangle hitBox;
 	private Rectangle rangeHitBox;
 	private double rangeWidthOfPanel = .3;
 	private int arrowCooldownTimer = 0;
@@ -24,6 +25,7 @@ public class Defender extends CollisionSprite implements DefenderI {
 		random = new Random();
 		int rangeWidth = (int) (this.img.getWidth() + panelDementions.getWidth()*rangeWidthOfPanel);
 		rangeHitBox = new Rectangle(currentPosition.x, currentPosition.y, rangeWidth, this.img.getHeight());
+		hitBox = new Rectangle(currentPosition.x, currentPosition.y, this.img.getWidth(), this.img.getHeight());
 	}
 	@Override
 	public void setDefending(int position) {
@@ -45,32 +47,32 @@ public class Defender extends CollisionSprite implements DefenderI {
 	}
 	public void checkCollision(CollisionController colControl) {
 		arrowCooldownTimer++;
-		List<BaseSprite> collidingSprites = colControl.checkCollition(rangeHitBox);
-		for (int i = 0; i < collidingSprites.size(); i++) {
-			if (collidingSprites.get(i) instanceof Enemy) {
+		List<BaseSprite> collidingSpritesRanged = colControl.checkCollition(rangeHitBox);
+		for (int i = 0; i < collidingSpritesRanged.size(); i++) {
+			if (collidingSpritesRanged.get(i) instanceof Enemy) {
 				if(arrowCooldownTimer >= 1000) {
 					arrowCooldownTimer = 0;
-					Point targetPoint = new Point(collidingSprites.get(i).getPosition());
+					Point targetPoint = new Point(collidingSpritesRanged.get(i).getPosition());
 					Arrow arrow = new Arrow(this.getPosition().x, "arrowSprite.png", dimensions, currentPosition.x<targetPoint.x);
 					colControl.addObject(arrow);
 				}
 			}
-			if (collidingSprites.get(i) instanceof DroppedCoin) {
-				colControl.deleteObject(collidingSprites.get(i));
-				this.incrementGold();
 			}
-			if (collidingSprites.get(i) instanceof PlayableCharacter) {
-				if(this.minusGold()>0)
-					colControl.addObject(new DroppedCoin(currentPosition.x, currentPosition.y, "coin.png", dimensions));
-				;
+		List<BaseSprite> collidingSprites = colControl.checkCollition(hitBox);
+		for (int i = 0; i < collidingSprites.size(); i++) {
+		if (collidingSprites.get(i) instanceof Enemy) {
+		colControl.deleteObject(this);
 			}
 		}
-	}
+		}
+	
 	@Override
 	public boolean paint(Graphics g) {
 		super.paint(g);
 		g.setColor(Color.GREEN);
 		rangeHitBox.x = (int) (currentPosition.x - (rangeHitBox.width/2) + (img.getWidth()/2));
+		hitBox.x = (int) (currentPosition.x - (hitBox.width)+ img.getWidth());
+		g.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
 		g.drawRect(rangeHitBox.x, rangeHitBox.y, rangeHitBox.width, rangeHitBox.height);
 		return true;
 	}
