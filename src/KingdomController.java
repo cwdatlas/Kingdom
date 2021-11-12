@@ -59,6 +59,7 @@ public class KingdomController extends JPanel
 	private Color dayColor = new Color(6, 6, 6, 0);
 	private Color duskColor = new Color(255, 153, 51, 30);
 	private Color nightColor = new Color(0, 0, 0, 120);
+	private Color bloodMoonColor = new Color(255, 0, 0, 60);
 	private Color backgroundColor = new Color(128, 255, 191, 30);
 	private BufferedImage backgroundImage;
 
@@ -283,8 +284,13 @@ public class KingdomController extends JPanel
 
 			timeCalculations();
 			if (spawning) {
-				spawnEnemies(4 + days * 2);
 				spawning = false;
+				if(timeState == TimeState.BLOODMOON) {
+					System.out.println("bloodMoon");
+					spawnEnemies((4 + days) * 4);
+				}else {
+					spawnEnemies((4 + days) * 2);
+				}
 			}
 		}
 		// JLabels
@@ -388,11 +394,9 @@ public class KingdomController extends JPanel
 					else
 						((Defender) objectList.get(i))
 								.setDefending(panelDimensions.width - 50 - panelDimensions.width / 3);
-
 				}
 				objectList.get(i).move();
 			} else if (objectList.get(i) instanceof Arrow) { // if class needs the move function
-
 				objectList.get(i).move();
 			}
 		}
@@ -414,7 +418,7 @@ public class KingdomController extends JPanel
 
 	// constructor for the time states to be used for times of day
 	private enum TimeState { // TODO this needs to be before JPanel/ before timestate is initialize
-		DUSK, DAY, DAWN, NIGHT
+		DUSK, DAY, DAWN, NIGHT, BLOODMOON
 	}
 	
 	private enum Difficulty{
@@ -427,11 +431,13 @@ public class KingdomController extends JPanel
 			days++;
 		}
 		if (timeOfDay == dayLength * .7 && timeState == timeState.DUSK) {
-			timeState = TimeState.NIGHT;
 			spawning = true;
 			attacking = true;
 			backgroundColor = nightColor;
-
+			if(Math.random()>.9) {
+				backgroundColor = bloodMoonColor;
+				timeState = TimeState.BLOODMOON;
+			}
 		} else if (timeOfDay == dayLength * .6 && timeState == timeState.DAY) {
 			timeState = TimeState.DUSK;
 			defending = true;
@@ -442,7 +448,7 @@ public class KingdomController extends JPanel
 			roaming = true;
 			backgroundColor = dayColor;
 
-		} else if (timeOfDay == 0 && timeState == timeState.NIGHT) {
+		} else if ((timeOfDay == 0 && timeState == timeState.NIGHT) || (timeOfDay == 0 && timeState == timeState.BLOODMOON)) {
 			timeState = TimeState.DAWN;
 			retreating = true;
 			backgroundColor = dawnColor;
