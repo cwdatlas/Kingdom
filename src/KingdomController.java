@@ -292,7 +292,6 @@ public class KingdomController extends JPanel
 			if (spawning) {
 				spawning = false;
 				if(timeState == TimeState.BLOODMOON) {
-					System.out.println("bloodMoon");
 					spawnEnemies((4 + days) * 4);
 				}else {
 					spawnEnemies((4 + days) * 2);
@@ -305,10 +304,8 @@ public class KingdomController extends JPanel
 		coinPanel.setBounds((int)panelDimensions.width - 150,0,100,100);
 		tod.setBounds((int)panelDimensions.width - 150,10,200,110);
 		playerArrows.setBounds((int)panelDimensions.width - 150,20,300,120);
-		coinPanel.setText("Coins: " + playerGold);
+		coinPanel.setText("Gold: " + playerGold);
 		tod.setText("Time of Day: " + timeState);
-		PlayableCharacter player = (PlayableCharacter)objectList.get(0);
-		playerArrows.setText("Arrows: " + player.getArrows());
 		coinPanel.setForeground(Color.WHITE);
 		tod.setForeground(Color.WHITE);
 		playerArrows.setForeground(Color.WHITE);
@@ -374,6 +371,7 @@ public class KingdomController extends JPanel
 				((PlayableCharacter) objectList.get(i)).downPress(playerUseMoney);
 				((PlayableCharacter) objectList.get(i)).playerShoot(playerShootingArrow, arrowTarget);
 				playerShootingArrow = false;
+				playerArrows.setText("Arrows: " + ((PlayableCharacter)objectList.get(i)).getArrows());
 			}
 
 			else if (objectList.get(i) instanceof Enemy) {
@@ -444,6 +442,7 @@ public class KingdomController extends JPanel
 				backgroundColor = bloodMoonColor;
 				timeState = TimeState.BLOODMOON;
 			}
+			timeState = TimeState.NIGHT;
 		} else if (timeOfDay == dayLength * .6 && timeState == timeState.DAY) {
 			timeState = TimeState.DUSK;
 			defending = true;
@@ -454,7 +453,7 @@ public class KingdomController extends JPanel
 			roaming = true;
 			backgroundColor = dayColor;
 
-		} else if ((timeOfDay == 0 && timeState == timeState.NIGHT) || (timeOfDay == 0 && timeState == timeState.BLOODMOON)) {
+		} else if (timeOfDay == 0 && (timeState == TimeState.NIGHT || timeState == TimeState.BLOODMOON)) {
 			timeState = TimeState.DAWN;
 			retreating = true;
 			backgroundColor = dawnColor;
@@ -465,6 +464,7 @@ public class KingdomController extends JPanel
 	private void setVariables() {
 		players = 1;
 		days = 0;
+		defendersSpawned = 0;
 		spawnedSprites = false;
 		gameRunning = false;
 		objectList = new ArrayList();
@@ -478,28 +478,24 @@ public class KingdomController extends JPanel
 		if(difficulty == Difficulty.EASY) {
 		defenders = 2;
 		walls = 2;
-		defendersSpawned = 2;
-		playerGold = 0;
+		playerGold = 10;
 		timeOfDay = 0;
 		timeState = TimeState.DAWN;
 	  } else if(difficulty == Difficulty.MEDIUM) {
-		defenders = 0;
+		defenders = 1;
 		walls = 2;
-		defendersSpawned = 0;
-		playerGold = 0;
+		playerGold = 10;
 		timeOfDay = 0;
 		timeState = TimeState.DAWN;
 	  } else if (difficulty == Difficulty.HARD) {
 		defenders = 0;
 		walls = 2;
-		defendersSpawned = 0;
-		playerGold = 0;
+		playerGold = 4;
 		timeOfDay = 0;
 		timeState = TimeState.DAWN;
 	  } else if (difficulty == Difficulty.CRAZY) {
 		defenders = 0;
 		walls = 2;
-		defendersSpawned = 0;
 		playerGold = 0;
 		timeOfDay = 0;
 		timeState = TimeState.DAWN;
