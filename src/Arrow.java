@@ -4,14 +4,27 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
+/**
+ * @author Aidan Scott
+ * Arrow is built to be a visual representation of an arrow that has the abbility to kill
+ * enemies on contact
+ * 
+ *@see BaseSprite for more information on how Arrow runs
+ */
 public class Arrow extends CollisionSprite {
 	boolean right;
 	boolean delete = false;
 
 	Random random = new Random();
 	
-
+	/**
+	 * the constructor will set the y position of the arrow, and build its hitbox for the dimensions of the img
+	 * 
+	 * @param int x is the x position, top left, of where the sprite will be spawned
+	 * @param String fileName is the filename of the image that will be used for the sprite
+	 * @param Dimension panelDementions are the dimensions for the panel being used so the arrow can be placed at the correct y value
+	 * @param boolean goingRight describes if the arrow is moving to the right or not(left)
+	 */
 	protected Arrow(int x, String fileName, Dimension panelDementions, boolean goingRight) {
 		super(x, fileName, panelDementions);
 		dimensions = panelDementions;
@@ -21,6 +34,11 @@ public class Arrow extends CollisionSprite {
 		right = goingRight;
 	}
 
+	/**
+	 * the move function overrides the move() function in baseSprite allowing it to increase its speed from 1px to 3px
+	 * 
+	 *@see move() in baseSprite to see the overridden function
+	 */
 	@Override
 	public boolean move() {
 		boolean check = false;
@@ -44,6 +62,12 @@ public class Arrow extends CollisionSprite {
 
 	}
 
+	/**
+	 * checkCollision is the class by class system for deciding what happens when a collition is detected by colControl
+	 *
+	 *@param CollisionController colControl is the centralized collision detection system for Kingdom
+	 *@see CollisionController to learn more about its .checkCollition(rectangle hitbox) function
+	 */
 	@Override
 	public void checkCollision(CollisionController colControl) {
 		List<BaseSprite> collidingSprites = colControl.checkCollition(this.getHitBox());
