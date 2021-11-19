@@ -74,13 +74,13 @@ public class KingdomController extends JPanel
 	private final Random random;
 	private JFrame parent;
 	String instructionsText = "Welcome to Kingdom! The point of this game is to survive as many nights as possible"
-			+ "from the ENEMIES(the green rectangles). In order to help you survive, EMEMIES will drop GOLD in"
-			+"order for you to buy precious resources such as ARROWS, DEFENDERS, and to rebuild WALLS. To shoot,"
-			+"place the mouse cursor to the left or right of your character and left click to shoot in the chosen"
-			+"direction. To buy ARROWS, go to the maroon arrow area and press the 'DOWN' directional key. To buy"
-			+"DEFENDERS, go to the DEFENDER box and press the 'DOWN' directional key to buy. To rebuild WALLS, go"
-			+"to a wall and press the 'DOWN' directional key to rebuild the wall. Note: completley broken walls"
-			+"will be grey with a red highlight(ENEMIES will pass through them).";
+			+" from the ENEMIES(the green rectangles). In order to help you survive, EMEMIES will drop GOLD in"
+			+" order for you to buy precious resources such as ARROWS, DEFENDERS, and to rebuild WALLS. To shoot,"
+			+" place the mouse cursor to the left or right of your character and left click to shoot in the chosen"
+			+" direction. To buy ARROWS, go to the maroon arrow area and press the 'DOWN' directional key. To buy"
+			+" DEFENDERS, go to the DEFENDER box and press the 'DOWN' directional key to buy. To rebuild WALLS, go"
+			+" to a wall and press the 'DOWN' directional key to rebuild the wall. Note: completley broken walls"
+			+" will be grey with a red highlight(ENEMIES will pass through them).";
 	private JLabel instructions = new JLabel("<html>"+instructionsText+"</html>");
 //	private JLabel instructions = new JLabel();
 	private boolean instructionsVisable = true;
@@ -183,7 +183,7 @@ public class KingdomController extends JPanel
 		hardBtn.addActionListener(this);
 		difficultyWindow.add(hardBtn);
 		
-		crazyBtn.setText("CARZY");
+		crazyBtn.setText("CRAZY");
 		crazyBtn.setBackground(Color.WHITE);
 		crazyBtn.setVisible(true);
 		crazyBtn.addActionListener(this);
