@@ -8,9 +8,10 @@ import java.util.List;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
-
-//Programmed by Adrian and Aidan of Carroll college
-	
+/**
+ * @author Aidan Scott & Adrien
+ * Defender will kill enemies by shooting arrows at them and defend or wonder depending on what is told to them
+ */	
 public class Defender extends CollisionSprite implements DefenderI {
 	private final Random random;
 	private boolean roaming;
@@ -18,7 +19,13 @@ public class Defender extends CollisionSprite implements DefenderI {
 	private Rectangle rangeHitBox;
 	private double rangeWidthOfPanel = .3;
 	private int arrowCooldownTimer = 0;
-
+	/**
+	 * This constructor builds the Sprites hitbox, sets y level, loads image and sets general variables
+	 * and build a ranged hitbox to allow the defenders to "see" enemies
+	 * @param int x is the x position, top left, of where the sprite will be spawned
+	 * @param String fileName is the filename of the image that will be used for the sprite
+	 * @param Dimension panelDementions are the dimensions for the panel being used so the arrow can be placed at the correct y value
+	 */
 	protected Defender(int x, String fileName, Dimension panelDementions) {
 		super(x, fileName, panelDementions);
 		
@@ -27,11 +34,19 @@ public class Defender extends CollisionSprite implements DefenderI {
 		rangeHitBox = new Rectangle(currentPosition.x, currentPosition.y, rangeWidth, this.img.getHeight());
 		hitBox = new Rectangle(currentPosition.x, currentPosition.y, this.img.getWidth(), this.img.getHeight());
 	}
+	/**
+	 * setDefendering sets the defenders to stay in one position
+	 * @param int position which is the x cord of the defenders defending position
+	 */
 	@Override
 	public void setDefending(int position) {
 		roaming = false;
 		target.setLocation(position, 500);
 	}
+	/**
+	 * setRoaming sets the defenders to move around the panel at random times to random locations
+	 * @see KingdomController to see how this is implemented
+	 */
 	@Override
 	public void setRoaming() {
 		roaming = true;
@@ -45,6 +60,11 @@ public class Defender extends CollisionSprite implements DefenderI {
 				}
 			}},500, 1000 );
 	}
+	/**
+	 * checkCollision decides what happens when the ranged hitBox is colliding with an enemy and when the small hitbox collides with 
+	 * an enemy
+	 * @param CollisionController colControl 
+	 */
 	public void checkCollision(CollisionController colControl) {
 		arrowCooldownTimer++;
 		List<BaseSprite> collidingSpritesRanged = colControl.checkCollition(rangeHitBox);
@@ -65,17 +85,22 @@ public class Defender extends CollisionSprite implements DefenderI {
 			}
 		}
 		}
-	
+	/**
+	 * paint overrides the BaseSprite method and implements it with super
+	 * a debugging tool is commented out here which implements a green rectangle around the rangedHitBox
+	 * @param Graphic g
+	 */
 	@Override
 	public boolean paint(Graphics g) {
 		super.paint(g);
-		g.setColor(Color.GREEN);
-		rangeHitBox.x = (int) (currentPosition.x - (rangeHitBox.width/2) + (img.getWidth()/2));
-		hitBox.x = (int) (currentPosition.x - (hitBox.width)+ img.getWidth());
-		g.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
-		g.drawRect(rangeHitBox.x, rangeHitBox.y, rangeHitBox.width, rangeHitBox.height);
+//		g.setColor(Color.GREEN);
+//		rangeHitBox.x = (int) (currentPosition.x - (rangeHitBox.width/2) + (img.getWidth()/2));
+//		hitBox.x = (int) (currentPosition.x - (hitBox.width)+ img.getWidth());
+//		g.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
+//		g.drawRect(rangeHitBox.x, rangeHitBox.y, rangeHitBox.width, rangeHitBox.height);
 		return true;
 	}
+
 }
 
 

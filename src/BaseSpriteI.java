@@ -14,7 +14,7 @@ public interface BaseSpriteI {
 	boolean move();
 
 	// sets visibility to true or false
-	void setvisible(boolean visability);
+	void setVisible(boolean visability);
 
 	// paint paints in the object with the graphics object (im not sure of this as
 	// of now)
@@ -23,9 +23,6 @@ public interface BaseSpriteI {
 	// gets the x position of Playable character
 	Point getPosition();
 
-	boolean isColliding(BaseSprite testedSprite); // returns true if objects collide
-
-	//makes it so you get the gold from playable character
 	int getGold();
 	
 	//lets us set the gold

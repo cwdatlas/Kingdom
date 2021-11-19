@@ -1,5 +1,3 @@
-//Programmed by Adrian and Aidan of Carroll college
-
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -21,21 +19,17 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
-
+/**
+ * @author Aidan Scott & Adrien
+ * KingdomMain is called to start the Kingdom game, it then builds the KingdomController and puts its paint function into a loop
+ * to simulate frame rate
+ */
 public class KingdomMain {
-
 	public static void main(String[] args) {
-	
-
 		JFrame kingdom = new JFrame("Kingdom");
 		JPanel kingdomPanel = new KingdomController(kingdom);
 		kingdom.addKeyListener((KeyListener) kingdomPanel);
 		kingdom.addMouseListener((MouseListener) kingdomPanel);
-
-		//this sets up the coins or score board
-
-		// setting window params
 		try {
 			// setting up parameters for the JFrame
 			kingdom.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -43,13 +37,10 @@ public class KingdomMain {
 			kingdom.setBounds(0, 0, 1920, 1080);
 			kingdom.setVisible(true);
 			kingdom.setBackground(Color.WHITE);
-
 			// setting parameters for the JPanel: world
 			kingdomPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
-	
 			// adding panel to kingdom
 			kingdom.add(kingdomPanel);
-
 			Timer myTimer = new Timer();
 			myTimer.scheduleAtFixedRate(new TimerTask() {
 				public void run() {

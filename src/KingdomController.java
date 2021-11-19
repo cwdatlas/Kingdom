@@ -26,7 +26,11 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
-
+/**
+ * @author Aidan Scott & Adrien
+ * KingdomController manages time and is the general controller for the game
+ * @see KingdomMain to understand how this class is built and used with the timer to simulate a framerate
+ */
 public class KingdomController extends JPanel
 		implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener, ActionListener {
 	private boolean gameRunning;
@@ -109,7 +113,10 @@ public class KingdomController extends JPanel
 	private JLabel daysPassed = new JLabel();
 	private JLabel playerArrows = new JLabel();
 	private List<BaseSprite> objectList;
-
+	/**
+	 * KingdomController constructor initializes graphic components like JLabels
+	 * it also initializes many variables 
+	 */
 	public KingdomController(JFrame parentPanel) {
 		setVariables(); //(READ) sets the variables that will need to be reset when the user wants to play
 				
@@ -207,7 +214,10 @@ public class KingdomController extends JPanel
 		youDiedWindow.add(totalScore);
 		youDiedWindow.add(daysPassed);
 	}
-
+	/**
+	 * PaintComponent starts all technical proccesssing like time, setting bounds dependent on panel size and sprite movement, collision checking
+	 * and other general actions
+	 */
 	public void paintComponent(Graphics g) {
 		panelDimensions = this.getSize();
 
@@ -251,8 +261,8 @@ public class KingdomController extends JPanel
 			spawnPlayers(players);
 			spawnDefenders(defenders);
 			spawnWalls(walls);
-			spawnDefenderShop(ShopType.arrowType);
-			spawnDefenderShop(ShopType.defenderType);
+			spawnShop(ShopType.arrowType);
+			spawnShop(ShopType.defenderType);
 			spawnedSprites = true;
 		}
 		if (!(objectList.get(0) instanceof PlayableCharacter)) { // this is a sign that the player died
@@ -292,7 +302,6 @@ public class KingdomController extends JPanel
 			if (spawning) {
 				spawning = false;
 				if(timeState == TimeState.BLOODMOON) {
-					System.out.println("bloodMoon");
 					spawnEnemies((4 + days) * 4);
 				}else {
 					spawnEnemies((4 + days) * 2);
@@ -305,32 +314,35 @@ public class KingdomController extends JPanel
 		coinPanel.setBounds((int)panelDimensions.width - 150,0,100,100);
 		tod.setBounds((int)panelDimensions.width - 150,10,200,110);
 		playerArrows.setBounds((int)panelDimensions.width - 150,20,300,120);
-		coinPanel.setText("Coins: " + playerGold);
+		coinPanel.setText("Gold: " + playerGold);
 		tod.setText("Time of Day: " + timeState);
-		PlayableCharacter player = (PlayableCharacter)objectList.get(0);
-		playerArrows.setText("Arrows: " + player.getArrows());
 		coinPanel.setForeground(Color.WHITE);
 		tod.setForeground(Color.WHITE);
 		playerArrows.setForeground(Color.WHITE);
 	}
-
-	// spawning shortcuts
-	// spawning players
+	/**
+	 * spawnPlayers initialize PlayerCharacter sprites at a specific location
+	 * @param int numberOfPlayers
+	 */
 	private void spawnPlayers(int numberOfPlayers) {
 		for (int d = 0; d < numberOfPlayers; d++)
 			objectList.add(0,
 					new PlayableCharacter(((int) panelDimensions.getWidth() / 2), 10, 4, playerSprite, panelDimensions));
 	}
-
-	// spawning defenders
+	/**
+	 * spawnDefenders initializes Defenders in a single location
+	 * @param int numberOfDefenders
+	 */
 	private void spawnDefenders(int numberOfDefenders) { // TODO set spawn parameters (place)
 		for (int d = 0; d < numberOfDefenders; d++) {
 			objectList.add(new Defender(800, defenderSprite, panelDimensions));
 			defendersSpawned++;
 		}
 	}
-
-	// spawning Enemies
+	/**
+	 * spawnEnemies initializes a specific quantity of enemies at either side of the map past the bounds of the panel
+	 * @param int numberOfEnemies
+	 */
 	private void spawnEnemies(int numberOfEnemies) {// TODO set spawn parameters (place)
 		for (int d = 0; d < numberOfEnemies; d++) {
 			if (d % 2 == 0)
@@ -340,8 +352,10 @@ public class KingdomController extends JPanel
 						panelDimensions));
 		}
 	}
-
-	// spawning walls
+	/**
+	 * spawnWalls initializes walls at two set locations, usually two walls or less will be initialised
+	 * @param int numberOfWalls
+	 */
 	private void spawnWalls(int numberOfWalls) {// TODO set spawn parameters (place)
 		for (int d = 0; d < numberOfWalls; d++) {
 			if (d % 2 == 0)
@@ -350,16 +364,21 @@ public class KingdomController extends JPanel
 				objectList.add(new Wall(((int) panelDimensions.getWidth() / 3) * 2, wallSprite, panelDimensions));
 		}
 	}
-
-	private void spawnDefenderShop(ShopType type) {
+	/**
+	 * spawnShop initialized a shop at a specific location depending on the shop type
+	 * @param ShopType type
+	 * @see the enum class ShopType to find out the shop types and add more 
+	 */
+	private void spawnShop(ShopType type) {
 		if(type == ShopType.defenderType)
 			objectList.add(new Shop(((int) panelDimensions.getWidth() / 2) + 50, defenderShopSprite, panelDimensions, type));
 		if(type == ShopType.arrowType)
 			objectList.add(new Shop(((int) panelDimensions.getWidth() / 2) - 130, arrowShopSprite, panelDimensions, type));
 	}
-
-	// set positions to move and allow the sprites to move themselves to thier
-	// target positions
+	/**
+	 * doMoves deals with all movement of sprites, that being how they are supposed to move or if they should move at all
+	 * When the sprites have a location to go to the move() function needs to be called for them to go twards that target location
+	 */
 	private void doMoves() {
 		int defender = 0;
 		for (int i = 0; i < objectList.size(); i++) {
@@ -374,6 +393,7 @@ public class KingdomController extends JPanel
 				((PlayableCharacter) objectList.get(i)).downPress(playerUseMoney);
 				((PlayableCharacter) objectList.get(i)).playerShoot(playerShootingArrow, arrowTarget);
 				playerShootingArrow = false;
+				playerArrows.setText("Arrows: " + ((PlayableCharacter)objectList.get(i)).getArrows());
 			}
 
 			else if (objectList.get(i) instanceof Enemy) {
@@ -411,8 +431,10 @@ public class KingdomController extends JPanel
 		roaming = false;
 		retreating = false;
 	}
-
-	// having the sprites check to see if they are colliding with any other sprites
+	/**
+	 * checkCollisions loops through the entire BaseSprite list and asks the sprites to checkCollision for only the sprites that can
+	 * @see CollisionController to understand how collition works
+	 */
 	private void checkCollisions() {
 
 		for (int i = 0; i < objectList.size(); i++) {
@@ -421,16 +443,25 @@ public class KingdomController extends JPanel
 			}
 		}
 	}
-
-	// constructor for the time states to be used for times of day
+	/**
+	 * TimerState is a enum for the times of the day
+	 * @see timeCalculations to see how the class is used
+	 */
 	private enum TimeState { // TODO this needs to be before JPanel/ before timestate is initialize
 		DUSK, DAY, DAWN, NIGHT, BLOODMOON
 	}
-	
+	/**
+	 * Difficulty is the set difficulty of the game
+	 * @see setVariables to see how the class is being used
+	 */
 	private enum Difficulty{
 		EASY, MEDIUM, HARD, CRAZY
 	}
-
+	/**
+	 * timeCalculations regulates the time of the day dependent on the amount of frames that have been recorded
+	 * depending on the time of day it is timeCalculations will set different events to occur 
+	 * @see TimeState to see how the times are stored
+	 */
 	private void timeCalculations() {
 		if (timeOfDay > dayLength) {
 			timeOfDay = 0;
@@ -444,6 +475,7 @@ public class KingdomController extends JPanel
 				backgroundColor = bloodMoonColor;
 				timeState = TimeState.BLOODMOON;
 			}
+			timeState = TimeState.NIGHT;
 		} else if (timeOfDay == dayLength * .6 && timeState == timeState.DAY) {
 			timeState = TimeState.DUSK;
 			defending = true;
@@ -454,52 +486,48 @@ public class KingdomController extends JPanel
 			roaming = true;
 			backgroundColor = dayColor;
 
-		} else if ((timeOfDay == 0 && timeState == timeState.NIGHT) || (timeOfDay == 0 && timeState == timeState.BLOODMOON)) {
+		} else if (timeOfDay == 0 && (timeState == TimeState.NIGHT || timeState == TimeState.BLOODMOON)) {
 			timeState = TimeState.DAWN;
 			retreating = true;
 			backgroundColor = dawnColor;
 		}
 		timeOfDay++;
 	}
-
+	/**
+	 * setVariables resets the core variables that need to be loaded at the start of the game and when the game needs to be reset
+	 * different choices in setVarables change difficulty of the game
+	 * @see the enum class Difficulty to see all the dificulties
+	 */
 	private void setVariables() {
 		players = 1;
 		days = 0;
+		defendersSpawned = 0;
 		spawnedSprites = false;
 		gameRunning = false;
 		objectList = new ArrayList();
 		colControl = new CollisionController(objectList);
-		walls = 2;
-
-		
-		// !!!!!!!!!!I DIDN'T TOUCH GOLD BECUASE IT IS NOT BEING CALLED HERE. WE NEED TO FIND OUT WHERE
-		// GOLD IS BEING CALLED FROM!!!!!!!!!!
-		
+		walls = 2;		
 		if(difficulty == Difficulty.EASY) {
 		defenders = 2;
 		walls = 2;
-		defendersSpawned = 2;
-		playerGold = 0;
+		playerGold = 10;
 		timeOfDay = 0;
 		timeState = TimeState.DAWN;
 	  } else if(difficulty == Difficulty.MEDIUM) {
-		defenders = 0;
+		defenders = 1;
 		walls = 2;
-		defendersSpawned = 0;
-		playerGold = 0;
+		playerGold = 10;
 		timeOfDay = 0;
 		timeState = TimeState.DAWN;
 	  } else if (difficulty == Difficulty.HARD) {
 		defenders = 0;
 		walls = 2;
-		defendersSpawned = 0;
-		playerGold = 0;
+		playerGold = 4;
 		timeOfDay = 0;
 		timeState = TimeState.DAWN;
 	  } else if (difficulty == Difficulty.CRAZY) {
 		defenders = 0;
 		walls = 2;
-		defendersSpawned = 0;
 		playerGold = 0;
 		timeOfDay = 0;
 		timeState = TimeState.DAWN;
@@ -512,7 +540,11 @@ public class KingdomController extends JPanel
 		// TODO Auto-generated method stub
 
 	}
-
+	/**
+	 * KeyPressed is built off the the key listener that KingdomController implements
+	 * this class deals with the key press which sets booleans to true
+	 * @param KeyEvent e 
+	 */
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == 39) {
@@ -523,7 +555,11 @@ public class KingdomController extends JPanel
 		if (e.getKeyCode() == 40)
 			playerUseMoney = true;
 	}
-
+	/**
+	 * KeyReleased is built off the the key listener that KingdomController implements
+	 * this class deals with the key release which sets booleans to false
+	 * @param KeyEvent e 
+	 */
 	@Override
 	public void keyReleased(KeyEvent e) {
 		if (e.getKeyCode() == 39)
@@ -551,7 +587,11 @@ public class KingdomController extends JPanel
 		// TODO Auto-generated method stub
 
 	}
-
+	/**
+	 * mouseClicked is built off the the mouse listener that KingdomController implements
+	 * this function gets called when a mouse was clicked on KingdomController
+	 * @param MouseEvent e 
+	 */
 	@Override
 	public void mouseClicked(MouseEvent e) { // TODO move to lower level processing (Player)
 		Point targetPoint = e.getLocationOnScreen();
@@ -581,7 +621,10 @@ public class KingdomController extends JPanel
 		// TODO Auto-generated method stub
 
 	}
-
+	/**
+	 * actionPerformed is called when a button that has been added to KingdomController is clicked
+	 * @param ActionEvent e 
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == startGame) {
@@ -617,7 +660,9 @@ public class KingdomController extends JPanel
 		}
 	}
 }
-
+/**
+ * ShopType is an enum class that sets the type of shop a shopSprite turns into
+ */
 enum ShopType { // this needs to be available for the shop class to use and for any other class
 	// that it is being handed to
 defenderType, arrowType
