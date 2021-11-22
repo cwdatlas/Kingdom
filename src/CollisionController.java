@@ -30,7 +30,6 @@ import java.util.ArrayList;
 			}
 		}
 		return returnableObjects;
-
 	}
 	/**
 	 * deleteObject delets an object within the given BaseSprite list

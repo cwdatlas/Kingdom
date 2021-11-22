@@ -10,7 +10,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 /**
  * @author Aidan Scott & Adrien
- * Defender will kill enemies by shooting arrows at them and defend or wonder depending on what is told to them
  */	
 public class Defender extends CollisionSprite implements DefenderI {
 	private final Random random;
@@ -22,9 +21,9 @@ public class Defender extends CollisionSprite implements DefenderI {
 	/**
 	 * This constructor builds the Sprites hitbox, sets y level, loads image and sets general variables
 	 * and build a ranged hitbox to allow the defenders to "see" enemies
-	 * @param int x is the x position, top left, of where the sprite will be spawned
-	 * @param String fileName is the filename of the image that will be used for the sprite
-	 * @param Dimension panelDementions are the dimensions for the panel being used so the arrow can be placed at the correct y value
+	 * @param x is the x position, top left, of where the sprite will be spawned
+	 * @param fileName is the filename of the image that will be used for the sprite
+	 * @param panelDementions are the dimensions for the panel being used so the arrow can be placed at the correct y value
 	 */
 	protected Defender(int x, String fileName, Dimension panelDementions) {
 		super(x, fileName, panelDementions);
@@ -35,8 +34,8 @@ public class Defender extends CollisionSprite implements DefenderI {
 		hitBox = new Rectangle(currentPosition.x, currentPosition.y, this.img.getWidth(), this.img.getHeight());
 	}
 	/**
-	 * setDefendering sets the defenders to stay in one position
-	 * @param int position which is the x cord of the defenders defending position
+	 * setDefendering() sets the defenders to stay in one specific position
+	 * @param position which is the x cord of the defenders defending position
 	 */
 	@Override
 	public void setDefending(int position) {
@@ -44,7 +43,7 @@ public class Defender extends CollisionSprite implements DefenderI {
 		target.setLocation(position, 500);
 	}
 	/**
-	 * setRoaming sets the defenders to move around the panel at random times to random locations
+	 * setRoaming() sets the defenders to move around the panel at random times to random locations
 	 * @see KingdomController to see how this is implemented
 	 */
 	@Override
@@ -61,9 +60,9 @@ public class Defender extends CollisionSprite implements DefenderI {
 			}},500, 1000 );
 	}
 	/**
-	 * checkCollision decides what happens when the ranged hitBox is colliding with an enemy and when the small hitbox collides with 
+	 * checkCollision() decides what happens when the ranged hitBox is colliding with an enemy and when the small hitbox collides with 
 	 * an enemy
-	 * @param CollisionController colControl 
+	 * @param colControl 
 	 */
 	public void checkCollision(CollisionController colControl) {
 		arrowCooldownTimer++;
@@ -88,7 +87,7 @@ public class Defender extends CollisionSprite implements DefenderI {
 	/**
 	 * paint overrides the BaseSprite method and implements it with super
 	 * a debugging tool is commented out here which implements a green rectangle around the rangedHitBox
-	 * @param Graphic g
+	 * @param g
 	 */
 	@Override
 	public boolean paint(Graphics g) {

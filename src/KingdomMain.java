@@ -21,8 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 /**
  * @author Aidan Scott & Adrien
- * KingdomMain is called to start the Kingdom game, it then builds the KingdomController and puts its paint function into a loop
- * to simulate frame rate
+ * @see KingdomController to see the bulk of the game
  */
 public class KingdomMain {
 	public static void main(String[] args) {

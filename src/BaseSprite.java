@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 /**
  * @author Aidan Scott & Adrien
- * BaseSprite is the parent of all sprite classes
- * it is used to have an easy system to implement images, hitboxes, movement, and painting across all sprites
  */
 public abstract class BaseSprite implements BaseSpriteI {
 	protected BufferedImage img;
@@ -24,7 +22,6 @@ public abstract class BaseSprite implements BaseSpriteI {
 	protected int gold;
 	/**
 	 * This constructor builds the Sprites hitbox, sets y level, loads image and sets general variables
-	 * 
 	 * @param int x is the x position, top left, of where the sprite will be spawned
 	 * @param String fileName is the filename of the image that will be used for the sprite
 	 * @param Dimension panelDementions are the dimensions for the panel being used so the arrow can be placed at the correct y value
@@ -38,18 +35,18 @@ public abstract class BaseSprite implements BaseSpriteI {
 		hitbox = new Rectangle(x, y, img.getWidth(), img.getHeight());
 	}
 	/**
-	 * placeSprite sets sprite location to x and y values it is given
-	 *@param int x is the x location
-	 *@param int y is the y location
+	 * placeSprite() sets sprite location to the x and y values
+	 *@param x is the x location
+	 *@param y is the y location
 	 */
 	@Override
 	public void placeSprite(int x, int y) {
 		currentPosition.setLocation(new Point(x, y));	
 	}
 	/**
-	 * moveTo sets the target location to where the sprite will move to over time
-	 *@param int x is the x target location
-	 *@param int y is the y target location
+	 * moveTo() sets the target location of the sprite
+	 *@param x is the x target location
+	 *@param y is the y target location
 	 *@see move() to understand how the location of the sprite changes with each call of the function
 	 */
 	@Override
@@ -58,7 +55,7 @@ public abstract class BaseSprite implements BaseSpriteI {
 		
 	}
 	/**
-	 * move() moves the sprite towards its target direction
+	 * move() moves the sprite towards its target location
 	 *the location of the sprite will be changed by 1px per call of this function
 	 */
 	@Override
@@ -79,17 +76,16 @@ public abstract class BaseSprite implements BaseSpriteI {
 		return check;
 	}
 	/**
-	 * setvisible() toggles the spites visibility
-	 * being invisible stop the paint function from painting the sprite
+	 * setVisible() toggles the spites visibility
+	 * being invisible stops the paint() from painting the sprite
 	 */
 	@Override
-	public void setvisible(boolean visability) {
+	public void setVisible(boolean visability) {
 			visible = visability;
 	}
 	/**
-	 * moveTo sets the target location to where the sprite will move to over time
-	 * @param Graphics g needs to be the graphics components gotten from a paint function
-	 * @return boolean visible
+	 * paint() displays the sprite on KingdomController
+	 * @param g
 	 */
 	@Override
 	public boolean paint(Graphics g) {
@@ -99,8 +95,8 @@ public abstract class BaseSprite implements BaseSpriteI {
 		return visible;
 	}
 	/**
-	 * loadImage sets bufferedImage to found image
-	 *@param String fileName image name
+	 * loadImage() takes fileName and gets the file from /images/
+	 *@param fileName image name
 	 */
 	public void loadImage(String fileName) {
 		if (fileName != null) {
@@ -112,27 +108,25 @@ public abstract class BaseSprite implements BaseSpriteI {
 		}
 	}
 	/**
-	 * getPosition returns the cords of the Sprite
-	 * @return point curentPosition which is the position of the sprite
+	 * getPosition() returns the cords of the Sprite
+	 * @return curentPosition
 	 */
 	@Override
 	public Point getPosition() {
 		return currentPosition;
 	}
 	/**
-	 * getHitBox returns the standardized hitbox that all baseSprites have
-	 * @return rectangle hitbox
+	 * getHitBox() returns the standardized hitbox that all baseSprites have
+	 * @return hitbox
 	 */
 	public Rectangle getHitBox() {
 		return hitbox;
 	}
 	/**
-	 * setBlocked will set a stop a sprite from moving through another sprite like a wall 
-	 * this function is specifically built to work will walls
-	 *@param boolean blocked true if a sprite is blocked by another
-	 *@see wall colliton to see an example of this being used
+	 * setBlocked() will set a stop a sprite from moving through wall sprites
+	 *@param blocked true if a sprite is blocked by a wall
+	 *@see Wall to see an example of this being used
 	 */
-	//the setter for blocking and the direction that the sprite is blocked in
 	public void setBlocked(boolean blocking) {
 		if(target.x > currentPosition.x && blocking) {
 			blockedRight = true;
@@ -146,22 +140,22 @@ public abstract class BaseSprite implements BaseSpriteI {
 		}
 	}
 	/**
-	 * @return int gold 
+	 * @return gold 
 	 */
 	@Override
 	public int getGold() {
 		return gold;
 	}
 	/**
-	 * @param int g sets gold to the quantity of gold passed into the function
+	 * @param g sets gold to the quantity of gold passed into the function
 	 */
 	@Override
 	public void setGold(int g) {
 		gold = g;	
 	}
 	/**
-	 * incrementGold adds 1 to the supply of gold the sprite has
-	 * @return int gold 
+	 * incrementGold() adds 1 to the supply of gold the sprite has
+	 * @return gold 
 	 */
 	@Override
 	public int incrementGold() {
@@ -169,8 +163,8 @@ public abstract class BaseSprite implements BaseSpriteI {
 		return gold;
 	}
 	/**
-	 * minusGold decreases the supply of gold the sprite has by 1
-	 * @return int gold
+	 * minusGold() decreases the supply of gold the sprite has by 1
+	 * @return gold
 	 */
 	public int minusGold() {
 		gold--;

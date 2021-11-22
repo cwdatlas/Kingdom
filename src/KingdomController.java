@@ -28,7 +28,6 @@ import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 /**
  * @author Aidan Scott & Adrien
- * KingdomController manages time and is the general controller for the game
  * @see KingdomMain to understand how this class is built and used with the timer to simulate a framerate
  */
 public class KingdomController extends JPanel
@@ -116,6 +115,7 @@ public class KingdomController extends JPanel
 	/**
 	 * KingdomController constructor initializes graphic components like JLabels
 	 * it also initializes many variables 
+	 * @param parentPanel the JFrame that KingdomController is inside of
 	 */
 	public KingdomController(JFrame parentPanel) {
 		setVariables(); //(READ) sets the variables that will need to be reset when the user wants to play
@@ -215,8 +215,9 @@ public class KingdomController extends JPanel
 		youDiedWindow.add(daysPassed);
 	}
 	/**
-	 * PaintComponent starts all technical proccesssing like time, setting bounds dependent on panel size and sprite movement, collision checking
+	 * PaintComponent() starts all technical proccesssing like time, setting bounds dependent on panel size and sprite movement, collision checking
 	 * and other general actions
+	 * @param g
 	 */
 	public void paintComponent(Graphics g) {
 		panelDimensions = this.getSize();
@@ -321,8 +322,8 @@ public class KingdomController extends JPanel
 		playerArrows.setForeground(Color.WHITE);
 	}
 	/**
-	 * spawnPlayers initialize PlayerCharacter sprites at a specific location
-	 * @param int numberOfPlayers
+	 * spawnPlayers() initialize PlayerCharacter sprites at a specific location
+	 * @param numberOfPlayers
 	 */
 	private void spawnPlayers(int numberOfPlayers) {
 		for (int d = 0; d < numberOfPlayers; d++)
@@ -330,8 +331,8 @@ public class KingdomController extends JPanel
 					new PlayableCharacter(((int) panelDimensions.getWidth() / 2), 10, 4, playerSprite, panelDimensions));
 	}
 	/**
-	 * spawnDefenders initializes Defenders in a single location
-	 * @param int numberOfDefenders
+	 * spawnDefenders() initializes Defenders in a single location
+	 * @param numberOfDefenders
 	 */
 	private void spawnDefenders(int numberOfDefenders) { // TODO set spawn parameters (place)
 		for (int d = 0; d < numberOfDefenders; d++) {
@@ -340,8 +341,8 @@ public class KingdomController extends JPanel
 		}
 	}
 	/**
-	 * spawnEnemies initializes a specific quantity of enemies at either side of the map past the bounds of the panel
-	 * @param int numberOfEnemies
+	 * spawnEnemies() initializes a specific quantity of enemies at either side of the map past the bounds of the panel
+	 * @param numberOfEnemies
 	 */
 	private void spawnEnemies(int numberOfEnemies) {// TODO set spawn parameters (place)
 		for (int d = 0; d < numberOfEnemies; d++) {
@@ -353,8 +354,8 @@ public class KingdomController extends JPanel
 		}
 	}
 	/**
-	 * spawnWalls initializes walls at two set locations, usually two walls or less will be initialised
-	 * @param int numberOfWalls
+	 * spawnWalls() initializes walls at two set locations, usually two walls or less will be initialised
+	 * @param numberOfWalls
 	 */
 	private void spawnWalls(int numberOfWalls) {// TODO set spawn parameters (place)
 		for (int d = 0; d < numberOfWalls; d++) {
@@ -365,9 +366,9 @@ public class KingdomController extends JPanel
 		}
 	}
 	/**
-	 * spawnShop initialized a shop at a specific location depending on the shop type
-	 * @param ShopType type
-	 * @see the enum class ShopType to find out the shop types and add more 
+	 * spawnShop() initialized a shop at a specific location depending on the shop type
+	 * @param type
+	 * @see the class ShopType to find out the shop types and add more 
 	 */
 	private void spawnShop(ShopType type) {
 		if(type == ShopType.defenderType)
@@ -376,7 +377,7 @@ public class KingdomController extends JPanel
 			objectList.add(new Shop(((int) panelDimensions.getWidth() / 2) - 130, arrowShopSprite, panelDimensions, type));
 	}
 	/**
-	 * doMoves deals with all movement of sprites, that being how they are supposed to move or if they should move at all
+	 * doMoves() deals with all movement of sprites, that being how they are supposed to move or if they should move at all
 	 * When the sprites have a location to go to the move() function needs to be called for them to go twards that target location
 	 */
 	private void doMoves() {
@@ -432,7 +433,7 @@ public class KingdomController extends JPanel
 		retreating = false;
 	}
 	/**
-	 * checkCollisions loops through the entire BaseSprite list and asks the sprites to checkCollision for only the sprites that can
+	 * checkCollisions() loops through the entire BaseSprite list and asks the sprites to checkCollision for only the sprites that can
 	 * @see CollisionController to understand how collition works
 	 */
 	private void checkCollisions() {
@@ -445,20 +446,20 @@ public class KingdomController extends JPanel
 	}
 	/**
 	 * TimerState is a enum for the times of the day
-	 * @see timeCalculations to see how the class is used
+	 * @see timeCalculations() to see how the class is used
 	 */
 	private enum TimeState { // TODO this needs to be before JPanel/ before timestate is initialize
 		DUSK, DAY, DAWN, NIGHT, BLOODMOON
 	}
 	/**
 	 * Difficulty is the set difficulty of the game
-	 * @see setVariables to see how the class is being used
+	 * @see setVariables() to see how the class is being used
 	 */
 	private enum Difficulty{
 		EASY, MEDIUM, HARD, CRAZY
 	}
 	/**
-	 * timeCalculations regulates the time of the day dependent on the amount of frames that have been recorded
+	 * timeCalculations() regulates the time of the day dependent on the amount of frames that have been recorded
 	 * depending on the time of day it is timeCalculations will set different events to occur 
 	 * @see TimeState to see how the times are stored
 	 */
@@ -494,7 +495,7 @@ public class KingdomController extends JPanel
 		timeOfDay++;
 	}
 	/**
-	 * setVariables resets the core variables that need to be loaded at the start of the game and when the game needs to be reset
+	 * setVariables() resets the core variables that need to be loaded at the start of the game and when the game needs to be reset
 	 * different choices in setVarables change difficulty of the game
 	 * @see the enum class Difficulty to see all the dificulties
 	 */
@@ -541,9 +542,9 @@ public class KingdomController extends JPanel
 
 	}
 	/**
-	 * KeyPressed is built off the the key listener that KingdomController implements
+	 * KeyPressed() is built off the the key listener that KingdomController implements
 	 * this class deals with the key press which sets booleans to true
-	 * @param KeyEvent e 
+	 * @param e 
 	 */
 	@Override
 	public void keyPressed(KeyEvent e) {
@@ -556,9 +557,9 @@ public class KingdomController extends JPanel
 			playerUseMoney = true;
 	}
 	/**
-	 * KeyReleased is built off the the key listener that KingdomController implements
+	 * KeyReleased() is built off the the key listener that KingdomController implements
 	 * this class deals with the key release which sets booleans to false
-	 * @param KeyEvent e 
+	 * @param e 
 	 */
 	@Override
 	public void keyReleased(KeyEvent e) {
@@ -588,9 +589,9 @@ public class KingdomController extends JPanel
 
 	}
 	/**
-	 * mouseClicked is built off the the mouse listener that KingdomController implements
+	 * mouseClicked() is built off the the mouse listener that KingdomController implements
 	 * this function gets called when a mouse was clicked on KingdomController
-	 * @param MouseEvent e 
+	 * @param e 
 	 */
 	@Override
 	public void mouseClicked(MouseEvent e) { // TODO move to lower level processing (Player)
@@ -622,8 +623,8 @@ public class KingdomController extends JPanel
 
 	}
 	/**
-	 * actionPerformed is called when a button that has been added to KingdomController is clicked
-	 * @param ActionEvent e 
+	 * actionPerformed() is called when a button that has been added to KingdomController is clicked
+	 * @param e 
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
