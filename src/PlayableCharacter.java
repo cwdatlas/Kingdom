@@ -10,8 +10,7 @@ import java.util.Random;
 import javax.imageio.ImageIO;
 
 /**
- * @author Aidan Scott & Adrien PlayerCharacter is the sprite that the player
- *         plays. only one PlayableCharacter is recommended to be initialized
+ * @author Aidan Scott & Adrien
  * @see kingdomController to change initialization
  */
 public class PlayableCharacter extends CollisionSprite implements PlayableCharacterI {
@@ -25,11 +24,11 @@ public class PlayableCharacter extends CollisionSprite implements PlayableCharac
 	private int arrows = 0;
 	private int arrowTarget = 0;
 	/**
-	 * @param int x is the x position, top left, of where the sprite will be spawned
-	 * @param int Gold is the quantity of gold player has
-	 * @param int arrowsGiven quantity of arrows given to the player
-	 * @param String fileName is the filename of the image that will be used for the sprite
-	 * @param Dimension panelDementions are the dimensions for the panel being used
+	 * @param x is the x position, top left, of where the sprite will be spawned
+	 * @param Gold is the quantity of gold player has
+	 * @param arrowsGiven quantity of arrows given to the player
+	 * @param fileName is the filename of the image that will be used for the sprite
+	 * @param panelDementions are the dimensions for the panel being used
 	 *                  so the arrow can be placed at the correct y value
 	 */
 	PlayableCharacter(int x, int Gold, int arrowsGiven, String fileName, Dimension panelDementions) {
@@ -38,7 +37,7 @@ public class PlayableCharacter extends CollisionSprite implements PlayableCharac
 		this.gold = Gold;
 	}
 	/**
-	 * moveLeft moves the player left
+	 * moveLeft() moves the player left
 	 */
 	@Override
 	public boolean moveLeft() {
@@ -47,7 +46,7 @@ public class PlayableCharacter extends CollisionSprite implements PlayableCharac
 		return true;
 	}
 	/**
-	 * moveRight moves the player right
+	 * moveRight() moves the player right
 	 */
 	@Override
 	public boolean moveRight() {
@@ -56,7 +55,7 @@ public class PlayableCharacter extends CollisionSprite implements PlayableCharac
 		return true;
 	}
 	/**
-	 *downPress should be called when the user presses down
+	 *downPress() should be called when the user presses down
 	 *on the numpad, which then press is set to true
 	 */
 	@Override
@@ -64,9 +63,9 @@ public class PlayableCharacter extends CollisionSprite implements PlayableCharac
 		downPress = press;
 	}
 	/**
-	 *playerShoot is called when the player needs to shoot an arrow 
-	 *@param boolean shooting
-	 *@param int position
+	 *playerShoot() is called when the player needs to shoot an arrow 
+	 *@param shooting
+	 *@param position
 	 */
 	public void playerShoot(boolean shooting, int position) {
 		playerShooting = shooting;
@@ -79,9 +78,9 @@ public class PlayableCharacter extends CollisionSprite implements PlayableCharac
 		return arrows;
 	}
 	/**
-	 * checkCollision asks colControl if player's hitbox is colliding with any other hitbox
+	 * checkCollision() asks colControl if player's hitbox is colliding with any other hitbox
 	 * checkCollision calculates what happens when collision events occur
-	 * @param CollisionController colControl
+	 * @param colControl
 	 * @see CollisionController to see how collision works
 	 */
 	public void checkCollision(CollisionController colControl) {
@@ -144,8 +143,8 @@ public class PlayableCharacter extends CollisionSprite implements PlayableCharac
 			arrowDrawTimer--;
 	}
 	/**
-	 * paint is overided to allow a red square to be placed around the player
-	 * @param Graphics g
+	 * paint() is overriden to allow a red square to be placed around the player
+	 * @param g
 	 * @see Defender to see how this is implemented in a similar way
 	 */
 	@Override
@@ -156,13 +155,13 @@ public class PlayableCharacter extends CollisionSprite implements PlayableCharac
 		return true;
 	}
 	/**
-	 *resetGoldTimer resets the goldtimer
+	 *resetGoldTimer() resets the goldtimer
 	 */
 	private void resetGoldTimer() {
 		goldUseTimer = 100;
 	}
 	/**
-	 *resetArrowDrawTimer resets drawTimer
+	 *resetArrowDrawTimer() resets drawTimer
 	 */
 	private void resetArrowDrawTimer() {
 		arrowDrawTimer = 100;

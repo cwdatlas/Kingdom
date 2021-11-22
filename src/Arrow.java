@@ -6,9 +6,6 @@ import java.util.List;
 import java.util.Random;
 /**
  * @author Aidan Scott
- * Arrow is built to be a visual representation of an arrow that has the abbility to kill
- * enemies on contact
- * 
  *@see BaseSprite for more information on how Arrow runs
  */
 public class Arrow extends CollisionSprite {
@@ -35,7 +32,7 @@ public class Arrow extends CollisionSprite {
 	}
 
 	/**
-	 * the move function overrides the move() function in baseSprite allowing it to increase its speed from 1px to 3px
+	 * the move() function overrides the move() function in baseSprite allowing it to increase its speed from 1px to 3px
 	 * 
 	 *@see move() in baseSprite to see the overridden function
 	 */
@@ -63,9 +60,9 @@ public class Arrow extends CollisionSprite {
 	}
 
 	/**
-	 * checkCollision is the class by class system for deciding what happens when a collition is detected by colControl
+	 * checkCollision() is the class by class system for deciding what happens when a collision is detected by colControl
 	 *
-	 *@param CollisionController colControl is the centralized collision detection system for Kingdom
+	 *@param colControl is the centralized collision detection system for Kingdom
 	 *@see CollisionController to learn more about its .checkCollition(rectangle hitbox) function
 	 */
 	@Override
