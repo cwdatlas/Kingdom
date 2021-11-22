@@ -1,1 +1,0 @@
-memberSearchIndex = [{"p":"<Unnamed>","c":"Wall","l":"checkCollision(CollisionController)"},{"p":"<Unnamed>","c":"Wall","l":"destroyWall()"},{"p":"<Unnamed>","c":"Wall","l":"paint(Graphics)","u":"paint(java.awt.Graphics)"},{"p":"<Unnamed>","c":"Wall","l":"rebuildWall()"}];updateSearchResults();
