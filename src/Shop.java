@@ -12,6 +12,7 @@ public class Shop extends BaseSprite{
 	 */
 	protected Shop(int x, String fileName, Dimension panelDimensions, ShopType shop) {
 		super(x, fileName, panelDimensions);
+		this.currentPosition.y = this.currentPosition.y - 50;
 		shopType = shop;
 	}
 	/**

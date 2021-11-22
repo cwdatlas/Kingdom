@@ -65,6 +65,7 @@ public class KingdomController extends JPanel
 	private Color bloodMoonColor = new Color(255, 0, 0, 60);
 	private Color backgroundColor = new Color(128, 255, 191, 30);
 	private BufferedImage backgroundImage;
+	private BufferedImage groundImage;
 
 	private int dayLength = 5000; // a full day at 5 min day should be around 30,000 frames
 	private int defenders;
@@ -128,6 +129,7 @@ public class KingdomController extends JPanel
 		this.add(playerArrows);
 		try {
 			backgroundImage = ImageIO.read(this.getClass().getResource("/images/background.png"));
+			groundImage = ImageIO.read(this.getClass().getResource("/images/ground.png"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -222,7 +224,8 @@ public class KingdomController extends JPanel
 	public void paintComponent(Graphics g) {
 		panelDimensions = this.getSize();
 
-		g.drawImage(backgroundImage, 0, 0, panelDimensions.width, panelDimensions.height, null);
+		g.drawImage(backgroundImage, 0, 0, panelDimensions.width, (int)(panelDimensions.height*.88), null);
+		g.drawImage(groundImage, 0, (((int)panelDimensions.height/6)*5)-5, panelDimensions.width, (int)panelDimensions.height/3, null);
 		g.setColor(backgroundColor);
 		g.fillRect(0, 0, panelDimensions.width, panelDimensions.height);
 
@@ -311,7 +314,6 @@ public class KingdomController extends JPanel
 		}
 		// JLabels
 		// this sets up the coins or score board
-		playerGold = objectList.get(0).getGold();
 		coinPanel.setBounds((int)panelDimensions.width - 150,0,100,100);
 		tod.setBounds((int)panelDimensions.width - 150,10,200,110);
 		playerArrows.setBounds((int)panelDimensions.width - 150,20,300,120);
@@ -395,6 +397,7 @@ public class KingdomController extends JPanel
 				((PlayableCharacter) objectList.get(i)).playerShoot(playerShootingArrow, arrowTarget);
 				playerShootingArrow = false;
 				playerArrows.setText("Arrows: " + ((PlayableCharacter)objectList.get(i)).getArrows());
+				playerGold = objectList.get(i).getGold();
 			}
 
 			else if (objectList.get(i) instanceof Enemy) {

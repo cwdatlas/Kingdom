@@ -93,8 +93,8 @@ public class Defender extends CollisionSprite implements DefenderI {
 	public boolean paint(Graphics g) {
 		super.paint(g);
 //		g.setColor(Color.GREEN);
-//		rangeHitBox.x = (int) (currentPosition.x - (rangeHitBox.width/2) + (img.getWidth()/2));
-//		hitBox.x = (int) (currentPosition.x - (hitBox.width)+ img.getWidth());
+		rangeHitBox.x = (int) (currentPosition.x - (rangeHitBox.width/2) + (img.getWidth()/2));
+		hitBox.x = (int) (currentPosition.x - (hitBox.width)+ img.getWidth());
 //		g.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
 //		g.drawRect(rangeHitBox.x, rangeHitBox.y, rangeHitBox.width, rangeHitBox.height);
 		return true;
