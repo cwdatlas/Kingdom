@@ -72,7 +72,7 @@ public class Arrow extends CollisionSprite {
 			if (collidingSprites.get(i) instanceof Enemy) {
 				Enemy effected = (Enemy) collidingSprites.get(i);
 				effected.setRetreat();
-				colControl.addObject(new DroppedCoin(random.nextInt(20)+currentPosition.x, "coin.png", dimensions));
+				colControl.addObject(new DroppedCoin(currentPosition.x, "coin.png", dimensions));
 				colControl.deleteObject(effected);
 				delete = true;
 			}

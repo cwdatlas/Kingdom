@@ -225,7 +225,7 @@ public class KingdomController extends JPanel
 		panelDimensions = this.getSize();
 
 		g.drawImage(backgroundImage, 0, 0, panelDimensions.width, (int)(panelDimensions.height*.88), null);
-		g.drawImage(groundImage, 0, (((int)panelDimensions.height/6)*5)-5, panelDimensions.width, (int)panelDimensions.height/3, null);
+		g.drawImage(groundImage, 0, (int)(panelDimensions.height*.822), panelDimensions.width, (int)panelDimensions.height/3, null);
 		g.setColor(backgroundColor);
 		g.fillRect(0, 0, panelDimensions.width, panelDimensions.height);
 

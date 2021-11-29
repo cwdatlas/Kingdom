@@ -25,7 +25,6 @@ public class Wall extends CollisionSprite {
 	 */
 	protected Wall(int x, String fileName, Dimension panelDementions) {
 		super(x, fileName, panelDementions);
-		this.currentPosition.y = this.currentPosition.y - 10;
 	}
 	/**
 	 * destroyWall() setsVisible to false
