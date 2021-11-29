@@ -25,8 +25,7 @@ public class Arrow extends CollisionSprite {
 	protected Arrow(int x, String fileName, Dimension panelDementions, boolean goingRight) {
 		super(x, fileName, panelDementions);
 		dimensions = panelDementions;
-		int y = currentPosition.y + 30;
-		currentPosition.y = y;
+		currentPosition.y = currentPosition.y - 30;
 		hitbox = new Rectangle(x, currentPosition.y, img.getWidth(), img.getHeight());
 		right = goingRight;
 	}
