@@ -565,9 +565,10 @@ public class KingdomController extends JPanel
 			shootingRight = false;
 			playerShootingArrow = true;
 		}
-		if (e.getKeyCode() == 68)
+		if (e.getKeyCode() == 68) {
 			shootingRight = true;
 			playerShootingArrow = true;
+		}
 
 	}
 	/**

@@ -120,12 +120,12 @@ public class PlayableCharacter extends CollisionSprite implements PlayableCharac
 			}
 		}
 		// press down to drop gold
-		if (downPress && gold > 0 && goldUseTimer == 0) {
-			this.gold--;
-			colControl.addObject(new DroppedCoin(currentPosition.x, "coin.png", dimensions));
-			resetGoldTimer();
-			droppedGoldTimer = 200;
-		}
+//		if (downPress && gold > 0 && goldUseTimer == 0) {
+//			this.gold--;
+//			colControl.addObject(new DroppedCoin(currentPosition.x, "coin.png", dimensions));
+//			resetGoldTimer();
+//			droppedGoldTimer = 200;
+//		}
 		// player shoots arrow
 		if (playerShooting && arrows > 0 && arrowDrawTimer == 0) {
 			this.arrows--;
