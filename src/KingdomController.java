@@ -44,9 +44,10 @@ public class KingdomController extends JPanel
 	private Dimension panelDimensions;
 	private boolean movingRight;
 	private boolean movingLeft;
+	
 	private boolean playerUseMoney;
 	private boolean playerShootingArrow;
-	private int arrowTarget;
+	private boolean shootingRight;
 	// time variables
 	private int days = 0;
 	private int timeOfDay = 0;
@@ -393,8 +394,8 @@ public class KingdomController extends JPanel
 				} else if (movingLeft) {
 					((PlayableCharacter) objectList.get(i)).moveLeft();
 				}
+				((PlayableCharacter) objectList.get(i)).playerShoot(playerShootingArrow, shootingRight);
 				((PlayableCharacter) objectList.get(i)).downPress(playerUseMoney);
-				((PlayableCharacter) objectList.get(i)).playerShoot(playerShootingArrow, arrowTarget);
 				playerShootingArrow = false;
 				playerArrows.setText("Arrows: " + ((PlayableCharacter)objectList.get(i)).getArrows());
 				playerGold = objectList.get(i).getGold();
@@ -551,6 +552,8 @@ public class KingdomController extends JPanel
 	 */
 	@Override
 	public void keyPressed(KeyEvent e) {
+		
+		
 		if (e.getKeyCode() == 39) {
 			movingRight = true;
 		}
@@ -558,6 +561,14 @@ public class KingdomController extends JPanel
 			movingLeft = true;
 		if (e.getKeyCode() == 40)
 			playerUseMoney = true;
+		if (e.getKeyCode() == 65) {
+			shootingRight = false;
+			playerShootingArrow = true;
+		}
+		if (e.getKeyCode() == 68)
+			shootingRight = true;
+			playerShootingArrow = true;
+
 	}
 	/**
 	 * KeyReleased() is built off the the key listener that KingdomController implements
@@ -572,6 +583,14 @@ public class KingdomController extends JPanel
 			movingLeft = false;
 		if (e.getKeyCode() == 40)
 			playerUseMoney = false;
+		if (e.getKeyCode() == 65)
+			shootingRight = true;
+			playerShootingArrow = false;
+
+		if (e.getKeyCode() == 68)
+			shootingRight = false;
+			playerShootingArrow = false;
+
 	}
 
 	@Override
@@ -591,18 +610,9 @@ public class KingdomController extends JPanel
 		// TODO Auto-generated method stub
 
 	}
-	/**
-	 * mouseClicked() is built off the the mouse listener that KingdomController implements
-	 * this function gets called when a mouse was clicked on KingdomController
-	 * @param e 
-	 */
 	@Override
-	public void mouseClicked(MouseEvent e) { // TODO move to lower level processing (Player)
-		Point targetPoint = e.getLocationOnScreen();
-		arrowTarget = targetPoint.x;
-		playerShootingArrow = true;
+	public void mouseClicked(MouseEvent e) { 
 	}
-
 	@Override
 	public void mousePressed(MouseEvent e) {
 
