@@ -32,7 +32,7 @@ import java.util.ArrayList;
 		return returnableObjects;
 	}
 	/**
-	 * deleteObject delets an object within the given BaseSprite list
+	 * deleteObject deletes an object within the given BaseSprite list
 	 * @param BaseSprite delObject is the object that will be deleted out of the list
 	 * @return boolean true if object was deleted
 	 * @see Arrow to see example of this being used
