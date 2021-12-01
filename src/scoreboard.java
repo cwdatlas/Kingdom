@@ -1,25 +1,30 @@
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
 public class scoreboard {
-	String file = "src/topScores.txt";
+	String file = "topScores.txt";
 	int amountOfTopScores = 5;
-	BufferedWriter writer;
-	BufferedReader reader;
+	;
 	int[] topFiveScores;
 
 	scoreboard() {
-		try {
-			writer = new BufferedWriter(new FileWriter(file));
-			reader = new BufferedReader(new FileReader(file));
-		} catch (IOException e) {
+		File topScores = new File(file);
+		if(topScores.exists()) {
 		}
 	}
 
 	public int[] getTopFive() {
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new FileReader(file));
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		}
 		topFiveScores = new int[amountOfTopScores];
 		String line = null;
 		for (int i = 0; i < amountOfTopScores; i++) {
@@ -28,10 +33,14 @@ public class scoreboard {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			System.out.println("the score is " + line);
 			if (line != null) {
 				topFiveScores[i] = Integer.parseInt(line);
 			}
+		}
+		try {
+			reader.close();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		return topFiveScores;
 	}
@@ -57,14 +66,25 @@ public class scoreboard {
 	}
 
 	private void writeScores(int[] scores) {
+		BufferedWriter writer = null;
 		try {
-			writer.flush();
+			writer = new BufferedWriter(new FileWriter(file));
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		try {
 			for (int i = 0; i < scores.length; i++) {
-				writer.write(scores[i]);
+				writer.write(scores[i]+"");
 				writer.newLine();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				writer.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 }

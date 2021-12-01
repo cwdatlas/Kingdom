@@ -16,6 +16,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -44,6 +45,8 @@ public class KingdomController extends JPanel
 	private Dimension panelDimensions;
 	private boolean movingRight;
 	private boolean movingLeft;
+	private scoreboard scoreboard = new scoreboard();
+	int[] topFiveScores;
 	
 	private boolean playerUseMoney;
 	private boolean playerShootingArrow;
@@ -112,6 +115,8 @@ public class KingdomController extends JPanel
 	private JLabel difficultyLabelStart = new JLabel();
 	private JLabel dificultyLabel = new JLabel();
 	private JLabel playerArrows = new JLabel();
+	private JLabel topFive = new JLabel();
+	private JLabel personalScore = new JLabel();
 	private List<BaseSprite> objectList;
 	/**
 	 * KingdomController constructor initializes graphic components like JLabels
@@ -135,7 +140,6 @@ public class KingdomController extends JPanel
 			e.printStackTrace();
 		}
 		// Panel parameters
-		instructions.setVisible(true);
 		// startWindow params
 		startWindow.setBackground(new Color(200, 150, 0, 200));
 		TitledBorder log2;
@@ -188,7 +192,7 @@ public class KingdomController extends JPanel
 		crazyBtn.addActionListener(this);
 		startWindow.add(crazyBtn);
 		
-		playAgain.setText("Play Again");
+		playAgain.setText("Main Menu");
 		playAgain.setBackground(Color.WHITE);
 		playAgain.setVisible(true);
 		playAgain.addActionListener(this);
@@ -208,12 +212,17 @@ public class KingdomController extends JPanel
 		daysPassed.setForeground(Color.WHITE);
 		difficultyLabelStart.setForeground(Color.WHITE);
 		dificultyLabel.setForeground(Color.WHITE);
+		instructions.setForeground(Color.WHITE);
+		topFive.setForeground(Color.WHITE);
+		personalScore.setForeground(Color.WHITE);
 		youDiedWindow.add(enemiesKilled);
 		youDiedWindow.add(endGold);
 		youDiedWindow.add(livingDefenders);
 		youDiedWindow.add(totalScore);
 		youDiedWindow.add(daysPassed);
 		startWindow.add(difficultyLabelStart);
+		startWindow.add(topFive);
+		this.add(personalScore);
 		this.add(dificultyLabel);
 	}
 	/**
@@ -235,6 +244,8 @@ public class KingdomController extends JPanel
 		instructions.setBounds((int)(startWindow.getWidth() * .1), 0, (int) (startWindow.getWidth() * .8), (int) (startWindow.getHeight() * .85));
 		difficultyLabelStart.setBounds((int)(startWindow.getWidth() * .1), -(int)(startWindow.getHeight() * .35), (int) (startWindow.getWidth() * .8), (int) (startWindow.getHeight() * .85));
 		difficultyLabelStart.setText("Difficulty set to: " + difficulty);
+		topFive.setBounds((int)(startWindow.getWidth() * .1), (int)(startWindow.getHeight() * .3), (int) (startWindow.getWidth() * .8), (int) (startWindow.getHeight() * .85));
+		topFive.setText("Top 5 High Scores!     1: " + topFiveScores[4] + "     2: " + topFiveScores[3] + "     3: " + topFiveScores[2] + "     4: " + topFiveScores[1] + "     5: " + topFiveScores[0]);
 		
 		startGame.setBounds((int) (startWindow.getWidth() * .1), (int) (startWindow.getHeight() * .8),
 				(int) (startWindow.getWidth() * .3), (int) (startWindow.getHeight() * .1));
@@ -275,21 +286,11 @@ public class KingdomController extends JPanel
 			spawnShop(ShopType.defenderType);
 			spawnedSprites = true;
 		}
-		if (!(objectList.get(0) instanceof PlayableCharacter)) { // this is a sign that the player died
-			enemiesKilled.setText("Enemies Killed: " + colControl.enemiesKilled);
-			endGold.setText("Ending Gold: " + playerGold);
-			int livDefenders = defendersSpawned - colControl.defendersKilled;
-			livingDefenders.setText("total living Defenders: " + livDefenders);
-			daysPassed.setText("days Passed: " + days);
-			int score = days * (colControl.enemiesKilled - colControl.defendersKilled) + playerGold;
-			totalScore.setText("Score: " + score);
-			youDiedVisible = true;
-			gameRunning = false;
-			setVariables();
-		}
+
 		if (panelDimensions != null && gameRunning) { // then this runs the game
 			doMoves();
 			checkCollisions();
+			getScore();
 			for (int i = 0; i < objectList.size(); i++) { // Painting first layer of Objects
 				if (objectList.get(i) instanceof Wall || objectList.get(i) instanceof Shop) {
 					objectList.get(i).paint(g);
@@ -320,7 +321,8 @@ public class KingdomController extends JPanel
 		}
 		// JLabels
 		// this sets up the coins or score board
-		dificultyLabel.setBounds((int)panelDimensions.width - 150,-10,100,100);
+		personalScore.setBounds((int)panelDimensions.width - 150,-30,150,100);
+		dificultyLabel.setBounds((int)panelDimensions.width - 150,-15,100,100);
 		coinPanel.setBounds((int)panelDimensions.width - 150,0,100,100);
 		tod.setBounds((int)panelDimensions.width - 150,10,200,110);
 		playerArrows.setBounds((int)panelDimensions.width - 150,20,300,120);
@@ -395,6 +397,14 @@ public class KingdomController extends JPanel
 		for (int i = 0; i < objectList.size(); i++) {
 			if (objectList.get(i) instanceof PlayableCharacter) { // more efficient way of doing this class //
 																	// comparison
+				if (!(objectList.get(i).visible)) { // this is a sign that the player died
+					objectList.remove(objectList.get(i));
+					youDiedVisible = true;
+					gameRunning = false;
+					scoreboard.addScore(getScore());
+					setVariables();
+					break;
+				}
 				if (movingRight) {
 					((PlayableCharacter) objectList.get(i)).moveRight();// telling the playable character each frame
 																		// to keep moving if true
@@ -454,6 +464,25 @@ public class KingdomController extends JPanel
 				((CollisionSprite) objectList.get(i)).checkCollision(colControl);
 			}
 		}
+	}
+	/**
+	 * getScore() calculates the score of the player and sets JLabels to their values that relate to score
+	 * @return score
+	 */
+	private int getScore() {
+		int lastScore = 0;
+		enemiesKilled.setText("Enemies Killed: " + colControl.enemiesKilled);
+		endGold.setText("Ending Gold: " + playerGold);
+		int livDefenders = defendersSpawned + colControl.defendersSpawned - colControl.defendersKilled;
+		livingDefenders.setText("total living Defenders: " + livDefenders);
+		daysPassed.setText("days Passed: " + days);
+		int score = days * (colControl.enemiesKilled - colControl.defendersKilled*10) + playerGold + colControl.defendersSpawned*3;
+		totalScore.setText("Score: " + score);
+		if(score != lastScore) {
+			lastScore = score;
+			personalScore.setText("Your Score is: " + score);
+		}
+		return score;
 	}
 	/**
 	 * TimerState is a enum for the times of the day
@@ -518,7 +547,9 @@ public class KingdomController extends JPanel
 		gameRunning = false;
 		objectList = new ArrayList();
 		colControl = new CollisionController(objectList);
-		walls = 2;		
+		walls = 2;	
+		topFiveScores = scoreboard.getTopFive();
+		Arrays.sort(topFiveScores);
 		if(difficulty == Difficulty.EASY) {
 		defenders = 2;
 		walls = 2;
