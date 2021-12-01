@@ -74,6 +74,7 @@ public class KingdomController extends JPanel
 	private int players;
 	private int defendersSpawned;
 	private int playerGold;
+	private int playerArrows;
 	private CollisionController colControl;
 
 	private final Random random;
@@ -97,6 +98,7 @@ public class KingdomController extends JPanel
 	private JPanel youDiedWindow = new JPanel();
 	private boolean youDiedVisible = false;
 	private JButton playAgain = new JButton();
+	private JButton exitButton = new JButton();
 	
 	//makes difficulty buttons
 	private JButton easyBtn = new JButton();
@@ -105,14 +107,14 @@ public class KingdomController extends JPanel
 	private JButton crazyBtn = new JButton();
 
 	private JLabel tod = new JLabel(); // this shows the time of day as a sting under coinPanel
-	private JLabel coinPanel = new JLabel(); // this sets up the coins or score board
+	private JLabel goldLabel = new JLabel(); // this sets up the coins or score board
 	// display of amounts at end of game
 	private JLabel enemiesKilled = new JLabel();
 	private JLabel endGold = new JLabel();
 	private JLabel livingDefenders = new JLabel();
 	private JLabel totalScore = new JLabel();
 	private JLabel daysPassed = new JLabel();
-	private JLabel playerArrows = new JLabel();
+	private JLabel arrowLabel = new JLabel();
 	private List<BaseSprite> objectList;
 	/**
 	 * KingdomController constructor initializes graphic components like JLabels
@@ -125,9 +127,9 @@ public class KingdomController extends JPanel
 		parent = parentPanel;
 		this.random = new Random();
 		panelDimensions = new Dimension();
-		this.add(coinPanel);
+		this.add(goldLabel);
 		this.add(tod);
-		this.add(playerArrows);
+		this.add(arrowLabel);
 		try {
 			backgroundImage = ImageIO.read(this.getClass().getResource("/images/background.png"));
 			groundImage = ImageIO.read(this.getClass().getResource("/images/ground.png"));
@@ -204,7 +206,14 @@ public class KingdomController extends JPanel
 		playAgain.setVisible(true);
 		playAgain.addActionListener(this);
 		youDiedWindow.add(playAgain);
-
+		
+		//exit program button
+		exitButton.setText("Play Again");
+		exitButton.setBackground(Color.WHITE);
+		exitButton.setVisible(true);
+		exitButton.addActionListener(this);
+		youDiedWindow.add(exitButton);
+		
 		// JLabels
 		enemiesKilled.setForeground(Color.WHITE);
 		endGold.setForeground(Color.WHITE);
@@ -315,14 +324,18 @@ public class KingdomController extends JPanel
 		}
 		// JLabels
 		// this sets up the coins or score board
-		coinPanel.setBounds((int)panelDimensions.width - 150,0,100,100);
-		tod.setBounds((int)panelDimensions.width - 150,10,200,110);
-		playerArrows.setBounds((int)panelDimensions.width - 150,20,300,120);
-		coinPanel.setText("Gold: " + playerGold);
+		goldLabel.setBounds((int)panelDimensions.width - 300,0,200,100);
+		goldLabel.setFont(new Font("Serif", Font.PLAIN, 30));
+		tod.setBounds((int)panelDimensions.width - 300,10,350,150);
+		arrowLabel.setBounds((int)panelDimensions.width - 300,20,300,200);
+		arrowLabel.setFont(new Font("Serif", Font.PLAIN, 30));
+		arrowLabel.setText("Arrows: " + playerArrows);
+		goldLabel.setText("Gold: " + playerGold);
 		tod.setText("Time of Day: " + timeState);
-		coinPanel.setForeground(Color.WHITE);
+		tod.setFont(new Font("Serif", Font.PLAIN, 30));
+		goldLabel.setForeground(Color.WHITE);
 		tod.setForeground(Color.WHITE);
-		playerArrows.setForeground(Color.WHITE);
+		arrowLabel.setForeground(Color.WHITE);
 	}
 	/**
 	 * spawnPlayers() initialize PlayerCharacter sprites at a specific location
@@ -397,7 +410,7 @@ public class KingdomController extends JPanel
 				((PlayableCharacter) objectList.get(i)).playerShoot(playerShootingArrow, shootingRight);
 				((PlayableCharacter) objectList.get(i)).downPress(playerUseMoney);
 				playerShootingArrow = false;
-				playerArrows.setText("Arrows: " + ((PlayableCharacter)objectList.get(i)).getArrows());
+				playerArrows = ((PlayableCharacter)objectList.get(i)).getArrows();
 				playerGold = objectList.get(i).getGold();
 			}
 
@@ -644,10 +657,18 @@ public class KingdomController extends JPanel
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == startGame) {
 			startWindowVisible = false;
-		} else if (e.getSource() == playAgain) {
+		} 
+		
+		else if (e.getSource() == playAgain) {
 			youDiedVisible = false;
 			parent.requestFocus();
 			gameRunning = true;
+		}
+		
+		else if(e.getSource() == exitButton) {
+			youDiedVisible = false;
+//			parent.EXIT_ON_CLOSE;
+			gameRunning = false;
 		}
 		else if (e.getSource() == easyBtn) {
 			gameRunning = true;
