@@ -27,12 +27,6 @@ public class Wall extends CollisionSprite {
 		super(x, fileName, panelDementions);
 	}
 	/**
-	 * destroyWall() setsVisible to false
-	 */
-	public void destroyWall() {
-		this.setVisible(false);
-	}
-	/**
 	 *rebuildWalls() sets wall HP to 50
 	 */
 	public void rebuildWall() {
@@ -53,9 +47,6 @@ public class Wall extends CollisionSprite {
 				if (HP > 0  && (infinityFrames>60)) {
 					infinityFrames = 0;
 					HP--;
-					if (HP == 0) {
-						destroyWall();
-					}
 				}
 				collidingSprites.get(i).setBlocked(HP > 0);
 				infinityFrames++;

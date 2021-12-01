@@ -16,6 +16,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -44,6 +45,8 @@ public class KingdomController extends JPanel
 	private Dimension panelDimensions;
 	private boolean movingRight;
 	private boolean movingLeft;
+	private scoreboard scoreboard = new scoreboard();
+	int[] topFiveScores;
 	
 	private boolean playerUseMoney;
 	private boolean playerShootingArrow;
@@ -87,18 +90,15 @@ public class KingdomController extends JPanel
 			+" DEFENDERS, go to the DEFENDER box and press the 'DOWN' directional key to buy. To rebuild WALLS, go"
 			+" to a wall and press the 'DOWN' directional key to rebuild the wall. Note: completley broken walls"
 			+" will be grey with a red highlight(ENEMIES will pass through them).";
-	private JLabel instructions = new JLabel("<html>"+instructionsText+"</html>");
-//	private JLabel instructions = new JLabel();
-	private boolean instructionsVisable = true;
+	private JLabel instructions = new JLabel("<html><p>"+instructionsText+"</p></html>");
 	private JPanel startWindow = new JPanel();
 	private boolean startWindowVisible = true;
 	private JButton startGame = new JButton();
-	private JPanel difficultyWindow = new JPanel();
-	private boolean difficultyWindowVisible = true;
 	private JPanel youDiedWindow = new JPanel();
 	private boolean youDiedVisible = false;
 	private JButton playAgain = new JButton();
 	private JButton exitButton = new JButton();
+	private JButton exitGame = new JButton();
 	
 	//makes difficulty buttons
 	private JButton easyBtn = new JButton();
@@ -115,6 +115,11 @@ public class KingdomController extends JPanel
 	private JLabel totalScore = new JLabel();
 	private JLabel daysPassed = new JLabel();
 	private JLabel arrowLabel = new JLabel();
+	private JLabel difficultyLabelStart = new JLabel();
+	private JLabel dificultyLabel = new JLabel();
+	private JLabel arrowsLabel = new JLabel();
+	private JLabel topFive = new JLabel();
+	private JLabel personalScore = new JLabel();
 	private List<BaseSprite> objectList;
 	/**
 	 * KingdomController constructor initializes graphic components like JLabels
@@ -138,7 +143,6 @@ public class KingdomController extends JPanel
 			e.printStackTrace();
 		}
 		// Panel parameters
-		instructions.setVisible(true);
 		// startWindow params
 		startWindow.setBackground(new Color(200, 150, 0, 200));
 		TitledBorder log2;
@@ -149,16 +153,6 @@ public class KingdomController extends JPanel
 		startWindow.setBorder(log2);
 		startWindow.setLayout(null);
 		this.add(startWindow);
-		
-		//difficultyWindow
-		difficultyWindow.setBackground(new Color(200, 150, 200, 200));
-		TitledBorder diff;
-		diff = BorderFactory.createTitledBorder("Difficulty Window");
-		diff.setTitleColor(Color.WHITE);
-		diff.setBorder(BorderFactory.createLineBorder(Color.WHITE));
-		difficultyWindow.setBorder(diff);
-		difficultyWindow.setLayout(null);
-		this.add(difficultyWindow);
 
 		// youDiedWindow
 		youDiedWindow.setBackground(Color.BLACK);
@@ -181,27 +175,27 @@ public class KingdomController extends JPanel
 		easyBtn.setBackground(Color.WHITE);
 		easyBtn.setVisible(true);
 		easyBtn.addActionListener(this);
-		difficultyWindow.add(easyBtn);
+		startWindow.add(easyBtn);
 		
 		mediumBtn.setText("MEDIUM");
 		mediumBtn.setBackground(Color.WHITE);
 		mediumBtn.setVisible(true);
 		mediumBtn.addActionListener(this);
-		difficultyWindow.add(mediumBtn);
+		startWindow.add(mediumBtn);
 
 		hardBtn.setText("HARD");
 		hardBtn.setBackground(Color.WHITE);
 		hardBtn.setVisible(true);
 		hardBtn.addActionListener(this);
-		difficultyWindow.add(hardBtn);
+		startWindow.add(hardBtn);
 		
 		crazyBtn.setText("CRAZY");
 		crazyBtn.setBackground(Color.WHITE);
 		crazyBtn.setVisible(true);
 		crazyBtn.addActionListener(this);
-		difficultyWindow.add(crazyBtn);
+		startWindow.add(crazyBtn);
 		
-		playAgain.setText("Play Again");
+		playAgain.setText("Main Menu");
 		playAgain.setBackground(Color.WHITE);
 		playAgain.setVisible(true);
 		playAgain.addActionListener(this);
@@ -214,17 +208,32 @@ public class KingdomController extends JPanel
 		exitButton.addActionListener(this);
 		youDiedWindow.add(exitButton);
 		
+		exitGame.setText("Exit Game");
+		exitGame.setBackground(Color.WHITE);
+		exitGame.setVisible(true);
+		exitGame.addActionListener(this);
+		startWindow.add(exitGame);
+
 		// JLabels
 		enemiesKilled.setForeground(Color.WHITE);
 		endGold.setForeground(Color.WHITE);
 		livingDefenders.setForeground(Color.WHITE);
 		totalScore.setForeground(Color.WHITE);
 		daysPassed.setForeground(Color.WHITE);
+		difficultyLabelStart.setForeground(Color.WHITE);
+		dificultyLabel.setForeground(Color.WHITE);
+		instructions.setForeground(Color.WHITE);
+		topFive.setForeground(Color.WHITE);
+		personalScore.setForeground(Color.WHITE);
 		youDiedWindow.add(enemiesKilled);
 		youDiedWindow.add(endGold);
 		youDiedWindow.add(livingDefenders);
 		youDiedWindow.add(totalScore);
 		youDiedWindow.add(daysPassed);
+		startWindow.add(difficultyLabelStart);
+		startWindow.add(topFive);
+		this.add(personalScore);
+		this.add(dificultyLabel);
 	}
 	/**
 	 * PaintComponent() starts all technical proccesssing like time, setting bounds dependent on panel size and sprite movement, collision checking
@@ -242,24 +251,32 @@ public class KingdomController extends JPanel
 		startWindow.setBounds(panelDimensions.width / 3, (int) (panelDimensions.height * .1), panelDimensions.width / 3,
 				(int) (panelDimensions.height * .7));
 		startWindow.setVisible(startWindowVisible);
-		instructions.setBounds((int) (startWindow.getWidth() * .01), 80, (int) (startWindow.getWidth()), (int) (startWindow.getHeight() * .85));
-		startGame.setBounds((int) (startWindow.getWidth() * .3), (int) (startWindow.getHeight() * .8),
-				(int) (startWindow.getWidth() * .4), (int) (startWindow.getHeight() * .1));
-		difficultyWindow.setBounds(panelDimensions.width / 3, (int) (panelDimensions.height * .1), panelDimensions.width / 3,
-				(int) (panelDimensions.height * .7));
-		difficultyWindow.setVisible(difficultyWindowVisible);
-		easyBtn.setBounds((int) (difficultyWindow.getWidth() * .1), (int) (difficultyWindow.getHeight() * .2),
-				(int) (difficultyWindow.getWidth() * .2), (int) (difficultyWindow.getHeight() * .1));
-		mediumBtn.setBounds((int) (difficultyWindow.getWidth() * .7), (int) (difficultyWindow.getHeight() * .2),
-				(int) (difficultyWindow.getWidth() * .2), (int) (difficultyWindow.getHeight() * .1));
-		hardBtn.setBounds((int) (difficultyWindow.getWidth() * .1), (int) (difficultyWindow.getHeight() * .8),
-				(int) (difficultyWindow.getWidth() * .2), (int) (difficultyWindow.getHeight() * .1));
-		crazyBtn.setBounds((int) (difficultyWindow.getWidth() * .7), (int) (difficultyWindow.getHeight() * .8),
-				(int) (difficultyWindow.getWidth() * .2), (int) (difficultyWindow.getHeight() * .1));
+		instructions.setBounds((int)(startWindow.getWidth() * .1), 0, (int) (startWindow.getWidth() * .8), (int) (startWindow.getHeight() * .85));
+		difficultyLabelStart.setBounds((int)(startWindow.getWidth() * .1), -(int)(startWindow.getHeight() * .35), (int) (startWindow.getWidth() * .8), (int) (startWindow.getHeight() * .85));
+		difficultyLabelStart.setText("Difficulty set to: " + difficulty);
+		topFive.setBounds((int)(startWindow.getWidth() * .1), (int)(startWindow.getHeight() * .3), (int) (startWindow.getWidth() * .8), (int) (startWindow.getHeight() * .85));
+		topFive.setText("Top 5 High Scores!     1: " + topFiveScores[4] + "     2: " + topFiveScores[3] + "     3: " + topFiveScores[2] + "     4: " + topFiveScores[1] + "     5: " + topFiveScores[0]);
+		
+		startGame.setBounds((int) (startWindow.getWidth() * .1), (int) (startWindow.getHeight() * .8),
+				(int) (startWindow.getWidth() * .3), (int) (startWindow.getHeight() * .1));
+		
+		exitGame.setBounds((int) (startWindow.getWidth() * .6), (int) (startWindow.getHeight() * .8),
+				(int) (startWindow.getWidth() * .3), (int) (startWindow.getHeight() * .1));
+		
+		easyBtn.setBounds((int) (startWindow.getWidth() * .1), (int) (startWindow.getHeight() * .1),
+				(int) (startWindow.getWidth() * .2), (int) (startWindow.getHeight() * .1));
+		
+		mediumBtn.setBounds((int) (startWindow.getWidth() * .3), (int) (startWindow.getHeight() * .1),
+				(int) (startWindow.getWidth() * .2), (int) (startWindow.getHeight() * .1));
+		
+		hardBtn.setBounds((int) (startWindow.getWidth() * .5), (int) (startWindow.getHeight() * .1),
+				(int) (startWindow.getWidth() * .2), (int) (startWindow.getHeight() * .1));
+		
+		crazyBtn.setBounds((int) (startWindow.getWidth() * .7), (int) (startWindow.getHeight() * .1),
+				(int) (startWindow.getWidth() * .2), (int) (startWindow.getHeight() * .1));
+		
 		youDiedWindow.setBounds(panelDimensions.width / 3, (int) (panelDimensions.height * .1),
 				panelDimensions.width / 3, (int) (panelDimensions.height * .7));
-		
-		
 		
 		playAgain.setBounds((int) (youDiedWindow.getWidth() * .3), (int) (youDiedWindow.getHeight() * .8),
 				(int) (youDiedWindow.getWidth() * .4), (int) (youDiedWindow.getHeight() * .1));
@@ -279,21 +296,11 @@ public class KingdomController extends JPanel
 			spawnShop(ShopType.defenderType);
 			spawnedSprites = true;
 		}
-		if (!(objectList.get(0) instanceof PlayableCharacter)) { // this is a sign that the player died
-			enemiesKilled.setText("Enemies Killed: " + colControl.enemiesKilled);
-			endGold.setText("Ending Gold: " + playerGold);
-			int livDefenders = defendersSpawned - colControl.defendersKilled;
-			livingDefenders.setText("total living Defenders: " + livDefenders);
-			daysPassed.setText("days Passed: " + days);
-			int score = days * (colControl.enemiesKilled - colControl.defendersKilled) + playerGold;
-			totalScore.setText("Score: " + score);
-			youDiedVisible = true;
-			gameRunning = false;
-			setVariables();
-		}
+
 		if (panelDimensions != null && gameRunning) { // then this runs the game
 			doMoves();
 			checkCollisions();
+			getScore();
 			for (int i = 0; i < objectList.size(); i++) { // Painting first layer of Objects
 				if (objectList.get(i) instanceof Wall || objectList.get(i) instanceof Shop) {
 					objectList.get(i).paint(g);
@@ -331,6 +338,8 @@ public class KingdomController extends JPanel
 		arrowLabel.setFont(new Font("Serif", Font.PLAIN, 30));
 		arrowLabel.setText("Arrows: " + playerArrows);
 		goldLabel.setText("Gold: " + playerGold);
+		personalScore.setBounds((int)panelDimensions.width - 150,-30,150,100);
+		dificultyLabel.setBounds((int)panelDimensions.width - 150,-15,100,100);
 		tod.setText("Time of Day: " + timeState);
 		tod.setFont(new Font("Serif", Font.PLAIN, 30));
 		goldLabel.setForeground(Color.WHITE);
@@ -401,6 +410,14 @@ public class KingdomController extends JPanel
 		for (int i = 0; i < objectList.size(); i++) {
 			if (objectList.get(i) instanceof PlayableCharacter) { // more efficient way of doing this class //
 																	// comparison
+				if (!(objectList.get(i).visible)) { // this is a sign that the player died
+					objectList.remove(objectList.get(i));
+					youDiedVisible = true;
+					gameRunning = false;
+					scoreboard.addScore(getScore());
+					setVariables();
+					break;
+				}
 				if (movingRight) {
 					((PlayableCharacter) objectList.get(i)).moveRight();// telling the playable character each frame
 																		// to keep moving if true
@@ -460,6 +477,25 @@ public class KingdomController extends JPanel
 				((CollisionSprite) objectList.get(i)).checkCollision(colControl);
 			}
 		}
+	}
+	/**
+	 * getScore() calculates the score of the player and sets JLabels to their values that relate to score
+	 * @return score
+	 */
+	private int getScore() {
+		int lastScore = 0;
+		enemiesKilled.setText("Enemies Killed: " + colControl.enemiesKilled);
+		endGold.setText("Ending Gold: " + playerGold);
+		int livDefenders = defendersSpawned + colControl.defendersSpawned - colControl.defendersKilled;
+		livingDefenders.setText("total living Defenders: " + livDefenders);
+		daysPassed.setText("days Passed: " + days);
+		int score = days * (colControl.enemiesKilled - colControl.defendersKilled*10) + playerGold + colControl.defendersSpawned*3;
+		totalScore.setText("Score: " + score);
+		if(score != lastScore) {
+			lastScore = score;
+			personalScore.setText("Your Score is: " + score);
+		}
+		return score;
 	}
 	/**
 	 * TimerState is a enum for the times of the day
@@ -524,7 +560,9 @@ public class KingdomController extends JPanel
 		gameRunning = false;
 		objectList = new ArrayList();
 		colControl = new CollisionController(objectList);
-		walls = 2;		
+		walls = 2;	
+		topFiveScores = scoreboard.getTopFive();
+		Arrays.sort(topFiveScores);
 		if(difficulty == Difficulty.EASY) {
 		defenders = 2;
 		walls = 2;
@@ -566,7 +604,6 @@ public class KingdomController extends JPanel
 	@Override
 	public void keyPressed(KeyEvent e) {
 		
-		
 		if (e.getKeyCode() == 39) {
 			movingRight = true;
 		}
@@ -600,11 +637,9 @@ public class KingdomController extends JPanel
 		if (e.getKeyCode() == 65)
 			shootingRight = true;
 			playerShootingArrow = false;
-
 		if (e.getKeyCode() == 68)
 			shootingRight = false;
 			playerShootingArrow = false;
-
 	}
 
 	@Override
@@ -660,9 +695,12 @@ public class KingdomController extends JPanel
 		} 
 		
 		else if (e.getSource() == playAgain) {
-			youDiedVisible = false;
 			parent.requestFocus();
 			gameRunning = true;
+		} else if (e.getSource() == playAgain) {
+			youDiedVisible = false;
+			startWindowVisible = true;
+			parent.requestFocus();
 		}
 		
 		else if(e.getSource() == exitButton) {
@@ -671,28 +709,19 @@ public class KingdomController extends JPanel
 			gameRunning = false;
 		}
 		else if (e.getSource() == easyBtn) {
-			gameRunning = true;
 			difficulty = Difficulty.EASY;
-			difficultyWindowVisible = false;
-			parent.requestFocus();
 		}
 		else if (e.getSource() == mediumBtn) {
-			gameRunning = true;
 			difficulty = Difficulty.MEDIUM;
-			difficultyWindowVisible = false;
-			parent.requestFocus();
 		}
 		else if (e.getSource() == hardBtn) {
-			gameRunning = true;
 			difficulty = Difficulty.HARD;
-			difficultyWindowVisible = false;
-			parent.requestFocus();
 		}
 		else if (e.getSource() == crazyBtn) {
-			gameRunning = true;
 			difficulty = Difficulty.CRAZY;
-			difficultyWindowVisible = false;
-			parent.requestFocus();
+		}
+		else if (e.getSource() == exitGame) {
+			parent.dispose();
 		}
 	}
 }

@@ -91,7 +91,7 @@ public class PlayableCharacter extends CollisionSprite implements PlayableCharac
 				colControl.deleteObject(coin);
 				this.incrementGold();
 			} else if (collidingSprites.get(i) instanceof Enemy) {
-				colControl.deleteObject(this);
+				this.setVisible(false);
 			} else if (collidingSprites.get(i) instanceof Wall) {
 				if (downPress && this.getGold() >= 3 && goldUseTimer == 0) {
 					Wall wall = (Wall) collidingSprites.get(i);
