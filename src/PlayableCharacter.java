@@ -87,7 +87,7 @@ public class PlayableCharacter extends CollisionSprite implements PlayableCharac
 	public void checkCollision(CollisionController colControl) {
 		List<BaseSprite> collidingSprites = colControl.checkCollition(this.getHitBox());
 		for (int i = 0; i < collidingSprites.size(); i++) {
-			if (collidingSprites.get(i) instanceof DroppedCoin && goldWarningTimer == 0) {
+			if (collidingSprites.get(i) instanceof DroppedCoin) {
 				DroppedCoin coin = (DroppedCoin) collidingSprites.get(i);
 				colControl.deleteObject(coin);
 				this.incrementGold();
