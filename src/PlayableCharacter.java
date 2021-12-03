@@ -20,8 +20,9 @@ public class PlayableCharacter extends CollisionSprite implements PlayableCharac
 	private boolean playerShooting = false;
 	private boolean shootingRight = true;
 	private int goldUseTimer = 0;
-	private int droppedGoldTimer = 0;
+	private int goldWarningTimer = 0;
 	private int arrowDrawTimer = 0;
+	private int arrowWarningTimer = 0;
 	private int arrows = 0;
 	/**
 	 * @param x is the x position, top left, of where the sprite will be spawned
@@ -86,7 +87,7 @@ public class PlayableCharacter extends CollisionSprite implements PlayableCharac
 	public void checkCollision(CollisionController colControl) {
 		List<BaseSprite> collidingSprites = colControl.checkCollition(this.getHitBox());
 		for (int i = 0; i < collidingSprites.size(); i++) {
-			if (collidingSprites.get(i) instanceof DroppedCoin && droppedGoldTimer == 0) {
+			if (collidingSprites.get(i) instanceof DroppedCoin && goldWarningTimer == 0) {
 				DroppedCoin coin = (DroppedCoin) collidingSprites.get(i);
 				colControl.deleteObject(coin);
 				this.incrementGold();
@@ -100,6 +101,8 @@ public class PlayableCharacter extends CollisionSprite implements PlayableCharac
 						this.setGold(this.getGold() - 3);
 						resetGoldTimer();
 					}
+				}else if(downPress && goldUseTimer == 0) {
+					goldWarningTimer = 700;
 				}
 			} else if (collidingSprites.get(i) instanceof Shop && goldUseTimer == 0) {
 				Shop shop = (Shop) collidingSprites.get(i);
@@ -108,6 +111,8 @@ public class PlayableCharacter extends CollisionSprite implements PlayableCharac
 						arrows++;
 						this.setGold(this.getGold() - 2);
 						resetGoldTimer();
+					}else if(downPress) {
+						goldWarningTimer = 700;
 					}
 
 				} else if (shop.getShopType() == ShopType.defenderType) {
@@ -115,6 +120,8 @@ public class PlayableCharacter extends CollisionSprite implements PlayableCharac
 						colControl.addObject(new Defender(800, "defenderSprite.png", dimensions));
 						this.setGold(this.getGold() - 3);
 						resetGoldTimer();
+					}else if(downPress){
+						goldWarningTimer = 700;
 					}
 				}
 			}
@@ -133,14 +140,18 @@ public class PlayableCharacter extends CollisionSprite implements PlayableCharac
 			arrow.moveTo(target.x, 500);
 			colControl.addObject(arrow);
 			resetArrowDrawTimer();
-		}
+		}else if(arrowDrawTimer == 0 && playerShooting)
+			arrowWarningTimer = 700;
+
 		// incrementing timers down
 		if (goldUseTimer > 0)
 			goldUseTimer--;
-		if (droppedGoldTimer > 0)
-			droppedGoldTimer--;
+		if (goldWarningTimer > 0)
+			goldWarningTimer--;
 		if (arrowDrawTimer > 0)
 			arrowDrawTimer--;
+		if (arrowWarningTimer > 0)
+			arrowWarningTimer--;
 	}
 	/**
 	 * paint() is overriden to allow a red square to be placed around the player
@@ -151,7 +162,11 @@ public class PlayableCharacter extends CollisionSprite implements PlayableCharac
 	public boolean paint(Graphics g) {
 		super.paint(g);
 		g.setColor(Color.RED);
-		g.drawRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+		//g.drawRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+		if(goldWarningTimer != 0)
+			g.drawString("Not Enough Gold", hitbox.x - 20, hitbox.y - 10);
+		if(arrowWarningTimer != 0)
+			g.drawString("Not Enough Arrows", hitbox.x - 20, hitbox.y - 10);
 		return true;
 	}
 	/**
