@@ -27,11 +27,11 @@ public abstract class BaseSprite implements BaseSpriteI {
 	 * @param Dimension panelDementions are the dimensions for the panel being used so the arrow can be placed at the correct y value
 	 */
 	protected BaseSprite(int x, String fileName, Dimension panelDimensions) {
-		int y = (int)(panelDimensions.height*.74);
+		this.loadImage(fileName);
+		int y = (int)(panelDimensions.height*.822) - img.getHeight();
 		target = new Point(x, y);
 		currentPosition = new Point(x, y);
 		dimensions = panelDimensions;
-		this.loadImage(fileName);
 		hitbox = new Rectangle(x, y, img.getWidth(), img.getHeight());
 	}
 	/**

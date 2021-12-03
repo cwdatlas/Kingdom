@@ -12,6 +12,12 @@ public class Wall extends CollisionSprite {
 	private double rangeWidthOfPanel = .3;
 	protected int HP = 0;
 	protected int infinityFrames;
+	private boolean broken0 = true;
+	private boolean broken1 = true;
+	private boolean broken2 = true;
+	private boolean broken3 = true;
+	private boolean broken4 = true;
+	private boolean broken5 = true;
 	/**
 	 * @param x is the x position, top left, of where the sprite will be spawned
 	 * @param fileName is the filename of the image that will be used for the sprite
@@ -21,16 +27,11 @@ public class Wall extends CollisionSprite {
 		super(x, fileName, panelDementions);
 	}
 	/**
-	 * destroyWall() setsVisible to false
-	 */
-	public void destroyWall() {
-		this.setVisible(false);
-	}
-	/**
 	 *rebuildWalls() sets wall HP to 50
 	 */
 	public void rebuildWall() {
 		HP = 50;
+		broken0 = true;
 	}
 	/**
 	 *checkCollision() asks colControl for any collisions with its hitbox
@@ -44,12 +45,8 @@ public class Wall extends CollisionSprite {
 		for (int i = 0; i < collidingSprites.size(); i++) {
 			if (collidingSprites.get(i) instanceof Enemy) {
 				if (HP > 0  && (infinityFrames>60)) {
-					
 					infinityFrames = 0;
 					HP--;
-					if (HP == 0) {
-						destroyWall();
-					}
 				}
 				collidingSprites.get(i).setBlocked(HP > 0);
 				infinityFrames++;
@@ -65,26 +62,35 @@ public class Wall extends CollisionSprite {
 	@Override
 	public boolean paint(Graphics g) {
 		super.paint(g);	
-		if(HP <= 0) {
-			g.setColor(new Color(1,1,1,250));
-			g.setColor(Color.RED);
-			g.drawRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+		if(HP == 0 && broken5) {
+			this.loadImage("wallSpriteBroken.png");
+			broken5 = false;
+			broken0 = true;
 		}
-		else if (HP <= 15) {
-			g.setColor(Color.RED);
-			g.fillRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+		else if (HP == 10 && broken4) {
+			this.loadImage("wallSprite4.png");
+			broken4 = false;
+			broken5 = true;
 		}
-				else if (HP <= 30) {
-			g.setColor(Color.ORANGE);
-			g.fillRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+		else if (HP == 20 && broken3) {
+			this.loadImage("wallSprite3.png");
+			broken3 = false;
+			broken4 = true;
+		}
+		else if (HP == 30 && broken2) {
+			this.loadImage("wallSprite2.png");
+			broken2 = false;
+			broken3 = true;
 		}		
-				else if(HP < 50) {
-			g.setColor(Color.YELLOW);
-			g.fillRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+		else if(HP == 40 && broken1) {
+			this.loadImage("wallSprite1.png");
+			broken1 = false;
+			broken2 = true;
 		}
-				else if(HP == 50) {
-			g.setColor(Color.MAGENTA);
-			g.fillRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+		else if(HP == 50 && broken0) {
+			this.loadImage("wallSprite.png");
+			broken0 = false;
+			broken1 = true;
 		}
 		return true;
 	}

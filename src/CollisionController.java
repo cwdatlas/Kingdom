@@ -9,6 +9,7 @@ import java.util.ArrayList;
 	private List<BaseSprite> objectList;
 	public int enemiesKilled = 0;
 	public int defendersKilled = 0;
+	public int defendersSpawned = 0;
 	/**
 	 * @param List<BaseSprite> list is the list of sprites that will be checked against when checking for collitions
 	 * @see checkCollition()
@@ -32,7 +33,7 @@ import java.util.ArrayList;
 		return returnableObjects;
 	}
 	/**
-	 * deleteObject delets an object within the given BaseSprite list
+	 * deleteObject deletes an object within the given BaseSprite list
 	 * @param BaseSprite delObject is the object that will be deleted out of the list
 	 * @return boolean true if object was deleted
 	 * @see Arrow to see example of this being used
@@ -40,7 +41,7 @@ import java.util.ArrayList;
 	public boolean deleteObject(BaseSprite delObject) {
 		if(delObject instanceof Enemy)
 			enemiesKilled++;
-		else if(delObject instanceof Enemy)
+		else if(delObject instanceof Defender)
 			defendersKilled++;
 		return objectList.remove(delObject);
 	}
@@ -49,6 +50,8 @@ import java.util.ArrayList;
 	 * @return true if object was added
 	 */
 	public boolean addObject(BaseSprite addObject) {
+		if(addObject instanceof Defender)
+			defendersSpawned++;
 		return objectList.add(addObject);
 		
 	}

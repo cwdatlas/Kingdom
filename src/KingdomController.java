@@ -16,6 +16,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -26,14 +27,18 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
+
 /**
  * @author Aidan Scott & Adrien
- * @see KingdomMain to understand how this class is built and used with the timer to simulate a framerate
+ * @see KingdomMain to understand how this class is built and used with the
+ *      timer to simulate a framerate
  */
 public class KingdomController extends JPanel
 		implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener, ActionListener {
 	private boolean gameRunning;
 	private boolean spawnedSprites;
+	private boolean difficultySet = false;
+	private boolean variablesSet = false;
 	private String enemySprite = "enemySprite.png";
 	private String playerSprite = "playerSprite.png";
 	private String arrowSprite = "arrowSprite.png";
@@ -44,12 +49,16 @@ public class KingdomController extends JPanel
 	private Dimension panelDimensions;
 	private boolean movingRight;
 	private boolean movingLeft;
+	private scoreboard scoreboard = new scoreboard();
+	int[] topFiveScores;
+
 	private boolean playerUseMoney;
 	private boolean playerShootingArrow;
-	private int arrowTarget;
+	private boolean shootingRight;
 	// time variables
 	private int days = 0;
 	private int timeOfDay = 0;
+	private int spawnWeight;
 	private TimeState timeState = TimeState.DAWN;
 	private Difficulty difficulty = Difficulty.EASY;
 	private ShopType shopType;
@@ -65,6 +74,7 @@ public class KingdomController extends JPanel
 	private Color bloodMoonColor = new Color(255, 0, 0, 60);
 	private Color backgroundColor = new Color(128, 255, 191, 30);
 	private BufferedImage backgroundImage;
+	private BufferedImage groundImage;
 
 	private int dayLength = 5000; // a full day at 5 min day should be around 30,000 frames
 	private int defenders;
@@ -77,26 +87,23 @@ public class KingdomController extends JPanel
 	private final Random random;
 	private JFrame parent;
 	String instructionsText = "Welcome to Kingdom! The point of this game is to survive as many nights as possible"
-			+ "from the ENEMIES(the green rectangles). In order to help you survive, EMEMIES will drop GOLD in"
-			+"order for you to buy precious resources such as ARROWS, DEFENDERS, and to rebuild WALLS. To shoot,"
-			+"place the mouse cursor to the left or right of your character and left click to shoot in the chosen"
-			+"direction. To buy ARROWS, go to the maroon arrow area and press the 'DOWN' directional key. To buy"
-			+"DEFENDERS, go to the DEFENDER box and press the 'DOWN' directional key to buy. To rebuild WALLS, go"
-			+"to a wall and press the 'DOWN' directional key to rebuild the wall. Note: completley broken walls"
-			+"will be grey with a red highlight(ENEMIES will pass through them).";
-	private JLabel instructions = new JLabel("<html>"+instructionsText+"</html>");
-//	private JLabel instructions = new JLabel();
-	private boolean instructionsVisable = true;
+			+ " from the ENEMIES(the green rectangles). In order to help you survive, EMEMIES will drop GOLD in"
+			+ " order for you to buy precious resources such as ARROWS, DEFENDERS, and to rebuild WALLS. To shoot,"
+			+ " place the mouse cursor to the left or right of your character and left click to shoot in the chosen"
+			+ " direction. To buy ARROWS, go to the maroon arrow area and press the 'DOWN' directional key. To buy"
+			+ " DEFENDERS, go to the DEFENDER box and press the 'DOWN' directional key to buy. To rebuild WALLS, go"
+			+ " to a wall and press the 'DOWN' directional key to rebuild the wall. Note: completley broken walls"
+			+ " will be grey with a red highlight(ENEMIES will pass through them).";
+	private JLabel instructions = new JLabel("<html><p>" + instructionsText + "</p></html>");
 	private JPanel startWindow = new JPanel();
 	private boolean startWindowVisible = true;
 	private JButton startGame = new JButton();
-	private JPanel difficultyWindow = new JPanel();
-	private boolean difficultyWindowVisible = true;
 	private JPanel youDiedWindow = new JPanel();
 	private boolean youDiedVisible = false;
 	private JButton playAgain = new JButton();
-	
-	//makes difficulty buttons
+	private JButton exitGame = new JButton();
+
+	// makes difficulty buttons
 	private JButton easyBtn = new JButton();
 	private JButton mediumBtn = new JButton();
 	private JButton hardBtn = new JButton();
@@ -110,16 +117,21 @@ public class KingdomController extends JPanel
 	private JLabel livingDefenders = new JLabel();
 	private JLabel totalScore = new JLabel();
 	private JLabel daysPassed = new JLabel();
+	private JLabel difficultyLabelStart = new JLabel();
+	private JLabel dificultyLabel = new JLabel();
 	private JLabel playerArrows = new JLabel();
+	private JLabel topFive = new JLabel();
+	private JLabel personalScore = new JLabel();
 	private List<BaseSprite> objectList;
+
 	/**
-	 * KingdomController constructor initializes graphic components like JLabels
-	 * it also initializes many variables 
+	 * KingdomController constructor initializes graphic components like JLabels it
+	 * also initializes many variables
+	 * 
 	 * @param parentPanel the JFrame that KingdomController is inside of
 	 */
 	public KingdomController(JFrame parentPanel) {
-		setVariables(); //(READ) sets the variables that will need to be reset when the user wants to play
-				
+		topFiveScores = scoreboard.getTopFive();
 		parent = parentPanel;
 		this.random = new Random();
 		panelDimensions = new Dimension();
@@ -128,12 +140,12 @@ public class KingdomController extends JPanel
 		this.add(playerArrows);
 		try {
 			backgroundImage = ImageIO.read(this.getClass().getResource("/images/background.png"));
+			groundImage = ImageIO.read(this.getClass().getResource("/images/ground.png"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		// Panel parameters
-		instructions.setVisible(true);
 		// startWindow params
 		startWindow.setBackground(new Color(200, 150, 0, 200));
 		TitledBorder log2;
@@ -144,16 +156,6 @@ public class KingdomController extends JPanel
 		startWindow.setBorder(log2);
 		startWindow.setLayout(null);
 		this.add(startWindow);
-		
-		//difficultyWindow
-		difficultyWindow.setBackground(new Color(200, 150, 200, 200));
-		TitledBorder diff;
-		diff = BorderFactory.createTitledBorder("Difficulty Window");
-		diff.setTitleColor(Color.WHITE);
-		diff.setBorder(BorderFactory.createLineBorder(Color.WHITE));
-		difficultyWindow.setBorder(diff);
-		difficultyWindow.setLayout(null);
-		this.add(difficultyWindow);
 
 		// youDiedWindow
 		youDiedWindow.setBackground(Color.BLACK);
@@ -171,36 +173,42 @@ public class KingdomController extends JPanel
 		startGame.setVisible(true);
 		startGame.addActionListener(this);
 		startWindow.add(startGame);
-		
+
 		easyBtn.setText("EASY");
 		easyBtn.setBackground(Color.WHITE);
 		easyBtn.setVisible(true);
 		easyBtn.addActionListener(this);
-		difficultyWindow.add(easyBtn);
-		
+		startWindow.add(easyBtn);
+
 		mediumBtn.setText("MEDIUM");
 		mediumBtn.setBackground(Color.WHITE);
 		mediumBtn.setVisible(true);
 		mediumBtn.addActionListener(this);
-		difficultyWindow.add(mediumBtn);
+		startWindow.add(mediumBtn);
 
 		hardBtn.setText("HARD");
 		hardBtn.setBackground(Color.WHITE);
 		hardBtn.setVisible(true);
 		hardBtn.addActionListener(this);
-		difficultyWindow.add(hardBtn);
-		
-		crazyBtn.setText("CARZY");
+		startWindow.add(hardBtn);
+
+		crazyBtn.setText("CRAZY");
 		crazyBtn.setBackground(Color.WHITE);
 		crazyBtn.setVisible(true);
 		crazyBtn.addActionListener(this);
-		difficultyWindow.add(crazyBtn);
-		
-		playAgain.setText("Play Again");
+		startWindow.add(crazyBtn);
+
+		playAgain.setText("Main Menu");
 		playAgain.setBackground(Color.WHITE);
 		playAgain.setVisible(true);
 		playAgain.addActionListener(this);
 		youDiedWindow.add(playAgain);
+
+		exitGame.setText("Exit Game");
+		exitGame.setBackground(Color.WHITE);
+		exitGame.setVisible(true);
+		exitGame.addActionListener(this);
+		startWindow.add(exitGame);
 
 		// JLabels
 		enemiesKilled.setForeground(Color.WHITE);
@@ -208,46 +216,72 @@ public class KingdomController extends JPanel
 		livingDefenders.setForeground(Color.WHITE);
 		totalScore.setForeground(Color.WHITE);
 		daysPassed.setForeground(Color.WHITE);
+		difficultyLabelStart.setForeground(Color.WHITE);
+		dificultyLabel.setForeground(Color.WHITE);
+		instructions.setForeground(Color.WHITE);
+		topFive.setForeground(Color.WHITE);
+		personalScore.setForeground(Color.WHITE);
 		youDiedWindow.add(enemiesKilled);
 		youDiedWindow.add(endGold);
 		youDiedWindow.add(livingDefenders);
 		youDiedWindow.add(totalScore);
 		youDiedWindow.add(daysPassed);
+		startWindow.add(difficultyLabelStart);
+		startWindow.add(topFive);
+		this.add(personalScore);
+		this.add(dificultyLabel);
 	}
+
 	/**
-	 * PaintComponent() starts all technical proccesssing like time, setting bounds dependent on panel size and sprite movement, collision checking
-	 * and other general actions
+	 * PaintComponent() starts all technical proccesssing like time, setting bounds
+	 * dependent on panel size and sprite movement, collision checking and other
+	 * general actions
+	 * 
 	 * @param g
 	 */
 	public void paintComponent(Graphics g) {
 		panelDimensions = this.getSize();
 
-		g.drawImage(backgroundImage, 0, 0, panelDimensions.width, panelDimensions.height, null);
+		g.drawImage(backgroundImage, 0, 0, panelDimensions.width, (int) (panelDimensions.height * .88), null);
+		g.drawImage(groundImage, 0, (int) (panelDimensions.height * .822), panelDimensions.width,
+				(int) panelDimensions.height / 3, null);
 		g.setColor(backgroundColor);
 		g.fillRect(0, 0, panelDimensions.width, panelDimensions.height);
 
 		startWindow.setBounds(panelDimensions.width / 3, (int) (panelDimensions.height * .1), panelDimensions.width / 3,
 				(int) (panelDimensions.height * .7));
 		startWindow.setVisible(startWindowVisible);
-		instructions.setBounds((int) (startWindow.getWidth() * .01), 80, (int) (startWindow.getWidth()), (int) (startWindow.getHeight() * .85));
-		startGame.setBounds((int) (startWindow.getWidth() * .3), (int) (startWindow.getHeight() * .8),
-				(int) (startWindow.getWidth() * .4), (int) (startWindow.getHeight() * .1));
-		difficultyWindow.setBounds(panelDimensions.width / 3, (int) (panelDimensions.height * .1), panelDimensions.width / 3,
-				(int) (panelDimensions.height * .7));
-		difficultyWindow.setVisible(difficultyWindowVisible);
-		easyBtn.setBounds((int) (difficultyWindow.getWidth() * .1), (int) (difficultyWindow.getHeight() * .2),
-				(int) (difficultyWindow.getWidth() * .2), (int) (difficultyWindow.getHeight() * .1));
-		mediumBtn.setBounds((int) (difficultyWindow.getWidth() * .7), (int) (difficultyWindow.getHeight() * .2),
-				(int) (difficultyWindow.getWidth() * .2), (int) (difficultyWindow.getHeight() * .1));
-		hardBtn.setBounds((int) (difficultyWindow.getWidth() * .1), (int) (difficultyWindow.getHeight() * .8),
-				(int) (difficultyWindow.getWidth() * .2), (int) (difficultyWindow.getHeight() * .1));
-		crazyBtn.setBounds((int) (difficultyWindow.getWidth() * .7), (int) (difficultyWindow.getHeight() * .8),
-				(int) (difficultyWindow.getWidth() * .2), (int) (difficultyWindow.getHeight() * .1));
+		instructions.setBounds((int) (startWindow.getWidth() * .1), 0, (int) (startWindow.getWidth() * .8),
+				(int) (startWindow.getHeight() * .85));
+		difficultyLabelStart.setBounds((int) (startWindow.getWidth() * .1), -(int) (startWindow.getHeight() * .35),
+				(int) (startWindow.getWidth() * .8), (int) (startWindow.getHeight() * .85));
+		difficultyLabelStart.setText("Difficulty set to: " + difficulty);
+		topFive.setBounds((int) (startWindow.getWidth() * .1), (int) (startWindow.getHeight() * .3),
+				(int) (startWindow.getWidth() * .8), (int) (startWindow.getHeight() * .85));
+		topFive.setText("Top 5 High Scores!     1: " + topFiveScores[4] + "     2: " + topFiveScores[3] + "     3: "
+				+ topFiveScores[2] + "     4: " + topFiveScores[1] + "     5: " + topFiveScores[0]);
+
+		startGame.setBounds((int) (startWindow.getWidth() * .1), (int) (startWindow.getHeight() * .8),
+				(int) (startWindow.getWidth() * .3), (int) (startWindow.getHeight() * .1));
+
+		exitGame.setBounds((int) (startWindow.getWidth() * .6), (int) (startWindow.getHeight() * .8),
+				(int) (startWindow.getWidth() * .3), (int) (startWindow.getHeight() * .1));
+
+		easyBtn.setBounds((int) (startWindow.getWidth() * .1), (int) (startWindow.getHeight() * .1),
+				(int) (startWindow.getWidth() * .2), (int) (startWindow.getHeight() * .1));
+
+		mediumBtn.setBounds((int) (startWindow.getWidth() * .3), (int) (startWindow.getHeight() * .1),
+				(int) (startWindow.getWidth() * .2), (int) (startWindow.getHeight() * .1));
+
+		hardBtn.setBounds((int) (startWindow.getWidth() * .5), (int) (startWindow.getHeight() * .1),
+				(int) (startWindow.getWidth() * .2), (int) (startWindow.getHeight() * .1));
+
+		crazyBtn.setBounds((int) (startWindow.getWidth() * .7), (int) (startWindow.getHeight() * .1),
+				(int) (startWindow.getWidth() * .2), (int) (startWindow.getHeight() * .1));
+
 		youDiedWindow.setBounds(panelDimensions.width / 3, (int) (panelDimensions.height * .1),
 				panelDimensions.width / 3, (int) (panelDimensions.height * .7));
-		
-		
-		
+
 		playAgain.setBounds((int) (youDiedWindow.getWidth() * .3), (int) (youDiedWindow.getHeight() * .8),
 				(int) (youDiedWindow.getWidth() * .4), (int) (youDiedWindow.getHeight() * .1));
 		enemiesKilled.setBounds((int) (youDiedWindow.getWidth() * .01), 20, (int) (youDiedWindow.getWidth() * .4), 20);
@@ -257,8 +291,13 @@ public class KingdomController extends JPanel
 		daysPassed.setBounds((int) (youDiedWindow.getWidth() * .01), 80, (int) (youDiedWindow.getWidth() * .4), 20);
 		totalScore.setBounds((int) (youDiedWindow.getWidth() * .01), 100, (int) (youDiedWindow.getWidth() * .4), 20);
 		youDiedWindow.setVisible(youDiedVisible);
-
-		if (!gameRunning && !spawnedSprites) { // spawn things that are dependent on frame width
+		
+		if(!gameRunning && difficultySet) {
+			setVariables();
+			variablesSet = true;
+		}
+		
+		if (!gameRunning && !spawnedSprites && variablesSet) { // spawn things that are dependent on frame width
 			spawnPlayers(players);
 			spawnDefenders(defenders);
 			spawnWalls(walls);
@@ -266,21 +305,11 @@ public class KingdomController extends JPanel
 			spawnShop(ShopType.defenderType);
 			spawnedSprites = true;
 		}
-		if (!(objectList.get(0) instanceof PlayableCharacter)) { // this is a sign that the player died
-			enemiesKilled.setText("Enemies Killed: " + colControl.enemiesKilled);
-			endGold.setText("Ending Gold: " + playerGold);
-			int livDefenders = defendersSpawned - colControl.defendersKilled;
-			livingDefenders.setText("total living Defenders: " + livDefenders);
-			daysPassed.setText("days Passed: " + days);
-			int score = days * (colControl.enemiesKilled - colControl.defendersKilled) + playerGold;
-			totalScore.setText("Score: " + score);
-			youDiedVisible = true;
-			gameRunning = false;
-			setVariables();
-		}
+
 		if (panelDimensions != null && gameRunning) { // then this runs the game
 			doMoves();
 			checkCollisions();
+			getScore();
 			for (int i = 0; i < objectList.size(); i++) { // Painting first layer of Objects
 				if (objectList.get(i) instanceof Wall || objectList.get(i) instanceof Shop) {
 					objectList.get(i).paint(g);
@@ -302,36 +331,42 @@ public class KingdomController extends JPanel
 			timeCalculations();
 			if (spawning) {
 				spawning = false;
-				if(timeState == TimeState.BLOODMOON) {
-					spawnEnemies((4 + days) * 4);
-				}else {
-					spawnEnemies((4 + days) * 2);
+				if (timeState == TimeState.BLOODMOON) {
+					spawnEnemies((4 + days) * spawnWeight * 4);
+				} else {
+					spawnEnemies((4 + days) * spawnWeight);
 				}
 			}
 		}
 		// JLabels
 		// this sets up the coins or score board
-		playerGold = objectList.get(0).getGold();
-		coinPanel.setBounds((int)panelDimensions.width - 150,0,100,100);
-		tod.setBounds((int)panelDimensions.width - 150,10,200,110);
-		playerArrows.setBounds((int)panelDimensions.width - 150,20,300,120);
+		personalScore.setBounds((int) panelDimensions.width - 150, -30, 150, 100);
+		dificultyLabel.setBounds((int) panelDimensions.width - 150, -15, 100, 100);
+		coinPanel.setBounds((int) panelDimensions.width - 150, 0, 100, 100);
+		tod.setBounds((int) panelDimensions.width - 150, 10, 200, 110);
+		playerArrows.setBounds((int) panelDimensions.width - 150, 20, 300, 120);
+		dificultyLabel.setText("Dificulty: " + difficulty);
 		coinPanel.setText("Gold: " + playerGold);
 		tod.setText("Time of Day: " + timeState);
 		coinPanel.setForeground(Color.WHITE);
 		tod.setForeground(Color.WHITE);
 		playerArrows.setForeground(Color.WHITE);
 	}
+
 	/**
 	 * spawnPlayers() initialize PlayerCharacter sprites at a specific location
+	 * 
 	 * @param numberOfPlayers
 	 */
 	private void spawnPlayers(int numberOfPlayers) {
 		for (int d = 0; d < numberOfPlayers; d++)
-			objectList.add(0,
-					new PlayableCharacter(((int) panelDimensions.getWidth() / 2), 10, 4, playerSprite, panelDimensions));
+			objectList.add(0, new PlayableCharacter(((int) panelDimensions.getWidth() / 2), 10, 4, playerSprite,
+					panelDimensions));
 	}
+
 	/**
 	 * spawnDefenders() initializes Defenders in a single location
+	 * 
 	 * @param numberOfDefenders
 	 */
 	private void spawnDefenders(int numberOfDefenders) { // TODO set spawn parameters (place)
@@ -340,8 +375,11 @@ public class KingdomController extends JPanel
 			defendersSpawned++;
 		}
 	}
+
 	/**
-	 * spawnEnemies() initializes a specific quantity of enemies at either side of the map past the bounds of the panel
+	 * spawnEnemies() initializes a specific quantity of enemies at either side of
+	 * the map past the bounds of the panel
+	 * 
 	 * @param numberOfEnemies
 	 */
 	private void spawnEnemies(int numberOfEnemies) {// TODO set spawn parameters (place)
@@ -353,8 +391,11 @@ public class KingdomController extends JPanel
 						panelDimensions));
 		}
 	}
+
 	/**
-	 * spawnWalls() initializes walls at two set locations, usually two walls or less will be initialised
+	 * spawnWalls() initializes walls at two set locations, usually two walls or
+	 * less will be initialised
+	 * 
 	 * @param numberOfWalls
 	 */
 	private void spawnWalls(int numberOfWalls) {// TODO set spawn parameters (place)
@@ -365,36 +406,55 @@ public class KingdomController extends JPanel
 				objectList.add(new Wall(((int) panelDimensions.getWidth() / 3) * 2, wallSprite, panelDimensions));
 		}
 	}
+
 	/**
-	 * spawnShop() initialized a shop at a specific location depending on the shop type
+	 * spawnShop() initialized a shop at a specific location depending on the shop
+	 * type
+	 * 
 	 * @param type
-	 * @see the class ShopType to find out the shop types and add more 
+	 * @see the class ShopType to find out the shop types and add more
 	 */
 	private void spawnShop(ShopType type) {
-		if(type == ShopType.defenderType)
-			objectList.add(new Shop(((int) panelDimensions.getWidth() / 2) + 50, defenderShopSprite, panelDimensions, type));
-		if(type == ShopType.arrowType)
-			objectList.add(new Shop(((int) panelDimensions.getWidth() / 2) - 130, arrowShopSprite, panelDimensions, type));
+		if (type == ShopType.defenderType)
+			objectList.add(
+					new Shop(((int) panelDimensions.getWidth() / 2) + 50, defenderShopSprite, panelDimensions, type));
+		if (type == ShopType.arrowType)
+			objectList.add(
+					new Shop(((int) panelDimensions.getWidth() / 2) - 130, arrowShopSprite, panelDimensions, type));
 	}
+
 	/**
-	 * doMoves() deals with all movement of sprites, that being how they are supposed to move or if they should move at all
-	 * When the sprites have a location to go to the move() function needs to be called for them to go twards that target location
+	 * doMoves() deals with all movement of sprites, that being how they are
+	 * supposed to move or if they should move at all When the sprites have a
+	 * location to go to the move() function needs to be called for them to go
+	 * twards that target location
 	 */
 	private void doMoves() {
 		int defender = 0;
 		for (int i = 0; i < objectList.size(); i++) {
 			if (objectList.get(i) instanceof PlayableCharacter) { // more efficient way of doing this class //
 																	// comparison
+				if (!(objectList.get(i).visible)) { // this is a sign that the player died
+					objectList.remove(objectList.get(i));
+					youDiedVisible = true;
+					gameRunning = false;
+					spawnedSprites = false;
+					difficultySet = false;
+					variablesSet = false;
+					scoreboard.addScore(getScore());
+					break;
+				}
 				if (movingRight) {
 					((PlayableCharacter) objectList.get(i)).moveRight();// telling the playable character each frame
 																		// to keep moving if true
 				} else if (movingLeft) {
 					((PlayableCharacter) objectList.get(i)).moveLeft();
 				}
+				((PlayableCharacter) objectList.get(i)).playerShoot(playerShootingArrow, shootingRight);
 				((PlayableCharacter) objectList.get(i)).downPress(playerUseMoney);
-				((PlayableCharacter) objectList.get(i)).playerShoot(playerShootingArrow, arrowTarget);
 				playerShootingArrow = false;
-				playerArrows.setText("Arrows: " + ((PlayableCharacter)objectList.get(i)).getArrows());
+				playerArrows.setText("Arrows: " + ((PlayableCharacter) objectList.get(i)).getArrows());
+				playerGold = objectList.get(i).getGold();
 			}
 
 			else if (objectList.get(i) instanceof Enemy) {
@@ -432,8 +492,11 @@ public class KingdomController extends JPanel
 		roaming = false;
 		retreating = false;
 	}
+
 	/**
-	 * checkCollisions() loops through the entire BaseSprite list and asks the sprites to checkCollision for only the sprites that can
+	 * checkCollisions() loops through the entire BaseSprite list and asks the
+	 * sprites to checkCollision for only the sprites that can
+	 * 
 	 * @see CollisionController to understand how collition works
 	 */
 	private void checkCollisions() {
@@ -444,23 +507,53 @@ public class KingdomController extends JPanel
 			}
 		}
 	}
+
+	/**
+	 * getScore() calculates the score of the player and sets JLabels to their
+	 * values that relate to score
+	 * 
+	 * @return score
+	 */
+	private int getScore() {
+		int lastScore = 0;
+		enemiesKilled.setText("Enemies Killed: " + colControl.enemiesKilled);
+		endGold.setText("Ending Gold: " + playerGold);
+		int livDefenders = defendersSpawned + colControl.defendersSpawned - colControl.defendersKilled;
+		livingDefenders.setText("total living Defenders: " + livDefenders);
+		daysPassed.setText("days Passed: " + days);
+		int score = (days * (colControl.enemiesKilled - colControl.defendersKilled * 10) + playerGold
+				+ colControl.defendersSpawned * 3) * spawnWeight;
+		totalScore.setText("Score: " + score);
+		if (score != lastScore) {
+			lastScore = score;
+			personalScore.setText("Your Score is: " + score);
+		}
+		return score;
+	}
+
 	/**
 	 * TimerState is a enum for the times of the day
+	 * 
 	 * @see timeCalculations() to see how the class is used
 	 */
 	private enum TimeState { // TODO this needs to be before JPanel/ before timestate is initialize
 		DUSK, DAY, DAWN, NIGHT, BLOODMOON
 	}
+
 	/**
 	 * Difficulty is the set difficulty of the game
+	 * 
 	 * @see setVariables() to see how the class is being used
 	 */
-	private enum Difficulty{
+	private enum Difficulty {
 		EASY, MEDIUM, HARD, CRAZY
 	}
+
 	/**
-	 * timeCalculations() regulates the time of the day dependent on the amount of frames that have been recorded
-	 * depending on the time of day it is timeCalculations will set different events to occur 
+	 * timeCalculations() regulates the time of the day dependent on the amount of
+	 * frames that have been recorded depending on the time of day it is
+	 * timeCalculations will set different events to occur
+	 * 
 	 * @see TimeState to see how the times are stored
 	 */
 	private void timeCalculations() {
@@ -472,7 +565,7 @@ public class KingdomController extends JPanel
 			spawning = true;
 			attacking = true;
 			backgroundColor = nightColor;
-			if(Math.random()>.9) {
+			if (Math.random() > .9) {
 				backgroundColor = bloodMoonColor;
 				timeState = TimeState.BLOODMOON;
 			}
@@ -494,9 +587,12 @@ public class KingdomController extends JPanel
 		}
 		timeOfDay++;
 	}
+
 	/**
-	 * setVariables() resets the core variables that need to be loaded at the start of the game and when the game needs to be reset
-	 * different choices in setVarables change difficulty of the game
+	 * setVariables() resets the core variables that need to be loaded at the start
+	 * of the game and when the game needs to be reset different choices in
+	 * setVarables change difficulty of the game
+	 * 
 	 * @see the enum class Difficulty to see all the dificulties
 	 */
 	private void setVariables() {
@@ -507,33 +603,38 @@ public class KingdomController extends JPanel
 		gameRunning = false;
 		objectList = new ArrayList();
 		colControl = new CollisionController(objectList);
-		walls = 2;		
-		if(difficulty == Difficulty.EASY) {
-		defenders = 2;
-		walls = 2;
-		playerGold = 10;
-		timeOfDay = 0;
-		timeState = TimeState.DAWN;
-	  } else if(difficulty == Difficulty.MEDIUM) {
-		defenders = 1;
-		walls = 2;
-		playerGold = 10;
-		timeOfDay = 0;
-		timeState = TimeState.DAWN;
-	  } else if (difficulty == Difficulty.HARD) {
-		defenders = 0;
-		walls = 2;
-		playerGold = 4;
-		timeOfDay = 0;
-		timeState = TimeState.DAWN;
-	  } else if (difficulty == Difficulty.CRAZY) {
-		defenders = 0;
-		walls = 2;
-		playerGold = 0;
-		timeOfDay = 0;
-		timeState = TimeState.DAWN;
+		topFiveScores = scoreboard.getTopFive();
+		Arrays.sort(topFiveScores);
+		if (difficulty == Difficulty.EASY) {
+			spawnWeight = 2;
+			defenders = 2;
+			walls = 2;
+			playerGold = 10;
+			timeOfDay = 0;
+			timeState = TimeState.DAWN;
+		} else if (difficulty == Difficulty.MEDIUM) {
+			spawnWeight = 3;
+			defenders = 1;
+			walls = 2;
+			playerGold = 10;
+			timeOfDay = 0;
+			timeState = TimeState.DAWN;
+		} else if (difficulty == Difficulty.HARD) {
+			spawnWeight = 4;
+			defenders = 0;
+			walls = 2;
+			playerGold = 6;
+			timeOfDay = 0;
+			timeState = TimeState.DAWN;
+		} else if (difficulty == Difficulty.CRAZY) {
+			spawnWeight = 5;
+			defenders = 0;
+			walls = 2;
+			playerGold = 6;
+			timeOfDay = 0;
+			timeState = TimeState.DAWN;
+		}
 	}
-}
 
 	// key and mouse listener events
 	@Override
@@ -541,25 +642,38 @@ public class KingdomController extends JPanel
 		// TODO Auto-generated method stub
 
 	}
+
 	/**
-	 * KeyPressed() is built off the the key listener that KingdomController implements
-	 * this class deals with the key press which sets booleans to true
-	 * @param e 
+	 * KeyPressed() is built off the the key listener that KingdomController
+	 * implements this class deals with the key press which sets booleans to true
+	 * 
+	 * @param e
 	 */
 	@Override
 	public void keyPressed(KeyEvent e) {
+
 		if (e.getKeyCode() == 39) {
 			movingRight = true;
-		}
-		else if (e.getKeyCode() == 37)
+		} else if (e.getKeyCode() == 37)
 			movingLeft = true;
 		if (e.getKeyCode() == 40)
 			playerUseMoney = true;
+		if (e.getKeyCode() == 65) {
+			shootingRight = false;
+			playerShootingArrow = true;
+		}
+		if (e.getKeyCode() == 68) {
+			shootingRight = true;
+			playerShootingArrow = true;
+		}
+
 	}
+
 	/**
-	 * KeyReleased() is built off the the key listener that KingdomController implements
-	 * this class deals with the key release which sets booleans to false
-	 * @param e 
+	 * KeyReleased() is built off the the key listener that KingdomController
+	 * implements this class deals with the key release which sets booleans to false
+	 * 
+	 * @param e
 	 */
 	@Override
 	public void keyReleased(KeyEvent e) {
@@ -569,6 +683,12 @@ public class KingdomController extends JPanel
 			movingLeft = false;
 		if (e.getKeyCode() == 40)
 			playerUseMoney = false;
+		if (e.getKeyCode() == 65)
+			shootingRight = true;
+		playerShootingArrow = false;
+		if (e.getKeyCode() == 68)
+			shootingRight = false;
+		playerShootingArrow = false;
 	}
 
 	@Override
@@ -588,16 +708,9 @@ public class KingdomController extends JPanel
 		// TODO Auto-generated method stub
 
 	}
-	/**
-	 * mouseClicked() is built off the the mouse listener that KingdomController implements
-	 * this function gets called when a mouse was clicked on KingdomController
-	 * @param e 
-	 */
+
 	@Override
-	public void mouseClicked(MouseEvent e) { // TODO move to lower level processing (Player)
-		Point targetPoint = e.getLocationOnScreen();
-		arrowTarget = targetPoint.x;
-		playerShootingArrow = true;
+	public void mouseClicked(MouseEvent e) {
 	}
 
 	@Override
@@ -622,49 +735,45 @@ public class KingdomController extends JPanel
 		// TODO Auto-generated method stub
 
 	}
+
 	/**
-	 * actionPerformed() is called when a button that has been added to KingdomController is clicked
-	 * @param e 
+	 * actionPerformed() is called when a button that has been added to
+	 * KingdomController is clicked
+	 * 
+	 * @param e
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == startGame) {
 			startWindowVisible = false;
+			parent.requestFocus();
+			gameRunning = true;
 		} else if (e.getSource() == playAgain) {
 			youDiedVisible = false;
+			startWindowVisible = true;
 			parent.requestFocus();
-			gameRunning = true;
-		}
-		else if (e.getSource() == easyBtn) {
-			gameRunning = true;
+		} else if (e.getSource() == easyBtn) {
 			difficulty = Difficulty.EASY;
-			difficultyWindowVisible = false;
-			parent.requestFocus();
-		}
-		else if (e.getSource() == mediumBtn) {
-			gameRunning = true;
+			difficultySet = true;
+		} else if (e.getSource() == mediumBtn) {
 			difficulty = Difficulty.MEDIUM;
-			difficultyWindowVisible = false;
-			parent.requestFocus();
-		}
-		else if (e.getSource() == hardBtn) {
-			gameRunning = true;
+			difficultySet = true;
+		} else if (e.getSource() == hardBtn) {
 			difficulty = Difficulty.HARD;
-			difficultyWindowVisible = false;
-			parent.requestFocus();
-		}
-		else if (e.getSource() == crazyBtn) {
-			gameRunning = true;
+			difficultySet = true;
+		} else if (e.getSource() == crazyBtn) {
 			difficulty = Difficulty.CRAZY;
-			difficultyWindowVisible = false;
-			parent.requestFocus();
+			difficultySet = true;
+		} else if (e.getSource() == exitGame) {
+			parent.dispose();
 		}
 	}
 }
+
 /**
  * ShopType is an enum class that sets the type of shop a shopSprite turns into
  */
 enum ShopType { // this needs to be available for the shop class to use and for any other class
 	// that it is being handed to
-defenderType, arrowType
+	defenderType, arrowType
 }

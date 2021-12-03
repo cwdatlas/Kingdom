@@ -18,11 +18,11 @@ public class PlayableCharacter extends CollisionSprite implements PlayableCharac
 	private Random random = new Random();
 	private boolean downPress = false;
 	private boolean playerShooting = false;
+	private boolean shootingRight = true;
 	private int goldUseTimer = 0;
 	private int droppedGoldTimer = 0;
 	private int arrowDrawTimer = 0;
 	private int arrows = 0;
-	private int arrowTarget = 0;
 	/**
 	 * @param x is the x position, top left, of where the sprite will be spawned
 	 * @param Gold is the quantity of gold player has
@@ -67,9 +67,9 @@ public class PlayableCharacter extends CollisionSprite implements PlayableCharac
 	 *@param shooting
 	 *@param position
 	 */
-	public void playerShoot(boolean shooting, int position) {
+	public void playerShoot(boolean shooting, boolean direction) {
 		playerShooting = shooting;
-		arrowTarget = position;
+		shootingRight = direction;
 	}
 	/**
 	 * @return arrows
@@ -91,7 +91,7 @@ public class PlayableCharacter extends CollisionSprite implements PlayableCharac
 				colControl.deleteObject(coin);
 				this.incrementGold();
 			} else if (collidingSprites.get(i) instanceof Enemy) {
-				colControl.deleteObject(this);
+				this.setVisible(false);
 			} else if (collidingSprites.get(i) instanceof Wall) {
 				if (downPress && this.getGold() >= 3 && goldUseTimer == 0) {
 					Wall wall = (Wall) collidingSprites.get(i);
@@ -120,16 +120,16 @@ public class PlayableCharacter extends CollisionSprite implements PlayableCharac
 			}
 		}
 		// press down to drop gold
-		if (downPress && gold > 0 && goldUseTimer == 0) {
-			this.gold--;
-			colControl.addObject(new DroppedCoin(currentPosition.x, "coin.png", dimensions));
-			resetGoldTimer();
-			droppedGoldTimer = 200;
-		}
+//		if (downPress && gold > 0 && goldUseTimer == 0) {
+//			this.gold--;
+//			colControl.addObject(new DroppedCoin(currentPosition.x, "coin.png", dimensions));
+//			resetGoldTimer();
+//			droppedGoldTimer = 200;
+//		}
 		// player shoots arrow
 		if (playerShooting && arrows > 0 && arrowDrawTimer == 0) {
 			this.arrows--;
-			Arrow arrow = new Arrow(currentPosition.x, "arrowSprite.png", dimensions, currentPosition.x < arrowTarget);
+			Arrow arrow = new Arrow(currentPosition.x, "arrowSprite.png", dimensions, shootingRight);
 			arrow.moveTo(target.x, 500);
 			colControl.addObject(arrow);
 			resetArrowDrawTimer();
