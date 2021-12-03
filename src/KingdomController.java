@@ -107,7 +107,7 @@ public class KingdomController extends JPanel implements KeyListener, MouseListe
 	private JButton hardBtn = new JButton();
 	private JButton crazyBtn = new JButton();
 
-	private JLabel tod = new JLabel(); // this shows the time of day as a sting under coinPanel
+	private JLabel timeOfDayLabel = new JLabel(); // this shows the time of day as a sting under coinPanel
 	private JLabel goldLabel = new JLabel(); // this sets up the coins or score board
 	// display of amounts at end of game
 	private JLabel enemiesKilled = new JLabel();
@@ -117,7 +117,7 @@ public class KingdomController extends JPanel implements KeyListener, MouseListe
 	private JLabel daysPassed = new JLabel();
 	private JLabel arrowLabel = new JLabel();
 	private JLabel difficultyLabelStart = new JLabel();
-	private JLabel dificultyLabel = new JLabel();
+	private JLabel difficultyLabel = new JLabel();
 	private JLabel arrowsLabel = new JLabel();
 	private JLabel topFive = new JLabel();
 	private JLabel personalScore = new JLabel();
@@ -134,7 +134,8 @@ public class KingdomController extends JPanel implements KeyListener, MouseListe
 		this.random = new Random();
 		panelDimensions = new Dimension();
 		this.add(goldLabel);
-		this.add(tod);
+		this.add(timeOfDayLabel);
+		this.add(difficultyLabel);
 		this.add(arrowLabel);
 		try {
 			backgroundImage = ImageIO.read(this.getClass().getResource("/images/background.png"));
@@ -222,7 +223,7 @@ public class KingdomController extends JPanel implements KeyListener, MouseListe
 		totalScore.setForeground(Color.WHITE);
 		daysPassed.setForeground(Color.WHITE);
 		difficultyLabelStart.setForeground(Color.WHITE);
-		dificultyLabel.setForeground(Color.WHITE);
+		difficultyLabel.setForeground(Color.WHITE);
 		instructions.setForeground(Color.WHITE);
 		topFive.setForeground(Color.WHITE);
 		personalScore.setForeground(Color.WHITE);
@@ -234,7 +235,7 @@ public class KingdomController extends JPanel implements KeyListener, MouseListe
 		startWindow.add(difficultyLabelStart);
 		startWindow.add(topFive);
 		this.add(personalScore);
-		this.add(dificultyLabel);
+		this.add(difficultyLabel);
 	}
 	/**
 	 * PaintComponent() starts all technical proccesssing like time, setting bounds dependent on panel size and sprite movement, collision checking
@@ -343,20 +344,42 @@ public class KingdomController extends JPanel implements KeyListener, MouseListe
 		}
 		// JLabels
 		// this sets up the coins or score board
-		goldLabel.setBounds((int)panelDimensions.width - 300,0,200,100);
+		//locations (setBounds)
+		goldLabel.setBounds((int)(panelDimensions.width * .765), (int) (panelDimensions.height * .02), 
+				(int) (panelDimensions.width * .5), (int) (panelDimensions.height *.1));
+		timeOfDayLabel.setBounds((int)(panelDimensions.width * .765), (int) (panelDimensions.height * .07), 
+				(int) (panelDimensions.width * .5), (int) (panelDimensions.height *.1));
+		arrowLabel.setBounds((int)(panelDimensions.width * .765), (int) (panelDimensions.height * .12), 
+				(int) (panelDimensions.width * .5), (int) (panelDimensions.height *.1));
+		difficultyLabel.setBounds((int)(panelDimensions.width * .765), (int) (panelDimensions.height * .17), 
+				(int) (panelDimensions.width * .5), (int) (panelDimensions.height *.1));
+		personalScore.setBounds((int)(panelDimensions.width * .765), (int) (panelDimensions.height * .22), 
+				(int) (panelDimensions.width * .5), (int) (panelDimensions.height *.1));
+		
+		//setting fonts 
 		goldLabel.setFont(new Font("Serif", Font.PLAIN, 30));
-		tod.setBounds((int)panelDimensions.width - 300,10,350,150);
-		arrowLabel.setBounds((int)panelDimensions.width - 300,20,300,200);
-		arrowLabel.setFont(new Font("Serif", Font.PLAIN, 30));
+		arrowLabel.setFont(new Font("Serif", Font.PLAIN, 30));		
+		timeOfDayLabel.setFont(new Font("Serif", Font.PLAIN, 30));
+		personalScore.setFont(new Font("Serif", Font.PLAIN, 30));
+		difficultyLabel.setFont(new Font("Serif", Font.PLAIN, 30));
+		
+		//setting texts (note: personalScore text is set within a loop on line 530)
 		arrowLabel.setText("Arrows: " + playerArrows);
 		goldLabel.setText("Gold: " + playerGold);
-		personalScore.setBounds((int)panelDimensions.width - 150,-30,150,100);
-		dificultyLabel.setBounds((int)panelDimensions.width - 150,-15,100,100);
-		tod.setText("Time of Day: " + timeState);
-		tod.setFont(new Font("Serif", Font.PLAIN, 30));
+		timeOfDayLabel.setText("Time of Day: " + timeState);
+		difficultyLabel.setText("Difficulty: " + difficulty);
+		
+		//setting foregrounds
 		goldLabel.setForeground(Color.WHITE);
-		tod.setForeground(Color.WHITE);
+		timeOfDayLabel.setForeground(Color.WHITE);
 		arrowLabel.setForeground(Color.WHITE);
+		personalScore.setForeground(Color.WHITE);
+		difficultyLabel.setForeground(Color.WHITE);
+		
+		
+		
+		
+
 	}
 	/**
 	 * spawnPlayers() initialize PlayerCharacter sprites at a specific location
