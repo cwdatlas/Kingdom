@@ -60,7 +60,7 @@ public class KingdomController extends JPanel
 	private int timeOfDay = 0;
 	private int spawnWeight;
 	private TimeState timeState = TimeState.DAWN;
-	private Difficulty difficulty = Difficulty.EASY;
+	private Difficulty difficulty = Difficulty.NONE;
 	private ShopType shopType;
 	private boolean spawning = false;
 	private boolean defending = false;
@@ -88,14 +88,14 @@ public class KingdomController extends JPanel
 	private final Random random;
 	private JFrame parent;
 	String instructionsText = "Welcome to Kingdom! The point of this game is to survive as many nights as possible"
-			+ " from the ENEMIES(the green rectangles). In order to help you survive, EMEMIES will drop GOLD in"
+			+ " from the ENEMIES(the green rectangles). EMEMIES will drop GOLD in"
 			+ " order for you to buy precious resources such as ARROWS, DEFENDERS, and to rebuild WALLS. To shoot,"
-			+ " place the mouse cursor to the left or right of your character and left click to shoot in the chosen"
-			+ " direction. To buy ARROWS, go to the maroon arrow area and press the 'DOWN' directional key. To buy"
-			+ " DEFENDERS, go to the DEFENDER box and press the 'DOWN' directional key to buy. To rebuild WALLS, go"
-			+ " to a wall and press the 'DOWN' directional key to rebuild the wall. Note: completley broken walls"
-			+ " will be grey with a red highlight(ENEMIES will pass through them).";
-	private JLabel instructions = new JLabel("<html><p>" + instructionsText + "</p></html>");
+			+ " left press key A and to shoot right press key D."
+			+ "  To buy ARROWS, go to the ARROW banner, left banner, and press the 'DOWN' directional key. To buy"
+			+ " DEFENDERS, go to the DEFENDER banner and press the 'DOWN' directional key to buy. To rebuild WALLS, go"
+			+ " to a wall and press the 'DOWN' directional key to rebuild the wall. Note: If the walls break completely"
+			+ " ENEMIES will be able to get into your kingdom and kill you and your DEFENDERS.";
+	private JLabel instructions = new JLabel("<html><hr>" + instructionsText + "<hr></html>");
 	private JPanel startWindow = new JPanel();
 	private boolean startWindowVisible = true;
 	private JButton startGame = new JButton();
@@ -173,8 +173,8 @@ public class KingdomController extends JPanel
 		// buttons
 		startGame.setText("START");
 		startGame.setBackground(Color.WHITE);
-		startGame.setVisible(true);
 		startGame.addActionListener(this);
+		startGame.setVisible(false);
 		startWindow.add(startGame);
 
 		easyBtn.setText("EASY");
@@ -264,9 +264,10 @@ public class KingdomController extends JPanel
 		startWindow.setVisible(startWindowVisible);
 		instructions.setBounds((int) (startWindow.getWidth() * .1), 0, (int) (startWindow.getWidth() * .8),
 				(int) (startWindow.getHeight() * .85));
-		difficultyLabelStart.setBounds((int) (startWindow.getWidth() * .1), -(int) (startWindow.getHeight() * .35),
+		difficultyLabelStart.setBounds((int) (startWindow.getWidth() * .1), -(int) (startWindow.getHeight() * .37),
 				(int) (startWindow.getWidth() * .8), (int) (startWindow.getHeight() * .85));
-		difficultyLabelStart.setText("Difficulty set to: " + difficulty);
+		difficultyLabelStart.setText("<html>Difficulty set to: " + difficulty +"<br> You must select a difficulty for Kingdom to run.</html>");
+		
 		topFive.setBounds((int) (startWindow.getWidth() * .1), (int) (startWindow.getHeight() * .3),
 				(int) (startWindow.getWidth() * .8), (int) (startWindow.getHeight() * .85));
 		topFive.setText("Top 5 High Scores!     1: " + topFiveScores[4] + "     2: " + topFiveScores[3] + "     3: "
@@ -317,7 +318,7 @@ public class KingdomController extends JPanel
 			spawnedSprites = true;
 		}
 
-		if (panelDimensions != null && gameRunning) { // then this runs the game
+		if (panelDimensions != null && gameRunning && variablesSet) { // then this runs the game
 			doMoves();
 			checkCollisions();
 			getScore();
@@ -565,7 +566,7 @@ public class KingdomController extends JPanel
 	 * @see setVariables() to see how the class is being used
 	 */
 	private enum Difficulty {
-		EASY, MEDIUM, HARD, CRAZY
+		EASY, MEDIUM, HARD, CRAZY, NONE
 	}
 
 	/**
@@ -685,6 +686,10 @@ public class KingdomController extends JPanel
 			shootingRight = true;
 			playerShootingArrow = true;
 		}
+		if (e.getKeyCode() == 27) {
+			gameRunning = false;
+			startWindowVisible = true;
+		}
 
 	}
 
@@ -770,6 +775,8 @@ public class KingdomController extends JPanel
 		else if (e.getSource() == playAgain) {
 			parent.requestFocus();
 			gameRunning = true;
+			difficultySet = true;
+			startGame.setVisible(false);
 		} else if (e.getSource() == playAgain) {
 			youDiedVisible = false;
 			startWindowVisible = true;
@@ -785,15 +792,19 @@ public class KingdomController extends JPanel
 		} else if (e.getSource() == easyBtn) {
 			difficulty = Difficulty.EASY;
 			difficultySet = true;
+			startGame.setVisible(true);
 		} else if (e.getSource() == mediumBtn) {
 			difficulty = Difficulty.MEDIUM;
 			difficultySet = true;
+			startGame.setVisible(true);
 		} else if (e.getSource() == hardBtn) {
 			difficulty = Difficulty.HARD;
 			difficultySet = true;
+			startGame.setVisible(true);
 		} else if (e.getSource() == crazyBtn) {
 			difficulty = Difficulty.CRAZY;
 			difficultySet = true;
+			startGame.setVisible(true);
 		} else if (e.getSource() == exitGame) {
 			parent.dispose();
 		}
