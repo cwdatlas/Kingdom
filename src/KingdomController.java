@@ -101,7 +101,7 @@ public class KingdomController extends JPanel
 	private JButton startGame = new JButton();
 	private JPanel youDiedWindow = new JPanel();
 	private boolean youDiedVisible = false;
-	private JButton playAgain = new JButton();
+	private JButton toMainMenu = new JButton();
 	private JButton exitButton = new JButton();
 	private JButton exitGame = new JButton();
 
@@ -201,11 +201,11 @@ public class KingdomController extends JPanel
 		crazyBtn.addActionListener(this);
 		startWindow.add(crazyBtn);
 
-		playAgain.setText("Main Menu");
-		playAgain.setBackground(Color.WHITE);
-		playAgain.setVisible(true);
-		playAgain.addActionListener(this);
-		youDiedWindow.add(playAgain);
+		toMainMenu.setText("Main Menu");
+		toMainMenu.setBackground(Color.WHITE);
+		toMainMenu.setVisible(true);
+		toMainMenu.addActionListener(this);
+		youDiedWindow.add(toMainMenu);
 		
 		//exit program button
 		exitButton.setText("Play Again");
@@ -294,7 +294,7 @@ public class KingdomController extends JPanel
 		youDiedWindow.setBounds(panelDimensions.width / 3, (int) (panelDimensions.height * .1),
 				panelDimensions.width / 3, (int) (panelDimensions.height * .7));
 
-		playAgain.setBounds((int) (youDiedWindow.getWidth() * .3), (int) (youDiedWindow.getHeight() * .8),
+		toMainMenu.setBounds((int) (youDiedWindow.getWidth() * .3), (int) (youDiedWindow.getHeight() * .8),
 				(int) (youDiedWindow.getWidth() * .4), (int) (youDiedWindow.getHeight() * .1));
 		enemiesKilled.setBounds((int) (youDiedWindow.getWidth() * .01), 20, (int) (youDiedWindow.getWidth() * .4), 20);
 		endGold.setBounds((int) (youDiedWindow.getWidth() * .01), 40, (int) (youDiedWindow.getWidth() * .4), 20);
@@ -770,25 +770,16 @@ public class KingdomController extends JPanel
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == startGame) {
 			startWindowVisible = false;
-		} 
-		
-		else if (e.getSource() == playAgain) {
-			parent.requestFocus();
 			gameRunning = true;
-			difficultySet = true;
-			startGame.setVisible(false);
-		} else if (e.getSource() == playAgain) {
-			youDiedVisible = false;
-			startWindowVisible = true;
 			parent.requestFocus();
-		}
-		
-		else if(e.getSource() == exitButton) {
+		 
+		}else if (e.getSource() == toMainMenu) {
+			parent.requestFocus();
+			startWindowVisible = true;
 			youDiedVisible = false;
-//			parent.EXIT_ON_CLOSE;
-			gameRunning = false;
-		}
-		else if (e.getSource() == easyBtn) {
+		
+		}else if(e.getSource() == exitButton) {
+			parent.dispose();
 		} else if (e.getSource() == easyBtn) {
 			difficulty = Difficulty.EASY;
 			difficultySet = true;
