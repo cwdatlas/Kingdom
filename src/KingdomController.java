@@ -120,6 +120,7 @@ public class KingdomController extends JPanel implements KeyListener, MouseListe
 	private JLabel difficultyLabel = new JLabel();
 	private JLabel arrowsLabel = new JLabel();
 	private JLabel topFive = new JLabel();
+	private JLabel daysPassedLabel = new JLabel();
 	private JLabel personalScore = new JLabel();
 	private List<BaseSprite> objectList;
 	/**
@@ -137,6 +138,7 @@ public class KingdomController extends JPanel implements KeyListener, MouseListe
 		this.add(timeOfDayLabel);
 		this.add(difficultyLabel);
 		this.add(arrowLabel);
+		this.add(daysPassedLabel);
 		try {
 			backgroundImage = ImageIO.read(this.getClass().getResource("/images/background.png"));
 			groundImage = ImageIO.read(this.getClass().getResource("/images/ground.png"));
@@ -353,7 +355,9 @@ public class KingdomController extends JPanel implements KeyListener, MouseListe
 				(int) (panelDimensions.width * .5), (int) (panelDimensions.height *.1));
 		difficultyLabel.setBounds((int)(panelDimensions.width * .765), (int) (panelDimensions.height * .17), 
 				(int) (panelDimensions.width * .5), (int) (panelDimensions.height *.1));
-		personalScore.setBounds((int)(panelDimensions.width * .765), (int) (panelDimensions.height * .22), 
+		daysPassedLabel.setBounds((int)(panelDimensions.width * .765), (int) (panelDimensions.height * .22), 
+				(int) (panelDimensions.width * .5), (int) (panelDimensions.height *.1));
+		personalScore.setBounds((int)(panelDimensions.width * .765), (int) (panelDimensions.height * .27), 
 				(int) (panelDimensions.width * .5), (int) (panelDimensions.height *.1));
 		
 		//setting fonts 
@@ -362,24 +366,23 @@ public class KingdomController extends JPanel implements KeyListener, MouseListe
 		timeOfDayLabel.setFont(new Font("Serif", Font.PLAIN, 30));
 		personalScore.setFont(new Font("Serif", Font.PLAIN, 30));
 		difficultyLabel.setFont(new Font("Serif", Font.PLAIN, 30));
+		daysPassedLabel.setFont(new Font("Serif", Font.PLAIN, 30));
+
 		
 		//setting texts (note: personalScore text is set within a loop on line 530)
 		arrowLabel.setText("Arrows: " + playerArrows);
 		goldLabel.setText("Gold: " + playerGold);
 		timeOfDayLabel.setText("Time of Day: " + timeState);
 		difficultyLabel.setText("Difficulty: " + difficulty);
+		daysPassedLabel.setText("Days Passed: " + days);
 		
 		//setting foregrounds
 		goldLabel.setForeground(Color.WHITE);
 		timeOfDayLabel.setForeground(Color.WHITE);
-		arrowLabel.setForeground(Color.WHITE);
+		arrowLabel.setForeground(Color.WHITE); 
 		personalScore.setForeground(Color.WHITE);
 		difficultyLabel.setForeground(Color.WHITE);
-		
-		
-		
-		
-
+		daysPassedLabel.setForeground(Color.WHITE);
 	}
 	/**
 	 * spawnPlayers() initialize PlayerCharacter sprites at a specific location
